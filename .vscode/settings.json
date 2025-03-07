@@ -1,0 +1,58 @@
+// To see what these do, you can pull open the settings (Ctrl + ,) and copy/paste
+// each individual key (like explorer.compactFolders) into the search field.
+{
+    "explorer.compactFolders": false,
+    "files.associations": {
+        "*.inc": "php"
+    },
+    "git.autofetch": true,
+    "editor.minimap.enabled": false,
+    "editor.quickSuggestions": {
+        "comments": "off",
+        "other": "off",
+        "strings": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "files.autoSave": "off",
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/objects",
+        ".vscode",
+        ".vscode-insiders",
+        ".prettierrc",
+        ".eslintrc.json",
+        ".devcontainer"
+    ],
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "[javascript]": {
+        "editor.maxTokenizationLineLength": 2500,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+    "extensions.ignoreRecommendations": true,
+    "github.codespaces.devcontainerChangedNotificationStyle": "none",
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "intelephense.completion.fullyQualifyGlobalConstantsAndFunctions": true,
+    "intelephense.format.braces": "k&r",
+    "intelephense.files.exclude": [
+        "**/.git/**",
+        "**/.svn/**",
+        "**/.hg/**",
+        "**/CVS/**",
+        "**/.DS_Store/**",
+        "**/node_modules/**",
+        "**/bower_components/**",
+        "**/vendor/**/{Tests,tests}/**",
+        "**/.history/**",
+        "**/vendor/**/vendor/**",
+        "**/*.api.php"
+    ],
+    "php.suggest.basic": false,
+    "php.validate.enable": false,
+    "liveServer.settings.port": 5501,
+}

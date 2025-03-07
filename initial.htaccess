@@ -1,0 +1,17 @@
+# Force requests for unknown directories and files to NOT throw a 404 - 
+# instead, redirect request to the document root.
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ / [L,QSA]
+
+# You can place SetEnv commands in here to create environment variables
+# accessible to your PHP code - very useful for things like DB passwords
+# and API keys.
+#
+# SetEnv FOO "bar" - the quotes are important - would allow you to write PHP like
+# echo getenv("FOO"); // Echoes "bar" to the response
+
+# Do NOT add this file to version control, as the likelihood of inadvertantly
+# revealing secrets is too high!

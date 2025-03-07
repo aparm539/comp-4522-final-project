@@ -1,0 +1,35 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "plugins": [
+        "prettier",
+        "unicorn"
+    ],
+    // https://eslint.org/docs/latest/rules/
+    // https://github.com/sindresorhus/eslint-plugin-unicorn#rules
+    "rules": {
+        "no-console": "off",
+        "no-var": "error",
+        "eqeqeq": "warn",
+        "no-extra-semi": "warn",
+        "semi": "error",
+        "indent": [
+            "error",
+            2
+        ],
+        "no-debugger": "warn",
+        "unicorn/prevent-abbreviations": "off"
+    },
+    "extends": [
+        "eslint:recommended",
+        "prettier",
+        "plugin:prettier/recommended",
+        "plugin:unicorn/recommended"
+    ],
+    "parserOptions": {
+        "sourceType": "module"
+    }
+}
