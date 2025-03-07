@@ -1,12 +1,19 @@
 <?php
 require_once '../database/DatabaseConnection.php';
 
+
+
 class DatabaseQueries {
     private $db;
 
     public function __construct() {
         $config = require '../database/config.php';
         $this->db = new DatabaseConnection($config);
+    }
+
+    public function seedDatabase() {
+        $sql = file_get_contents('../../dump.sql');
+        $this->db->run($sql);
     }
 
     public function createAdminsTable() {

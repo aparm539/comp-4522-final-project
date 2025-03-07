@@ -29,7 +29,7 @@
 -- Table structure for table `admin_tokens`
 --
 
-DROP DATABASE IF EXIST `travel`;
+DROP DATABASE IF EXISTS `travel`;
 
 CREATE DATABASE IF NOT EXISTS `travel`;
 

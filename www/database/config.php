@@ -4,6 +4,6 @@
 return [
     "dbname" => "travel",
     "username" => "root",
-    "password" => "ASC6MVxbVpkoLq", // ⚠️ This needs to be your box's password.
-    "host" => "localhost" // ⚠️This has changed.
+    "password" => "root", // ⚠️ This needs to be your box's password.
+    "host" => "172.18.0.2" // ⚠️This has changed.
 ];
