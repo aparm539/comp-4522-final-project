@@ -2,8 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Container;
+use App\Models\UnitOfMeasure;
 use App\Models\User;
+use App\Models\Location;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Unit;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory(10)->create();
+        Container::factory(2000)->create();
+        Location::factory(50)->create();
+        UnitOfMeasure::factory(5)->create();
     }
 }
