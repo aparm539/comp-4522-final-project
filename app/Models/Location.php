@@ -17,13 +17,10 @@ class Location extends Model
     // Define fillable fields for mass assignment
     protected $fillable = [
         'location_barcode',
-        'location_json',
+        'shelf',
+        'room_number',
+        'description',
         'supervisor_id',
-    ];
-
-    // Cast fields to appropriate data types
-    protected $casts = [
-        'location_json' => 'array',
     ];
 
     // Define relationships

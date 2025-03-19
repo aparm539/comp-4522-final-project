@@ -24,11 +24,9 @@ class LocationFactory extends Factory
     {
         return [
             'location_barcode' => $this->faker->unique()->regexify('[A-Z0-9]{15}'),
-            'location_json' => [
-                'shelf' => $this->faker->randomDigit(),
-                'room_id' => $this->faker->randomDigit(),
-                'description' => $this->faker->sentence(),
-            ],
+            'shelf' => $this->faker->randomDigit(),
+            'room_number' => $this->faker->bothify('?###'),
+            'description' => $this->faker->sentence(),
             'supervisor_id' => User::factory(),
         ];
     }
