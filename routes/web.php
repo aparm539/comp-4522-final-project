@@ -10,13 +10,13 @@ Route::get('/', function () {
 });
 
 Route::get('/containers', function () {
-    $containers = Container::with(['location', 'unitofmeasure','shelf'])->paginate(5);
+    $containers = Container::with(['location', 'unitofmeasure','shelf','chemical'])->paginate(5);
     return view("containers", ['containers' => $containers]);
 
 });
 
 Route::get('/locations/{id}', function ($id) {
-    $containers = Container::with(['location', 'unitofmeasure','shelf'])->where('location_id','=', $id)->paginate(5);
+    $containers = Container::with(['location', 'unitofmeasure','shelf','chemical'])->where('location_id','=', $id)->paginate(5);
     return view("containers", ['containers' => $containers]);
 });
 

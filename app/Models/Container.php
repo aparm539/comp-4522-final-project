@@ -16,16 +16,14 @@ class Container extends Model
     // Define fillable fields for mass assignment
     protected $fillable = [
         'barcode',
-        'cas',
         'quantity',
         'unit_of_measure',
+        'chemical_id',
         'location_id',
         'shelf_id',
         'ishazardous',
         'date_added',
         'supervisor_id',
-        'chemical_name',
-        'container_name',
     ];
 
     // Cast fields to appropriate data types
@@ -53,6 +51,10 @@ class Container extends Model
     public function shelf()
     {
         return $this->belongsTo(Shelf::class, 'shelf_id');
+    }
+    public function chemical()
+    {
+        return $this->belongsTo(Chemical::class, 'chemical_id');
     }
 
 }
