@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Container;
 use App\Models\Location;
+use App\Models\Shelf;
 use App\Models\User;
 use App\Models\UnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -35,6 +36,7 @@ class ContainerFactory extends Factory
             'supervisor_id' => User::factory(),
             'chemical_name' => $this->faker->word(),
             'container_name' => $this->faker->word(),
+            'shelf_id' => Shelf::factory(),
         ];
     }
 }

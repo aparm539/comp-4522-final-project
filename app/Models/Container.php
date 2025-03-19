@@ -20,6 +20,7 @@ class Container extends Model
         'quantity',
         'unit_of_measure',
         'location_id',
+        'shelf_id',
         'ishazardous',
         'date_added',
         'supervisor_id',
@@ -49,4 +50,9 @@ class Container extends Model
     {
         return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure');
     }
+    public function shelf()
+    {
+        return $this->belongsTo(Shelf::class, 'shelf_id');
+    }
+
 }

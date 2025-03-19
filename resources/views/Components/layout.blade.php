@@ -42,6 +42,7 @@
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               <x-nav-link href="/">Home</x-nav-link>
               <x-nav-link href="/containers">Containers</x-nav-link>
+                <x-nav-link href="/locations">Locations</x-nav-link>
             </div>
           </div>
         </div>
@@ -91,7 +92,7 @@
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
         <a href="/" class="block rounded-md px-3 py-2 text-base font-medium hover:bg-gray-700 hover:text-white" aria-current="page">Home</a>
         <a href="/containers" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">containers</a>
-
+          <a href="/locations" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">locations</a>
       </div>
       <div class="border-t border-gray-700 pt-4 pb-3">
         <div class="flex items-center px-5">

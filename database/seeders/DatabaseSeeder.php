@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Container;
+use App\Models\Shelf;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
 use App\Models\Location;
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
         Container::factory(2000)->create();
         Location::factory(50)->create();
         UnitOfMeasure::factory(5)->create();
+        Shelf::factory(50)->create();
     }
 }
