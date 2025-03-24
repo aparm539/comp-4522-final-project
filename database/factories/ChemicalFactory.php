@@ -18,7 +18,7 @@ class ChemicalFactory extends Factory
     {
         return [
             'cas' => $this->faker->bothify('??-###-##'),
-            'full_name' => $this->faker->word(),
+            'name' => $this->faker->word(),
         ];
     }
 }

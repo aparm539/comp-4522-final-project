@@ -17,7 +17,7 @@ class Chemical extends Model
 
     protected $fillable = [
         'cas',
-        'full_name',
+        'name',
         ];
 
     public function containers(){

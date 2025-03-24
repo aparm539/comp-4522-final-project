@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 
 class LocationFactory extends Factory
 {
@@ -22,12 +23,12 @@ class LocationFactory extends Factory
      */
     public function definition(): array
     {
+        $userIDs = DB::table('users')->pluck('id');
         return [
-            'location_barcode' => $this->faker->unique()->regexify('[A-Z0-9]{15}'),
-            'shelf' => $this->faker->randomDigit(),
-            'room_number' => $this->faker->bothify('?###'),
+            'barcode' => $this->faker->unique()->bothify('MRUC******'),
+            'room_number' => $this->faker->bothify('B2##'),
             'description' => $this->faker->sentence(),
-            'supervisor_id' => User::factory(),
+            'supervisor_id' => $this->faker->randomElement($userIDs),
         ];
     }
 }

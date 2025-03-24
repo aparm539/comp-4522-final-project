@@ -18,10 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            ChemicalSeeder::class,
+            UnitOfMeasureSeeder::class,
+        ]);
         User::factory(10)->create();
-        Container::factory(2000)->create();
         Location::factory(50)->create();
-        UnitOfMeasure::factory(5)->create();
         Shelf::factory(50)->create();
+        Container::factory(2000)->create();
     }
 }

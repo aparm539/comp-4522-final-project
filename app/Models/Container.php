@@ -11,18 +11,17 @@ class Container extends Model
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
-    public $timestamps = false;
+    public $timestamps = true;
 
     // Define fillable fields for mass assignment
     protected $fillable = [
         'barcode',
         'quantity',
-        'unit_of_measure',
+        'unit_of_measure_id',
         'chemical_id',
         'location_id',
         'shelf_id',
         'ishazardous',
-        'date_added',
         'supervisor_id',
     ];
 
@@ -30,7 +29,6 @@ class Container extends Model
     protected $casts = [
         'quantity' => 'double',
         'ishazardous' => 'boolean',
-        'date_added' => 'date',
     ];
 
     // Define relationships

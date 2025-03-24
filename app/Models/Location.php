@@ -17,6 +17,7 @@ class Location extends Model
     // Define fillable fields for mass assignment
     protected $fillable = [
         'room_number',
+        'barcode',
         'description',
         'supervisor_id',
     ];

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shelf>
@@ -17,10 +18,11 @@ class ShelfFactory extends Factory
      */
     public function definition(): array
     {
+        $locationIDs = DB::table('locations')->pluck('id');
         return [
-            'barcode' => $this->faker->unique()->regexify('[A-Z0-9]{10}'),
-            'name' => $this->faker->bothify('shelf ##'),
-            'location_id' => Location::factory(),
+            'barcode' => $this->faker->unique()->bothify('MRUC******'),
+            'name' => $this->faker->bothify('shelf #'),
+            'location_id' => $this->faker->randomElement($locationIDs),
         ];
     }
 }

@@ -16,7 +16,7 @@ class UnitOfMeasure extends Model
 
     // Define fillable fields for mass assignment
     protected $fillable = [
-        'measure_name',
+        'name',
         'abbreviation',
     ];
 
