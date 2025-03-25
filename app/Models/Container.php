@@ -44,7 +44,7 @@ class Container extends Model
 
     public function unitOfMeasure()
     {
-        return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure');
+        return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure_id');
     }
     public function shelf()
     {
