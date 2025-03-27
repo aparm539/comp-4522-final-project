@@ -12,7 +12,7 @@ class Location extends Model
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
-    public $timestamps = false;
+    public $timestamps = true;
 
     // Define fillable fields for mass assignment
     protected $fillable = [
