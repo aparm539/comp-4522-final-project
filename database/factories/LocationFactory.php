@@ -28,7 +28,7 @@ class LocationFactory extends Factory
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'room_number' => $this->faker->bothify('B2##'),
             'description' => $this->faker->sentence(),
-            'supervisor_id' => $this->faker->randomElement($userIDs),
+            'supervisor_id' => User::factory(),
         ];
     }
 }

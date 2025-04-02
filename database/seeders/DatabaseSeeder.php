@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Container;
-use App\Models\Shelf;
+use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
 use App\Models\Location;
@@ -22,9 +22,20 @@ class DatabaseSeeder extends Seeder
             ChemicalSeeder::class,
             UnitOfMeasureSeeder::class,
         ]);
-        User::factory(10)->create();
-        Location::factory(50)->create();
-        Shelf::factory(50)->create();
-        Container::factory(2000)->create();
+        User::factory(3)->create();
+        StorageCabinet::factory(5)
+            ->recycle(
+                Location::factory()
+                    ->recycle(
+                        User::factory()->create()
+                    )
+                    ->create()
+            )
+            ->create();
+        Container::factory(10)
+            ->recycle(
+                StorageCabinet::factory()->create()
+            )
+            ->create();
     }
 }

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shelf>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\StorageCabinet>
  */
-class ShelfFactory extends Factory
+class StorageCabinetFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class ShelfFactory extends Factory
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'name' => $this->faker->bothify('shelf #'),
-            'location_id' => $this->faker->randomElement($locationIDs),
+            'location_id' => Location::factory(),
         ];
     }
 }

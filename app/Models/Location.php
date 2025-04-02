@@ -32,4 +32,9 @@ class Location extends Model
     {
         return $this->hasMany(Container::class, 'location_id');
     }
+
+    public function storageCabinets()
+    {
+        return $this->hasMany(StorageCabinet::class, 'location_id');
+    }
 }

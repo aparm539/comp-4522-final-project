@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Shelf extends Model
+class StorageCabinet extends Model
 {
-    /** @use HasFactory<\Database\Factories\ShelfFactory> */
+    /** @use HasFactory<\Database\Factories\StorageCabinetFactory> */
     use HasFactory;
-    protected $table = 'shelves';
+    protected $table = 'storage_cabinets';
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
@@ -26,7 +26,7 @@ class Shelf extends Model
     }
     public function containers()
     {
-        return $this->hasMany(Container::class, 'shelf_id');
+        return $this->hasMany(Container::class, 'storage_cabinet_id');
     }
 
 }

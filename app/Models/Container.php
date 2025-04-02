@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Container extends Model
 {
     use HasFactory;
@@ -19,7 +21,6 @@ class Container extends Model
         'quantity',
         'unit_of_measure_id',
         'chemical_id',
-        'location_id',
         'shelf_id',
         'ishazardous',
         'supervisor_id',
@@ -31,12 +32,6 @@ class Container extends Model
         'ishazardous' => 'boolean',
     ];
 
-    // Define relationships
-    public function location()
-    {
-        return $this->belongsTo(Location::class, 'location_id');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'supervisor_id');
@@ -46,13 +41,18 @@ class Container extends Model
     {
         return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure_id');
     }
-    public function shelf()
+    public function storageCabinet()
     {
-        return $this->belongsTo(Shelf::class, 'shelf_id');
+        return $this->belongsTo(StorageCabinet::class, 'storage_cabinet_id');
     }
     public function chemical()
     {
         return $this->belongsTo(Chemical::class, 'chemical_id');
+    }
+
+    public function reconciliation_item(): HasMany
+    {
+        return $this->hasMany(ReconciliationItem::class, 'container_id');
     }
 
 }

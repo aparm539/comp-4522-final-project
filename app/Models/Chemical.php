@@ -15,10 +15,6 @@ class Chemical extends Model
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = [
-        'cas',
-        'name',
-        ];
 
     public function containers(){
         return $this->hasMany(Container::class, 'chemical_id');
