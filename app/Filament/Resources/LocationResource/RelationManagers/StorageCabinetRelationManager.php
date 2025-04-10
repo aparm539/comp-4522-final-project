@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\LocationResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -20,9 +21,11 @@ class StorageCabinetRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(255),
+                TextInput::make('name'),
+                TextInput::make('barcode')
+                    ->disabled()
+                    ->visible(fn ($record) => $record !== null) // Show only if the record exists (e.g., on edit)
+                    ->dehydrated(false),
             ]);
     }
 
@@ -41,8 +44,6 @@ class StorageCabinetRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

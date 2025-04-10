@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\LocationResource\Pages;
 use App\Filament\Resources\LocationResource\RelationManagers\StorageCabinetRelationManager;
 use App\Models\Location;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -22,6 +23,15 @@ class LocationResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('barcode')
+                    ->label('Barcode')
+                    ->disabled()
+                    ->visible(fn ($record) => $record !== null) // Show only if the record exists (e.g., on edit)
+                    ->dehydrated(false),
+                TextInput::make('room_number')
+                    ->disabled()
+                    ->visible(fn ($record) => $record !== null) // Show only if the record exists (e.g., on edit)
+                    ->dehydrated(false),
 
             ]);
     }
@@ -45,7 +55,8 @@ class LocationResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
                 ]),
             ]);
     }

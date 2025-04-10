@@ -1,3 +1,3 @@
-<div @class('size-300px')>
-    {{$this->table}}
+<div>
+    {{ $this->table }}
 </div>

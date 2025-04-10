@@ -7,6 +7,7 @@ use App\Filament\Resources\StorageCabinetResource\RelationManagers;
 use App\Filament\Resources\StorageCabinetResource\RelationManagers\ContainersRelationManager;
 use App\Models\StorageCabinet;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,6 +25,7 @@ class StorageCabinetResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('name')
                 //
             ]);
     }
@@ -47,7 +49,8 @@ class StorageCabinetResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
                 ]),
             ]);
     }

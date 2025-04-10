@@ -14,15 +14,25 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReconciliationItemRelationManager extends RelationManager
 {
-    protected static string $relationship = 'ReconciliationItem';
+    protected static string $relationship = 'reconciliationItems';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
+                Forms\Components\Select::make('reconciliation_id')
+                    ->relationship('reconciliation', 'id')
+                    ->required(),
+                Forms\Components\Select::make('container_id')
+                    ->relationship('container', 'id')
+                    ->required(),
+                Forms\Components\TextInput::make('expected_quantity')
                     ->required()
-                    ->maxLength(255),
+                    ->numeric(),
+                Forms\Components\TextInput::make('actual_quantity')
+                    ->numeric(),
+                Forms\Components\Toggle::make('is_reconciled')
+                    ->required(),
             ]);
     }
 
@@ -37,7 +47,6 @@ class ReconciliationItemRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
                 AttachAction::make()
                     ->preloadRecordSelect(),
                 Tables\Actions\AssociateAction::make(),

@@ -7,6 +7,7 @@ use App\Filament\Resources\ChemicalResource\RelationManagers;
 use App\Models\Chemical;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,6 +29,9 @@ class ChemicalResource extends Resource
             ->schema([
                 TextInput::make('cas')->required(),
                 TextInput::make('name')->required(),
+                Toggle::make('ishazardous')
+                    ->default(true)
+                ->required(),
             ]);
     }
 
@@ -46,7 +50,8 @@ class ChemicalResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
                 ]),
             ]);
     }

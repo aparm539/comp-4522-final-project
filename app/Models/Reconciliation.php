@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Reconciliation extends Model
 {
-    public function ReconciliationItem(): HasMany
+    public function reconciliationItems(): HasMany
     {
         return $this->hasMany(ReconciliationItem::class, 'reconciliation_id');
     }
 
-    public function storageCabinet(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(StorageCabinet::class, 'storage_cabinet_id');
+        return $this->belongsTo(Location::class, 'location_id');
     }
 }

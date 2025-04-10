@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ChemicalSeeder::class,
             UnitOfMeasureSeeder::class,
+            RoleSeeder::class,
         ]);
         User::factory(3)->create();
         StorageCabinet::factory(5)

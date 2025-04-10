@@ -10,6 +10,7 @@ use App\Models\Reconciliation;
 use App\Models\ReconciliationItem;
 use App\Models\StorageCabinet;
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -33,22 +34,46 @@ class ReconciliationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'ongoing' => 'Ongoing',
+                        'completed' => 'Completed',
+                        'canceled' => 'Canceled',
+                        'stopped' => 'Stopped',
+                    ])
                     ->required()
-                    ->maxLength(255)
-                    ->default('stopped'),
+                    ->default('ongoing')
+                    ->afterStateUpdated(function ( $set, $state) {
+                        if ($state === 'ongoing') {
+                            $set('started_at', now());
+                        }
+                        if ($state === 'completed') {
+                            $set('ended_at', now());
+                        }
+                        else{
+                            $set('ended_at', null);
+                        }
+
+
+                    }),
                 Forms\Components\Textarea::make('notes')
                     ->columnSpanFull(),
-            ]);
+                DateTimePicker::make('started_at')
+                    ->hidden(fn ($get) => $get('status') !== 'ongoing')
+                    ->required(),
+                DateTimePicker::make('ended_at')
+                    ->hidden(fn ($get) => $get('status') !== 'completed')
+            ])
+            ;
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                textColumn::make('storageCabinet.name')
+                textColumn::make('location.room_number')
                     ->label('Location')
-                    ->formatStateUsing(fn ($state, $record) => ($record->storageCabinet->location->room_number.' '.$record->storageCabinet->name)),
+                    ->formatStateUsing(fn ($state, $record) => $record->location->room_number),
                 IconColumn::make('status')
                     ->icon(fn (string $state): string => match ($state) {
                         'stopped' => 'akar-stop',
@@ -79,7 +104,7 @@ class ReconciliationResource extends Resource
             ->groups([
                 Group::make('status')
                     ->collapsible(),
-                Group::make('storageContainer.location.room_number')
+                Group::make('location.room_number')
                     ->collapsible(),
             ])
             ->filters([
@@ -90,8 +115,8 @@ class ReconciliationResource extends Resource
                 Tables\Actions\ViewAction::make(),
             ])
             ->headerActions([
-                Action::make('Create Reconciliations for All Shelves')
-                    ->action(fn() => self::createReconciliationsForAllShelves()),
+                Action::make('Create Reconciliations for All Locations')
+                    ->action(fn() => self::createReconciliationsForAllLocations()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -100,20 +125,25 @@ class ReconciliationResource extends Resource
             ]);
     }
 
-    public static function createReconciliationsForAllShelves(){
-        foreach(StorageCabinet::all() as $storageCabinet){
+    public static function createReconciliationsForAllLocations(){
+        foreach(Location::all() as $location){
             $reconciliation = new Reconciliation();
             $reconciliation->status = 'ongoing';
-            $reconciliation->storage_cabinet_id = $storageCabinet->id;
+            $reconciliation->started_at = now();
+            $reconciliation->location_id = $location->id;
             $reconciliation->save();
-            foreach($storageCabinet->containers as $container){
-                $reconciliationItem = new ReconciliationItem();
-                $reconciliationItem->container()->associate($container);
-                $reconciliationItem->reconciliation()->associate($reconciliation);
-                $reconciliationItem->is_reconciled = false;
-                $reconciliationItem->expected_quantity= 1;
-                $reconciliationItem->actual_quantity=0;
-                $reconciliationItem->save();
+            
+            // Get all containers from all storage cabinets in this location
+            foreach($location->storageCabinets as $storageCabinet) {
+                foreach($storageCabinet->containers as $container){
+                    $reconciliationItem = new ReconciliationItem();
+                    $reconciliationItem->container()->associate($container);
+                    $reconciliationItem->reconciliation()->associate($reconciliation);
+                    $reconciliationItem->is_reconciled = false;
+                    $reconciliationItem->expected_quantity = 1;
+                    $reconciliationItem->actual_quantity = 0;
+                    $reconciliationItem->save();
+                }
             }
         }
     }

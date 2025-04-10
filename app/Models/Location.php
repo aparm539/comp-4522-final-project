@@ -37,4 +37,14 @@ class Location extends Model
     {
         return $this->hasMany(StorageCabinet::class, 'location_id');
     }
+
+    public function reconciliations()
+    {
+        return $this->hasMany(Reconciliation::class, 'location_id');
+    }
+
+    public function hasOngoingReconciliation()
+    {
+        return $this->reconciliations()->where('status', 'ongoing')->exists();
+    }
 }

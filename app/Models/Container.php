@@ -24,6 +24,7 @@ class Container extends Model
         'shelf_id',
         'ishazardous',
         'supervisor_id',
+        'location_id',
     ];
 
     // Cast fields to appropriate data types
@@ -31,6 +32,21 @@ class Container extends Model
         'quantity' => 'double',
         'ishazardous' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($container) {
+            if (empty($container->barcode)) {
+                do {
+                    // Generate a barcode with the format MRUC****** (6 random digits)
+                    $barcode = 'MRUC' . str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                } while (self::where('barcode', $barcode)->exists()); // Ensure unique barcode
+
+                $container->barcode = $barcode;
+            }
+        });
+    }
+
 
     public function user()
     {
@@ -47,7 +63,12 @@ class Container extends Model
     }
     public function chemical()
     {
-        return $this->belongsTo(Chemical::class, 'chemical_id');
+        return $this->belongsTo(Chemical::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function reconciliation_item(): HasMany
