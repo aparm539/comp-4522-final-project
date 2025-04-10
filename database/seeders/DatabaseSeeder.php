@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ChemicalSeeder::class,
             UnitOfMeasureSeeder::class,
             RoleSeeder::class,
+            AdminUserSeeder::class,
         ]);
         User::factory(3)->create();
         StorageCabinet::factory(5)
