@@ -14,7 +14,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Forms\Components\Select;
+use App\Models\Location;
+use App\Models\User;
 class StorageCabinetResource extends Resource
 {
     protected static ?string $model = StorageCabinet::class;
@@ -26,6 +28,14 @@ class StorageCabinetResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Select::make('location_id')
+
+                    ->label('Location')
+                    ->options(Location::all()->pluck('room_number', 'id'))
+                    ->required()
+                    ->searchable(),
                 //
             ]);
     }

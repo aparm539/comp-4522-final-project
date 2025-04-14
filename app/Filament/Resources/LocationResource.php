@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\User;
+use Filament\Forms\Components\Select;
 
 class LocationResource extends Resource
 {
@@ -24,15 +26,15 @@ class LocationResource extends Resource
         return $form
             ->schema([
                 TextInput::make('barcode')
-                    ->label('Barcode')
-                    ->disabled()
-                    ->visible(fn ($record) => $record !== null) // Show only if the record exists (e.g., on edit)
-                    ->dehydrated(false),
+                    ->label('Barcode'),
                 TextInput::make('room_number')
-                    ->disabled()
-                    ->visible(fn ($record) => $record !== null) // Show only if the record exists (e.g., on edit)
-                    ->dehydrated(false),
-
+                    ->label('Room Number'),
+                TextInput::make('description')
+                    ->label('Description'),
+                Select::make('supervisor_id')
+                    ->label('Supervisor')
+                    ->options(User::all()->pluck('name', 'id'))
+                    ->searchable()
             ]);
     }
 
