@@ -33,4 +33,4 @@ class UserPolicy
     {
         return $user->isAdmin(); // Only admins can delete users
     }
-} 
+}

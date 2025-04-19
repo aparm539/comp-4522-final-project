@@ -2,8 +2,7 @@
 
 namespace App\Filament\Resources\StorageCabinetResource\Pages;
 
-use App\Filament\Resources\StorageCabinetResource;
-use Filament\Actions;
+use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateStorageCabinet extends CreateRecord

@@ -18,12 +18,11 @@ class LocationFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
         $userIDs = DB::table('users')->pluck('id');
+
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'room_number' => $this->faker->bothify('B2##'),

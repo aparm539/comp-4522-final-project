@@ -17,8 +17,8 @@ class UnitOfMeasureFactory extends Factory
     public function definition(): array
     {
         return [
-            "name" => $this->faker->word(),
-            "abbreviation" => $this->faker->lexify('???'),
+            'name' => $this->faker->word(),
+            'abbreviation' => $this->faker->lexify('???'),
         ];
     }
 }

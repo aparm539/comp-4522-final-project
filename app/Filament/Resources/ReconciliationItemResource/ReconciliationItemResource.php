@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ReconciliationItemResource;
 
-use App\Filament\Resources\ReconciliationItemResource\Pages;
-use App\Filament\Resources\ReconciliationItemResource\RelationManagers;
 use App\Models\ReconciliationItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReconciliationItemResource extends Resource
 {
     protected static ?string $model = ReconciliationItem::class;
+
     protected static bool $shouldRegisterNavigation = false;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -94,8 +90,6 @@ class ReconciliationItemResource extends Resource
     {
         return [
             'index' => Pages\ListReconciliationItems::route('/'),
-            'create' => Pages\CreateReconciliationItem::route('/create'),
-            'edit' => Pages\EditReconciliationItem::route('/{record}/edit'),
         ];
     }
 }

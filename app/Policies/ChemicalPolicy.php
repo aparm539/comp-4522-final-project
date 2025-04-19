@@ -46,4 +46,4 @@ class ChemicalPolicy
     {
         return $user->isAdmin(); // Only admins can delete chemicals
     }
-} 
+}

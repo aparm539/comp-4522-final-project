@@ -3,12 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Container;
-use App\Models\StorageCabinet;
-use App\Models\UnitOfMeasure;
-use App\Models\User;
 use App\Models\Location;
+use App\Models\StorageCabinet;
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Carbon\Unit;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

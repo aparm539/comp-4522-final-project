@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\LocationResource;
 
-use App\Filament\Resources\LocationResource\Pages;
 use App\Filament\Resources\LocationResource\RelationManagers\StorageCabinetRelationManager;
 use App\Models\Location;
+use App\Models\User;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use App\Models\User;
-use Filament\Forms\Components\Select;
 
 class LocationResource extends Resource
 {
     protected static ?string $model = Location::class;
-    protected static ?string $navigationIcon = 'gmdi-meeting-room-o';
-    protected static ?string $activeNavigationIcon = 'gmdi-meeting-room-r';
+
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-building-office';
 
     public static function form(Form $form): Form
     {
@@ -34,7 +34,7 @@ class LocationResource extends Resource
                 Select::make('supervisor_id')
                     ->label('Supervisor')
                     ->options(User::all()->pluck('name', 'id'))
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 
@@ -47,7 +47,7 @@ class LocationResource extends Resource
                 TextColumn::make('description')
                     ->limit(20),
                 TextColumn::make('user.name')
-                    ->label('Supervisor')
+                    ->label('Supervisor'),
             ])
             ->filters([
                 //
@@ -74,9 +74,8 @@ class LocationResource extends Resource
     {
         return [
             'index' => Pages\ListLocations::route('/'),
-            'create' => Pages\CreateLocation::route('/create'),
             'edit' => Pages\EditLocation::route('/{record}/edit'),
+            'view' => Pages\ViewLocation::route('/{record}'),
         ];
     }
-
 }

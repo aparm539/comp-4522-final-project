@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\StorageCabinetResource\Pages;
 
-use App\Filament\Resources\StorageCabinetResource;
+use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\LocationResource\Pages;
 
-use App\Filament\Resources\LocationResource;
+use App\Filament\Resources\LocationResource\LocationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 

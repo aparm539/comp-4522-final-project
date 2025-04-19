@@ -34,4 +34,4 @@ class StorageCabinetPolicy
     {
         return $user->hasRole('admin');
     }
-} 
+}

@@ -2,13 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Container;
-use App\Models\StorageCabinet;
-use App\Models\UnitOfMeasure;
-use App\Models\User;
-use App\Models\Location;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Carbon\Unit;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -51,10 +45,9 @@ class ChemicalSeeder extends Seeder
             ['cas' => '1963-21-9', 'name' => 'Gly-Val', 'ishazardous' => true],
             ['cas' => '87-51-4', 'name' => 'Indole-3-Acetic Acid', 'ishazardous' => true],
             ['cas' => '525-79-1', 'name' => 'Kinetin', 'ishazardous' => true],
-            ['cas' => '8002-43-5', 'name' => 'L-a-Phosphatidylcholine', 'ishazardous' => true]
+            ['cas' => '8002-43-5', 'name' => 'L-a-Phosphatidylcholine', 'ishazardous' => true],
         ];
-
 
         DB::table('chemicals')->insert($chemicals);
     }
-    }
+}

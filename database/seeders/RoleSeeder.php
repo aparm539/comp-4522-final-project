@@ -12,20 +12,20 @@ class RoleSeeder extends Seeder
         $roles = [
             [
                 'name' => 'viewer',
-                'description' => 'Users who can only view data'
+                'description' => 'Users who can only view data',
             ],
             [
                 'name' => 'researcher',
-                'description' => 'Users who can view and update chemicals and containers'
+                'description' => 'Users who can view and update chemicals and containers',
             ],
             [
                 'name' => 'admin',
-                'description' => 'Users with full administrative permissions'
-            ]
+                'description' => 'Users with full administrative permissions',
+            ],
         ];
 
         foreach ($roles as $role) {
             Role::create($role);
         }
     }
-} 
+}

@@ -9,8 +9,6 @@ use Filament\Tables;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReconciliationItemRelationManager extends RelationManager
 {
@@ -41,7 +39,7 @@ class ReconciliationItemRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('container.barcode'),
-                TextColumn::make('container.chemical.cas')
+                TextColumn::make('container.chemical.cas'),
             ])
             ->filters([
                 //

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ChemicalResource\Pages;
 
-use App\Filament\Resources\ChemicalResource;
+use App\Filament\Resources\ChemicalResource\ChemicalResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

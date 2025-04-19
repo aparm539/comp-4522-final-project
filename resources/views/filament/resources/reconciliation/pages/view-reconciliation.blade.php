@@ -7,6 +7,6 @@
         </div>
     @endif
 
-    @livewire('list-reconciliation-items', ['reconciliation_id' => $record->id])
+    @livewire('view-reconciliation', ['reconciliation_id' => $record->id])
 </x-filament-panels::page>
 

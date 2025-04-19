@@ -19,6 +19,7 @@ class ChemicalFactory extends Factory
         return [
             'cas' => $this->faker->bothify('??-###-##'),
             'name' => $this->faker->word(),
+            'ishazardous' => $this->faker->boolean(),
         ];
     }
 }

@@ -34,4 +34,4 @@ class LocationPolicy
     {
         return $user->hasRole('admin');
     }
-} 
+}

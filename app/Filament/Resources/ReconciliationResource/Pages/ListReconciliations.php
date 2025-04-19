@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ReconciliationResource\Pages;
 
-use App\Filament\Resources\ReconciliationResource;
+use App\Filament\Resources\ReconciliationResource\ReconciliationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

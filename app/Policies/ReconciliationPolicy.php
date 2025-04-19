@@ -34,4 +34,4 @@ class ReconciliationPolicy
     {
         return $user->hasRole('admin');
     }
-} 
+}

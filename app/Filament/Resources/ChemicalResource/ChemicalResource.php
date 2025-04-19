@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ChemicalResource;
 
-use App\Filament\Resources\ChemicalResource\Pages;
-use App\Filament\Resources\ChemicalResource\RelationManagers;
 use App\Models\Chemical;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -13,15 +10,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ChemicalResource extends Resource
 {
     protected static ?string $model = Chemical::class;
 
-    protected static ?string $navigationIcon = 'fluentui-beaker-16-o';
-    protected static ?string $activeNavigationIcon = 'fluentui-beaker-16';
+    protected static ?string $navigationIcon = 'heroicon-o-beaker';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-beaker';
 
     public static function form(Form $form): Form
     {
@@ -31,7 +27,7 @@ class ChemicalResource extends Resource
                 TextInput::make('name')->required(),
                 Toggle::make('ishazardous')
                     ->default(true)
-                ->required(),
+                    ->required(),
             ]);
     }
 
@@ -56,18 +52,10 @@ class ChemicalResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListChemicals::route('/'),
-            'create' => Pages\CreateChemical::route('/create'),
         ];
     }
 }

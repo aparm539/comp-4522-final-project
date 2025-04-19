@@ -19,6 +19,7 @@ class StorageCabinetFactory extends Factory
     public function definition(): array
     {
         $locationIDs = DB::table('locations')->pluck('id');
+
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'name' => $this->faker->bothify('shelf #'),
