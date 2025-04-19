@@ -5,26 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
  */
 class Chemical extends Model
 {
-    /** @use HasFactory<\Database\Factories\ChemicalFactory> */
     use HasFactory;
 
-    protected $table = 'chemicals';
-
-    protected $primaryKey = 'id';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
-    public $timestamps = false;
-
-    public function containers()
+    public function containers(): HasMany
     {
         return $this->hasMany(Container::class, 'chemical_id');
     }
