@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::table('containers', function (Blueprint $table) {
-            $table->integer('shelf_id');
+            $table->unsignedBigInteger('shelf_id');
             $table->foreign('shelf_id')->references('id')->on('shelves')->onDelete('cascade');
         });
 

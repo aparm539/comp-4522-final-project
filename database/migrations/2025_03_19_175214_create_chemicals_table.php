@@ -21,8 +21,8 @@ return new class extends Migration
             $table->dropColumn('cas');
             $table->dropColumn('chemical_name');
             $table->dropColumn('container_name');
-            $table->integer('chemical_id');
-            $table->foreign('chemical_id')->references('id')->on('chemicals')->onDelete('set null');
+            $table->unsignedBigInteger('chemical_id');
+            $table->foreign('chemical_id')->references('id')->on('chemicals')->onDelete('cascade');
 
         });
 

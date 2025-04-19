@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->string('room_number')->nullable();
                 $table->string('description')->nullable();
             });
-        };
+        }
 
         //
     }
@@ -30,7 +30,7 @@ return new class extends Migration
     {
         Schema::table('locations', function (Blueprint $table) {
             $table->json('location_json')->nullable();
-            $table->dropColumn(['shelf','room_number', 'description']);
+            $table->dropColumn(['shelf', 'room_number', 'description']);
         });
         //
     }

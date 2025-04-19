@@ -15,10 +15,10 @@ return new class extends Migration
             $table->string('full_name', 255)->change();
         });
 
-        Schema::table('unitsofmeasure', function(Blueprint $table) {
+        Schema::table('unitsofmeasure', function (Blueprint $table) {
             $table->string('abbreviation', 10)->change();
         });
-        Schema::table('containers', function(Blueprint $table) {
+        Schema::table('containers', function (Blueprint $table) {
             $table->date('created_at');
             $table->date('updated_at');
             $table->dropColumn('date_added');
@@ -33,10 +33,10 @@ return new class extends Migration
         Schema::table('chemicals', function (Blueprint $table) {
             $table->string('full_name', 100)->change();
         });
-        Schema::table('unitsofmeasure', function(Blueprint $table) {
+        Schema::table('unitsofmeasure', function (Blueprint $table) {
             $table->string('abbreviation', 3)->change();
         });
-        Schema::table('containers', function(Blueprint $table) {
+        Schema::table('containers', function (Blueprint $table) {
             $table->dropColumn('created_at');
             $table->dropColumn('updated_at');
             $table->date('date_added');
