@@ -15,16 +15,6 @@ class Container extends Model
 {
     use HasFactory;
 
-    protected $table = 'containers';
-
-    protected $primaryKey = 'id';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
-
-    public $timestamps = true;
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'supervisor_id');
@@ -50,7 +40,7 @@ class Container extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function reconciliation_item(): HasMany
+    public function reconciliationItems(): HasMany
     {
         return $this->hasMany(ReconciliationItem::class, 'container_id');
     }
