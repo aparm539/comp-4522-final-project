@@ -2,12 +2,10 @@
 
 namespace App\Livewire;
 
-
-use App\Models\Location;
+use App\Models\Reconciliation;
 use App\Models\ReconciliationItem;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -18,6 +16,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class ViewReconciliation extends Component implements HasForms, HasTable
@@ -25,17 +24,9 @@ class ViewReconciliation extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
-    public $reconciliation_id;
+    public int $reconciliation_id;
 
-    public $newLocationId;
-
-    public $modalData = [
-        'reconciliationItemId' => null,
-        'currentLocation' => null,
-        'containerName' => null,
-    ];
-
-    public function mount($reconciliation_id)
+    public function mount($reconciliation_id): void
     {
         $this->reconciliation_id = $reconciliation_id;
     }
@@ -50,19 +41,19 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                 Select::make('container_id')
                     ->relationship('container', 'id')
                     ->required(),
-                TextInput::make('expected_quantity')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('actual_quantity')
-                    ->numeric(),
-                Toggle::make('is_reconciled')
+                Select::make('status')
+                    ->options([
+                        'pending' => 'Pending',
+                        'reconciled' => 'Reconciled',
+                        'missing' => 'Missing',
+                    ])
                     ->required(),
             ]);
     }
 
     public function table(Table $table): Table
     {
-        $reconciliation = \App\Models\Reconciliation::find($this->reconciliation_id);
+        $reconciliation = Reconciliation::find($this->reconciliation_id);
         $isStopped = $reconciliation && $reconciliation->status === 'stopped';
 
         return $table
@@ -90,9 +81,6 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->label('Storage Cabinet')
                     ->collapsible(),
             ])
-            ->filters([
-                // ...
-            ])
             ->actions([
                 Action::make('Reconcile')
                     ->label('Reconcile')
@@ -103,7 +91,6 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                         if ($record->status === 'pending') {
                             $record->update([
                                 'status' => 'reconciled',
-                                'is_reconciled' => true,
                             ]);
                             Notification::make()
                                 ->title('Reconciliation successful')
@@ -125,7 +112,6 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                         if ($record->status === 'pending') {
                             $record->update([
                                 'status' => 'missing',
-                                'is_reconciled' => true,
                             ]);
                             Notification::make()
                                 ->title('Marked as missing')
@@ -152,7 +138,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->disabled($isStopped)
                     ->visible(! $isStopped)
                     ->action(function () {
-                        $reconciliation = \App\Models\Reconciliation::find($this->reconciliation_id);
+                        $reconciliation = Reconciliation::find($this->reconciliation_id);
 
                         if ($reconciliation) {
                             $reconciliation->update([
@@ -175,7 +161,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->modalDescription('Are you sure you want to resume this reconciliation?')
                     ->visible($isStopped)
                     ->action(function () {
-                        $reconciliation = \App\Models\Reconciliation::find($this->reconciliation_id);
+                        $reconciliation = Reconciliation::find($this->reconciliation_id);
 
                         if ($reconciliation) {
                             $reconciliation->update([
@@ -233,13 +219,12 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                         if ($unreconciledCount > 0) {
                             ReconciliationItem::where('status', 'pending')->update([
                                 'status' => $data['action'],
-                                'is_reconciled' => true,
                             ]);
 
                             $actionLabel = $data['action'] === 'reconciled' ? 'reconciled' : 'marked as missing';
                             Notification::make()
                                 ->title('Reconciliation Completed')
-                                ->body("Successfully {$actionLabel} {$unreconciledCount} items.")
+                                ->body("Successfully $actionLabel $unreconciledCount items.")
                                 ->success()
                                 ->send();
                         } else {
@@ -255,14 +240,14 @@ class ViewReconciliation extends Component implements HasForms, HasTable
 
     protected function processBarcode(string $barcode): void
     {
-        $record = ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+        $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
             ->whereHas('container', function ($query) use ($barcode) {
                 $query->where('barcode', $barcode);
             })
             ->with(['container.location'])
             ->first();
 
-        if (! $record) {
+        if (! $reconciliationItem) {
             Notification::make()
                 ->title('Reconciliation Failed')
                 ->body('No record found for the provided barcode in this reconciliation.')
@@ -272,89 +257,20 @@ class ViewReconciliation extends Component implements HasForms, HasTable
             return;
         }
 
-        if ($record->status === 'pending') {
-            // Get the current location
-            $currentLocation = $record->container->location_id;
+        if ($reconciliationItem->status === 'pending') {
 
-            // Find a different location to move to
-            $newLocation = Location::where('id', '!=', $currentLocation)->first();
-
-            if ($newLocation) {
-                // Update container location
-                $record->container->update(['location_id' => $newLocation->id]);
-
-                // Update reconciliation item
-                $record->update([
-                    'status' => 'reconciled',
-                    'is_reconciled' => true,
-                    'location_id' => $newLocation->id,
-                ]);
-
-                // Refresh the relationships
-                $record->load(['container.location']);
-
-                Notification::make()
-                    ->title('Location Updated')
-                    ->body("Container moved from {$record->container->location->name} to {$newLocation->name}")
-                    ->success()
-                    ->send();
-            } else {
-                Notification::make()
-                    ->title('No Alternative Location')
-                    ->body('No alternative location found to move the container to.')
-                    ->warning()
-                    ->send();
-            }
-        } else {
-            Notification::make()
-                ->title('Already Processed')
-                ->body('This container has already been processed.')
-                ->warning()
-                ->send();
-        }
-    }
-
-    public function updateLocation(): void
-    {
-        if (! $this->newLocationId) {
-            Notification::make()
-                ->title('Location Required')
-                ->body('Please select a new location.')
-                ->warning()
-                ->send();
-
-            return;
-        }
-
-        $record = ReconciliationItem::findOrFail($this->modalData['reconciliationItemId']);
-
-        if ($record->status === 'pending') {
-            // Update container location
-            $record->container->update(['location_id' => $this->newLocationId]);
-
-            // Update reconciliation item
-            $record->update([
+            $reconciliationItem->update([
                 'status' => 'reconciled',
-                'is_reconciled' => true,
-                'location_id' => $this->newLocationId,
             ]);
 
-            $this->newLocationId = null;
-            $this->modalData = [
-                'reconciliationItemId' => null,
-                'currentLocation' => null,
-                'containerName' => null,
-            ];
-
             Notification::make()
-                ->title('Location Updated')
-                ->body('The container has been moved to the new location and marked as reconciled.')
                 ->success()
                 ->send();
         }
+
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.list-reconciliation-items');
     }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ReconciliationItem extends Model
 {
+    public $timestamps = false;
     public function container(): BelongsTo
     {
         return $this->belongsTo(Container::class, 'container_id');
