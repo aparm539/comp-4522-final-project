@@ -21,10 +21,7 @@ class LocationFactory extends Factory
      */
     public function definition(): array
     {
-        $userIDs = DB::table('users')->pluck('id');
-
         return [
-            'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'room_number' => $this->faker->bothify('B2##'),
             'description' => $this->faker->sentence(),
             'supervisor_id' => User::factory(),
