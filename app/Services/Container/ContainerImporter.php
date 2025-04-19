@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Imports;
+namespace App\Services\Container;
 
-use App\Models\Container;
 use App\Models\Chemical;
-use App\Models\UnitOfMeasure;
+use App\Models\Container;
 use App\Models\Location;
 use App\Models\StorageCabinet;
+use App\Models\UnitOfMeasure;
+use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
-use Filament\Actions\Imports\ImportColumn;
 
 class ContainerImporter extends Importer
 {
@@ -52,51 +52,51 @@ class ContainerImporter extends Importer
 
     public function resolveRecord(): ?Container
     {
-        $container = new Container();
-        
+        $container = new Container;
+
         // Find or create related models
         $chemical = Chemical::where('cas', $this->data['chemical.cas'])->first();
-        if (!$chemical) {
+        if (! $chemical) {
             return null;
         }
-        
+
         $unitOfMeasure = UnitOfMeasure::where('abbreviation', $this->data['unitofmeasure.abbreviation'])->first();
-        if (!$unitOfMeasure) {
+        if (! $unitOfMeasure) {
             return null;
         }
-        
+
         $location = Location::where('room_number', $this->data['storageCabinet.location.room_number'])->first();
-        if (!$location) {
+        if (! $location) {
             return null;
         }
-        
+
         $storageCabinet = StorageCabinet::where('name', $this->data['storageCabinet.name'])
             ->where('location_id', $location->id)
             ->first();
-        if (!$storageCabinet) {
+        if (! $storageCabinet) {
             return null;
         }
-        
+
         // Set the relationships
         $container->chemical_id = $chemical->id;
         $container->unit_of_measure_id = $unitOfMeasure->id;
         $container->storage_cabinet_id = $storageCabinet->id;
-        
+
         // Set other attributes
         $container->quantity = $this->data['quantity'];
         $container->barcode = $this->data['barcode'] ?? null;
-        
+
         return $container;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your container import has completed and ' . number_format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your container import has completed and '.number_format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;
     }
-} 
+}

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\StorageCabinetResource\RelationManagers;
 
 use App\Models\Reconciliation;
-use App\Models\ReconciliationItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -13,8 +12,6 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ContainersRelationManager extends RelationManager
 {
@@ -37,7 +34,7 @@ class ContainersRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('barcode'),
                 TextColumn::make('chemical.cas')
-                    ->label("CAS #"),
+                    ->label('CAS #'),
                 TextColumn::make('chemical.name')
                     ->limit(25)
                     ->tooltip(fn ($record): string => ($record->chemical->name)),
@@ -60,7 +57,7 @@ class ContainersRelationManager extends RelationManager
                     })
                     ->label('Hazardous'),
                 TextColumn::make('storageCabinet.location.user.name')
-                    ->label('Supervisor')
+                    ->label('Supervisor'),
 
             ])
             ->filters([

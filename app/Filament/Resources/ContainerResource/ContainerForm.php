@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\ContainerResource;
 
 use App\Models\Chemical;
+use App\Models\Location;
+use App\Models\StorageCabinet;
+use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use App\Models\UnitOfMeasure;
-use App\Models\Location;
-use App\Models\StorageCabinet;  
 
 class ContainerForm
 {
@@ -18,53 +18,56 @@ class ContainerForm
                 ->label('CAS #')
                 ->options(Chemical::all()->pluck('cas', 'id'))
                 ->searchable()
-            ->required(),
+                ->required(),
             Select::make('unit_of_measure_id')
-            ->label('Unit of Measure')
-            ->options(UnitOfMeasure::all()->pluck('abbreviation', 'id'))
-            ->searchable()
-            ->required(),
+                ->label('Unit of Measure')
+                ->options(UnitOfMeasure::all()->pluck('abbreviation', 'id'))
+                ->searchable()
+                ->required(),
 
             TextInput::make('quantity')
-            ->label('Quantity')
+                ->label('Quantity')
                 ->numeric()
                 ->required(),
             Select::make('location_id')
-            ->label('Location')
-            ->options(function() {
-                return Location::all()->pluck('room_number', 'id');
-            })
-            ->disableOptionWhen(function($value) {
-                $location = Location::find($value);
-                return $location && $location->hasOngoingReconciliation();
-            })
-            ->helperText(function() {
-                $ongoingLocations = Location::whereHas('reconciliations', function($query) {
-                    $query->where('status', 'ongoing');
-                })->get();
-                
-                if ($ongoingLocations->isNotEmpty()) {
-                    $locations = $ongoingLocations->pluck('room_number')->join(', ');
-                    return "The following locations are currently being reconciled and cannot be selected: {$locations}";
-                }
-                return null;
-            })
-            ->searchable()
-            ->dehydrated(false)
-            ->required(),
+                ->label('Location')
+                ->options(function () {
+                    return Location::all()->pluck('room_number', 'id');
+                })
+                ->disableOptionWhen(function ($value) {
+                    $location = Location::find($value);
+
+                    return $location && $location->hasOngoingReconciliation();
+                })
+                ->helperText(function () {
+                    $ongoingLocations = Location::whereHas('reconciliations', function ($query) {
+                        $query->where('status', 'ongoing');
+                    })->get();
+
+                    if ($ongoingLocations->isNotEmpty()) {
+                        $locations = $ongoingLocations->pluck('room_number')->join(', ');
+
+                        return "The following locations are currently being reconciled and cannot be selected: {$locations}";
+                    }
+
+                    return null;
+                })
+                ->searchable()
+                ->dehydrated(false)
+                ->required(),
             Select::make('storage_cabinet_id')
                 ->label('Storage Cabinet')
-                ->options(function($get){
+                ->options(function ($get) {
                     $location = $get('location_id');
+
                     return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
                 })
-            ->required()
-            ->searchable(),
+                ->required()
+                ->searchable(),
             TextInput::make('barcode')
                 ->label('Barcode')
-                ->required()
+                ->required(),
 
-            ];
+        ];
     }
 }
-

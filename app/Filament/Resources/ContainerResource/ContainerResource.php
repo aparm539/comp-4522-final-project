@@ -1,23 +1,17 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ContainerResource;
 
-use App\Filament\Resources\ContainerResource\Pages;
 use App\Models\Container;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
-use App\Filament\Resources\ContainerResource\ContainerForm;
-use App\Filament\Resources\ContainerResource\ContainerTable;
 
 class ContainerResource extends Resource
 {
     protected static ?string $model = Container::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $activeNavigationIcon = 'heroicon-s-rectangle-stack';
-
-
 
     public static function form(Form $form): Form
     {

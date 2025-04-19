@@ -46,4 +46,4 @@ class ContainerPolicy
     {
         return $user->isAdmin(); // Only admins can delete containers
     }
-} 
+}

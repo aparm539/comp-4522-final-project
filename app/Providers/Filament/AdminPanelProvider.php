@@ -2,15 +2,19 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\ChemicalResource\ChemicalResource;
+use App\Filament\Resources\ContainerResource\ContainerResource;
+use App\Filament\Resources\LocationResource\LocationResource;
+use App\Filament\Resources\ReconciliationItemResource\ReconciliationItemResource;
+use App\Filament\Resources\ReconciliationResource\ReconciliationResource;
+use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
+use App\Filament\Resources\UserResource\UserResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -33,9 +37,15 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => 'rgb(18, 50, 80)',
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->resources([
+                ChemicalResource::class,
+                ContainerResource::class,
+                LocationResource::class,
+                ReconciliationItemResource::class,
+                ReconciliationResource::class,
+                StorageCabinetResource::class,
+                UserResource::class])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
