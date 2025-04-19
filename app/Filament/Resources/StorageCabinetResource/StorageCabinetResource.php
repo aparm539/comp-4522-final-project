@@ -23,43 +23,15 @@ class StorageCabinetResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('location_id')
-
-                    ->label('Location')
-                    ->options(Location::all()->pluck('room_number', 'id'))
-                    ->required()
-                    ->searchable(),
-                //
-            ]);
+            ->schema(StorageCabinetForm::make());
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('location.user.name')
-                    ->Label('Supervisor'),
-                Tables\Columns\TextColumn::make('location.room_number'),
-                Tables\Columns\TextColumn::make('name')
-                    ->Label('Storage Cabinet'),
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
-                ]),
-            ]);
+            ->columns(StorageCabinetTable::columns())
+            ->actions(StorageCabinetTable::actions())
+            ->bulkActions(StorageCabinetTable::bulkActions());
     }
 
     public static function getRelations(): array

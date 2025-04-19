@@ -24,43 +24,16 @@ class LocationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('barcode')
-                    ->label('Barcode'),
-                TextInput::make('room_number')
-                    ->label('Room Number'),
-                TextInput::make('description')
-                    ->label('Description'),
-                Select::make('supervisor_id')
-                    ->label('Supervisor')
-                    ->options(User::all()->pluck('name', 'id'))
-                    ->searchable(),
-            ]);
+            ->schema(LocationForm::make());
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('room_number'),
-                TextColumn::make('barcode'),
-                TextColumn::make('description')
-                    ->limit(20),
-                TextColumn::make('user.name')
-                    ->label('Supervisor'),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
-                ]),
-            ]);
+            ->columns(LocationTable::columns())
+            ->actions(LocationTable::actions())
+            ->bulkActions(LocationTable::bulkActions());
+
     }
 
     public static function getRelations(): array
