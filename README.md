@@ -1,66 +1,229 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Chemical Inventory Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web app for tracking and managing chemical containers. Built with Laravel and Filament Admin Panel. Made for the MRU chemistry department.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   [Features](#features)
+-   [Technologies Used](#technologies-used)
+-   [Folder Structure](#folder-structure)
+-   [Developer Setup](#developer-setup)
+-   [Application Components](#application-components)
+-   [Reconciliation Feature](#reconciliation-feature)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Container tracking with unique barcodes
+-   Chemical management
+-   Location and storage cabinet organization
+-   User roles and permissions (Admin, Researcher, Viewer)
+-   Reconciliation system
+-   Export and import functionality
 
-## Learning Laravel
+## Technologies Used
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Backend
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-   **PHP 8.2+**
+-   **Laravel 12** - PHP web framework
+-   **Filament 3** - Admin panel and CRUD interface
+-   **Laravel Excel** - Import/export functionality
+-   **Laravel DomPDF** - PDF generation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Frontend
 
-## Laravel Sponsors
+-   **TailwindCSS 4**
+-   **Blade**
+-   **Livewire**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Development/Testing
 
-### Premium Partners
+-   **Vite** - Frontend build tool
+-   **PHPUnit** - Testing framework
+-   **Laravel Pint** - PHP code style fixer
+-   **Laravel Pail** - Log viewer
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Folder Structure
 
-## Contributing
+The application follows Laravel's standard directory structure:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   **app/** - Core application code
+    -   **Filament/** - Admin panel components and resources
+    -   **Livewire/** - Livewire components
+    -   **Models/** - Eloquent model definitions
+    -   **Policies/** - Authorization policies
+    -   **Providers/** - Service providers
+-   **bootstrap/** - Application bootstrapping files
+-   **config/** - Configuration files
+-   **database/** - Database migrations, seeders, and factories
+-   **public/** - Publicly accessible files
+-   **resources/** - Frontend resources
+    -   **css/** - CSS styles
+    -   **js/** - JavaScript files
+    -   **views/** - Blade templates
+-   **routes/** - Route definitions
+-   **storage/** - Application storage
+-   **tests/** - Automated tests
+-   **vendor/** - Composer dependencies
 
-## Code of Conduct
+## Developer Setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Prerequisites
 
-## Security Vulnerabilities
+-   PHP 8.2 or higher
+-   Composer
+-   Node.js and npm
+-   MySQL
+-   Git
+-   Docker
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Installation Steps
 
-## License
+1. Clone the repository:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    git clone [repository-url]
+    cd comp-4522-final-project
+    ```
+
+2. Install PHP dependencies:
+
+    ```bash
+    composer install
+    ```
+
+3. Install JavaScript dependencies:
+
+    ```bash
+    npm install
+    ```
+
+4. Create environment file and generate app key:
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+5. Start Laravel Sail:
+
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
+
+6. Run database migrations and seed initial data:
+
+    ```bash
+    ./vendor/bin/sail artisan migrate --seed
+    ```
+
+7. Start the development server:
+
+    ```bash
+    ./vendor/bin/sail npm run dev
+    ```
+
+8. Visit http://localhost in your browser and login using one of the users created in the UserSeeder.php file
+
+## Application Components
+
+### Models and Relationships
+
+-   **User** - System users with role-based permissions
+-   **Role** - User roles (Admin, Researcher, Viewer)
+-   **Container** - Chemical containers with unique barcodes
+-   **Chemical** - Chemical substances
+-   **Location** - Physical locations for containers
+-   **StorageCabinet** - Storage units for chemicals
+-   **UnitOfMeasure** - Measurement units for chemicals
+-   **Reconciliation** - Inventory reconciliation records
+-   **ReconciliationItem** - Individual items in reconciliation
+
+### Authentication and Authorization
+
+The system implements a role-based access control system:
+
+-   **Admin** - Complete access to all features
+-   **Researcher** - Can manage containers and perform reconciliations
+-   **Viewer** - Read-only access to inventory data
+
+## Reconciliation Feature
+
+The reconciliation feature provides a systematic way to verify and account for all chemical containers in the inventory. It helps ensure the accuracy of inventory records and identifies any discrepancies between the system records and the actual physical inventory.
+
+### Overview
+
+Reconciliation is the process of comparing the expected inventory (what the system shows) with the actual physical inventory (what exists in the laboratory). This helps in:
+
+-   Identifying missing or misplaced containers
+-   Verifying the quantities of chemicals
+-   Ensuring compliance with safety and regulatory requirements
+-   Maintaining accurate inventory records
+
+### How It Works
+
+1. **Initiation**: Reconciliations can be started for:
+
+    - Individual locations
+    - All locations at once (using the "Create Reconciliations for All Locations" action)
+
+2. **Process**:
+
+    - Each reconciliation is associated with a specific location
+    - The system automatically creates reconciliation items for each container in the storage cabinets at that location
+    - Each reconciliation item tracks:
+        - Expected quantity (from system records)
+        - Actual quantity (to be filled during the physical count)
+        - Reconciliation status (whether the item has been checked)
+
+3. **Reconciliation States**:
+
+    - **Ongoing**: The reconciliation process is in progress
+    - **Completed**: All items have been verified and the reconciliation is finished
+    - **Stopped**: The reconciliation has been halted before completion
+
+4. **Item Verification**:
+    - Staff scan or manually enter container barcodes
+    - Actual quantities are recorded
+    - Items are marked as "reconciled" once verified
+
+### Workflow Example
+
+1. An administrator initiates a reconciliation for a specific laboratory location
+2. The system generates a list of all containers expected to be at that location
+3. Staff physically count and verify each container
+4. For each container found:
+    - The barcode is scanned
+    - The actual quantity is recorded
+    - The container is marked as "reconciled"
+5. After all containers are checked, discrepancies are reviewed:
+    - Missing containers (expected but not found)
+    - Unexpected containers (found but not in the system record for that location)
+    - Quantity differences
+6. Actions are taken to resolve discrepancies
+7. The reconciliation is marked as "completed"
+
+### Data Structure
+
+The reconciliation feature is built on two main models:
+
+1. **Reconciliation**:
+
+    - Associated with a location
+    - Tracks status (ongoing, completed, stopped)
+    - Records start and end times
+    - Stores notes about the reconciliation process
+
+2. **ReconciliationItem**:
+    - Links a specific container to a reconciliation
+    - Records expected and actual quantities
+    - Tracks whether the item has been reconciled
+
+### Reporting
+
+The reconciliation feature provides reporting capabilities that allow administrators to:
+
+-   View the status of ongoing reconciliations
+-   Review completed reconciliations
+-   Identify patterns of discrepancies
+-   Generate compliance reports for regulatory purposes
