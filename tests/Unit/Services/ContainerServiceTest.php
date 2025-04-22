@@ -28,9 +28,13 @@ class ContainerServiceTest extends TestCase
     public function test_it_can_print_containers()
     {
         // Arrange
+        /** @var Chemical $chemical */
         $chemical = Chemical::factory()->create();
+        /** @var UnitOfMeasure $unitOfMeasure */
         $unitOfMeasure = UnitOfMeasure::factory()->create();
+        /** @var Location $location */
         $location = Location::factory()->create();
+        /** @var StorageCabinet $storageCabinet */
         $storageCabinet = StorageCabinet::factory()->create([
             'location_id' => $location->id,
         ]);

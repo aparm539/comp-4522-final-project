@@ -21,9 +21,8 @@ class ContainerFactory extends Factory
      */
     public function definition(): array
     {
-        $userIDs = DB::table('users')->pluck('id');
+
         $unitOfMeasureIDs = DB::table('unitsofmeasure')->pluck('id');
-        $shelfIDs = DB::table('storage_cabinets')->pluck('id');
 
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),

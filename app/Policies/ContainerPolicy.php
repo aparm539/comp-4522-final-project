@@ -10,7 +10,7 @@ class ContainerPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true; // All authenticated users can view containers
     }
@@ -18,7 +18,7 @@ class ContainerPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Container $container): bool
+    public function view(): bool
     {
         return true; // All authenticated users can view individual containers
     }
@@ -34,7 +34,7 @@ class ContainerPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Container $container): bool
+    public function update(User $user): bool
     {
         return $user->isResearcher() || $user->isAdmin();
     }
@@ -42,7 +42,7 @@ class ContainerPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Container $container): bool
+    public function delete(User $user): bool
     {
         return $user->isAdmin(); // Only admins can delete containers
     }

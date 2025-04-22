@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +13,15 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @mixin Builder
+ *
+ * @property int id
+ * @property string name
+ * @property string email
+ * @property DateTime email_verified_at
+ * @property string password
+ * @property string remember_token
+ * @property DateTime created_at
+ * @property DateTime updated_at
  */
 class User extends Authenticatable implements FilamentUser
 {

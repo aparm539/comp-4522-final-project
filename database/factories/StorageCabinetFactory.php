@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Location;
+use App\Models\StorageCabinet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\StorageCabinet>
+ * @extends Factory<StorageCabinet>
  */
 class StorageCabinetFactory extends Factory
 {
@@ -18,8 +19,6 @@ class StorageCabinetFactory extends Factory
      */
     public function definition(): array
     {
-        $locationIDs = DB::table('locations')->pluck('id');
-
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'name' => $this->faker->bothify('shelf #'),

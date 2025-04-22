@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ * @property int id
+ * @property string name
+ * @property string abbreviation
  */
 class UnitOfMeasure extends Model
 {
@@ -18,6 +21,8 @@ class UnitOfMeasure extends Model
     // so we must explicitly define it here.
     // https://laravel.com/docs/12.x/eloquent#table-names
     protected $table = 'unitsofmeasure';
+
+    public $timestamps = false;
 
     // Define relationships
     public function containers(): HasMany

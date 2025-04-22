@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Chemical;
 use App\Models\User;
 
 class ChemicalPolicy
@@ -10,7 +9,7 @@ class ChemicalPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true; // All authenticated users can view chemicals
     }
@@ -18,7 +17,7 @@ class ChemicalPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Chemical $chemical): bool
+    public function view(): bool
     {
         return true; // All authenticated users can view individual chemicals
     }
@@ -34,7 +33,7 @@ class ChemicalPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Chemical $chemical): bool
+    public function update(User $user): bool
     {
         return $user->isResearcher() || $user->isAdmin();
     }
@@ -42,8 +41,9 @@ class ChemicalPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Chemical $chemical): bool
+    public function delete(User $user): bool
     {
-        return $user->isAdmin(); // Only admins can delete chemicals
+
+        return $user->isAdmin() || $user->isResearcher(); // Only admins can delete chemicals
     }
 }

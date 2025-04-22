@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ContainerResource;
 use App\Models\Container;
 use App\Models\Location;
 use App\Models\StorageCabinet;
+use App\Models\User;
 use App\Services\Container\ContainerExporter;
 use App\Services\Container\ContainerImporter;
 use App\Services\Container\ContainerService;
@@ -129,7 +130,12 @@ class ContainerTable
                 ->exporter(ContainerExporter::class),
             ImportAction::make()
                 ->importer(ContainerImporter::class)
-                ->visible(fn () => auth()->user()->can('create', Container::class)),
+                ->visible(function () {
+                    /** @var User $user */
+                    $user = auth()->user();
+
+                    return $user->can('create', Container::class);
+                }),
             Action::make('print')
                 ->label('Print All Containers')
                 ->icon('heroicon-o-printer')
@@ -143,11 +149,21 @@ class ContainerTable
     {
         return [
             DeleteBulkAction::make()
-                ->visible(fn (Container $container): bool => auth()->user()->can('delete', $container)),
+                ->visible(function (Container $container): bool {
+                    /** @var User $user */
+                    $user = auth()->user();
+
+                    return $user->can('delete', $container);
+                }),
             BulkAction::make('changeLocation')
                 ->label('Change Location')
                 ->icon('heroicon-o-map')
-                ->visible(fn (Container $container): bool => auth()->user()->can('update', $container))
+                ->visible(function (Container $container): bool {
+                    /** @var User $user */
+                    $user = auth()->user();
+
+                    return $user->can('update', $container);
+                })
                 ->form([
                     Select::make('location_id')
                         ->label('Location')
@@ -157,7 +173,8 @@ class ContainerTable
                             });
                         })
                         ->disableOptionWhen(function ($value) {
-                            $location = Location::class->find($value);
+                            /** @var Location $location */
+                            $location = Location::find($value);
 
                             return $location && $location->hasOngoingReconciliation();
                         })
@@ -167,7 +184,7 @@ class ContainerTable
                             if ($ongoingLocations->isNotEmpty()) {
                                 $locations = $ongoingLocations->pluck('room_number')->join(', ');
 
-                                return "The following locations are currently being reconciled and cannot be selected: {$locations}";
+                                return "The following locations are currently being reconciled and cannot be selected: $locations";
                             }
 
                             return null;
@@ -183,9 +200,7 @@ class ContainerTable
                         ->searchable()
                         ->required(),
                 ])
-                ->action(function (Collection $records, array $data) {
-                    return app(ContainerService::class)->changeLocation($records, $data);
-                })
+                ->action(fn (Collection $records, array $data) => app(ContainerService::class)->changeLocation($records, $data))
                 ->requiresConfirmation()
                 ->modalHeading('Change Location')
                 ->modalDescription('Are you sure you want to change the location and storage cabinet of the selected containers?')
