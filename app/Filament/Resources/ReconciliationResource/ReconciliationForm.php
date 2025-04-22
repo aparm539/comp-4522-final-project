@@ -16,7 +16,6 @@ class ReconciliationForm
                 ->options([
                     'ongoing' => 'Ongoing',
                     'completed' => 'Completed',
-                    'canceled' => 'Canceled',
                     'stopped' => 'Stopped',
                 ])
                 ->required()

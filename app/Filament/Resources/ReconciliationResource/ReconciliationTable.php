@@ -27,6 +27,7 @@ class ReconciliationTable
                     'stopped' => 'heroicon-o-no-symbol',
                     'ongoing' => 'heroicon-o-pencil',
                     'completed' => 'heroicon-o-check-circle',
+                    'canceled' => 'heroicon-o-exclamation-circle',
                 })
                 ->color(fn (string $state): string => match ($state) {
                     'stopped' => 'danger',
