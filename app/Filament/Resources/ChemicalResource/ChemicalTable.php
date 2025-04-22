@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ChemicalResource;
 
+use App\Models\Chemical;
+use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -30,7 +32,12 @@ class ChemicalTable
         return [
             BulkActionGroup::make([
                 DeleteBulkAction::make()
-                    ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
+                    ->visible(function (Chemical $chemical) {
+                        /** @var User $user */
+                        $user = auth()->user();
+
+                        return $user->can('delete', $chemical);
+                    }),
             ]),
         ];
     }

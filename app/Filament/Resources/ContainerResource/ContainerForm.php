@@ -8,6 +8,7 @@ use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Model;
 
 class ContainerForm
 {
@@ -32,6 +33,7 @@ class ContainerForm
             Select::make('location_id')
                 ->label('Location')
                 ->options(function () {
+
                     return Location::all()->pluck('room_number', 'id');
                 })
                 ->disableOptionWhen(function ($value) {
@@ -47,20 +49,24 @@ class ContainerForm
                     if ($ongoingLocations->isNotEmpty()) {
                         $locations = $ongoingLocations->pluck('room_number')->join(', ');
 
-                        return "The following locations are currently being reconciled and cannot be selected: {$locations}";
+                        return "The following locations are currently being reconciled and cannot be selected: $locations";
                     }
 
                     return null;
                 })
                 ->searchable()
-                ->dehydrated(false)
                 ->required(),
             Select::make('storage_cabinet_id')
                 ->label('Storage Cabinet')
                 ->options(function ($get) {
                     $location = $get('location_id');
+                    if ($location) {
 
-                    return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
+                        return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
+                    }
+
+                    return StorageCabinet::all()->pluck('name', 'id');
+
                 })
                 ->required()
                 ->searchable(),

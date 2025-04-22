@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Reconciliation;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -15,7 +14,7 @@ class ReconciliationPolicy
         return $user->hasRole('admin');
     }
 
-    public function view(User $user, Reconciliation $reconciliation): bool
+    public function view(User $user): bool
     {
         return $user->hasRole('admin');
     }
@@ -25,12 +24,12 @@ class ReconciliationPolicy
         return $user->hasRole('admin');
     }
 
-    public function update(User $user, Reconciliation $reconciliation): bool
+    public function update(User $user): bool
     {
         return $user->hasRole('admin');
     }
 
-    public function delete(User $user, Reconciliation $reconciliation): bool
+    public function delete(User $user): bool
     {
         return $user->hasRole('admin');
     }

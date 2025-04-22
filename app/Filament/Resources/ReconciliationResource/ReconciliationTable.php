@@ -24,7 +24,7 @@ class ReconciliationTable
                 ->formatStateUsing(fn ($state, $record) => $record->location->room_number),
             IconColumn::make('status')
                 ->icon(fn (string $state): string => match ($state) {
-                    'stopped' => 'akar-stop',
+                    'stopped' => 'heroicon-o-no-symbol',
                     'ongoing' => 'heroicon-o-pencil',
                     'completed' => 'heroicon-o-check-circle',
                 })
@@ -94,6 +94,7 @@ class ReconciliationTable
             $reconciliation->started_at = now();
             $reconciliation->location_id = $location->id;
             $reconciliation->save();
+
 
             // Get all containers from all storage cabinets in this location
             foreach ($location->storageCabinets as $storageCabinet) {

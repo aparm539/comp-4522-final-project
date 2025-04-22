@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\StorageCabinetResource;
 
+use App\Models\StorageCabinet;
+use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -32,7 +34,13 @@ class StorageCabinetTable
         return [
             BulkActionGroup::make([
                 DeleteBulkAction::make()
-                    ->visible(fn () => auth()->user()->hasRole('admin') || auth()->user()->hasRole('manager')),
+
+                    ->visible(function (StorageCabinet $storageCabinet) {
+                        /** @var User $user */
+                        $user = auth()->user();
+
+                        return $user->can('delete', $storageCabinet);
+                    }),
             ]),
         ];
     }

@@ -10,12 +10,12 @@ class StorageCabinetPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true; // All users can view storage cabinets
     }
 
-    public function view(User $user, StorageCabinet $storageCabinet): bool
+    public function view(User $user): bool
     {
         return true; // All users can view individual storage cabinets
     }
@@ -25,12 +25,12 @@ class StorageCabinetPolicy
         return $user->hasRole('admin');
     }
 
-    public function update(User $user, StorageCabinet $storageCabinet): bool
+    public function update(User $user): bool
     {
         return $user->hasRole('admin');
     }
 
-    public function delete(User $user, StorageCabinet $storageCabinet): bool
+    public function delete(User $user): bool
     {
         return $user->hasRole('admin');
     }

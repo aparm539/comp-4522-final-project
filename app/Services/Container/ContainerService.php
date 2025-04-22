@@ -4,14 +4,14 @@ namespace App\Services\Container;
 
 use App\Models\Container;
 use App\Models\Location;
-use App\Models\User;
 use App\Services\Container\Exceptions\ContainerLocationUpdateException;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class ContainerService
+readonly class ContainerService
 {
     public function __construct(
         private Container $model,
@@ -20,37 +20,32 @@ class ContainerService
     ) {}
 
     /**
-     * Create a new container with logging
+     * Create a new container with logging.
      *
      * @throws Exception
      */
     public function create(array $data): Container
     {
-        if ($this->logger) {
-            $this->logger->info('Creating new container', ['data' => $data]);
-        }
+        $this->logger?->info('Creating new container', ['data' => $data]);
 
         try {
+            /** @var Container $container */
             $container = $this->model->create($data);
 
-            if ($this->logger) {
-                $this->logger->info('Container created successfully', ['id' => $container->id]);
-            }
+            $this->logger?->info('Container created successfully', ['id' => $container->id]);
 
             return $container;
         } catch (Exception $e) {
-            if ($this->logger) {
-                $this->logger->error('Failed to create container', [
-                    'error' => $e->getMessage(),
-                    'data' => $data,
-                ]);
-            }
+            $this->logger?->error('Failed to create container', [
+                'error' => $e->getMessage(),
+                'data' => $data,
+            ]);
             throw $e;
         }
     }
 
     /**
-     * Find a container by ID
+     * Find a container by ID.
      */
     public function find(int $id): ?Container
     {
@@ -58,21 +53,11 @@ class ContainerService
     }
 
     /**
-     * Get containers with all related data
-     */
-    public function findWithRelations(int $id): ?Container
-    {
-        return $this->model
-            ->with(['chemical', 'location', 'storageCabinet', 'unitOfMeasure'])
-            ->find($id);
-    }
-
-    /**
-     * Change location for multiple containers
+     * Change location for multiple containers.
      *
      * @throws ContainerLocationUpdateException
      */
-    public function changeLocation(\Illuminate\Database\Eloquent\Collection $records, array $data): void
+    public function changeLocation(Collection $records, array $data): void
     {
         try {
             DB::beginTransaction();
@@ -84,7 +69,6 @@ class ContainerService
 
             $records->each(function ($record) use ($data) {
                 $record->update([
-                    'location_id' => $data['location_id'],
                     'storage_cabinet_id' => $data['storage_cabinet_id'],
                 ]);
             });
@@ -112,36 +96,15 @@ class ContainerService
     public function printContainers(): StreamedResponse
     {
         $containers = Container::all();
-        $response = $this->exporter->streamPdfDownload($containers);
 
-        return $response;
+        return $this->exporter->streamPdfDownload($containers);
+
     }
 
-    public function getUnavailableLocations()
+    public function getUnavailableLocations(): Collection
     {
         return Location::whereHas('reconciliations', function ($query) {
             $query->where('status', 'ongoing');
         })->get();
-    }
-
-    /**
-     * Get containers for reconciliation with specific conditions
-     */
-    public function getContainersForReconciliation(Location $location, User $user): \Illuminate\Database\Eloquent\Collection
-    {
-        return $this->model
-            ->whereHas('storageCabinet', function ($query) use ($location) {
-                $query->where('location_id', $location->id);
-            })
-            ->whereDoesntHave('reconciliationItems', function ($query) {
-                $query->where('status', 'pending');
-            })
-            ->when(! $user->isAdmin(), function ($query) use ($user) {
-                $query->whereHas('storageCabinet.location', function ($query) use ($user) {
-                    $query->where('supervisor_id', $user->id);
-                });
-            })
-            ->with(['chemical', 'unitOfMeasure'])
-            ->get();
     }
 }

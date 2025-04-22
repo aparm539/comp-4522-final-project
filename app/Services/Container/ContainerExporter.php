@@ -35,21 +35,6 @@ class ContainerExporter extends Exporter
         ];
     }
 
-    public static function getColumnLabels(): array
-    {
-        return [
-            'barcode' => 'Barcode',
-            'chemical.cas' => 'CAS #',
-            'chemical.name' => 'Chemical Name',
-            'quantity' => 'Quantity',
-            'unitofmeasure.abbreviation' => 'Unit',
-            'storageCabinet.location.room_number' => 'Room',
-            'storageCabinet.name' => 'Cabinet',
-            'chemical.ishazardous' => 'Hazardous',
-            'storageCabinet.location.user.name' => 'Supervisor',
-        ];
-    }
-
     public static function getCompletedNotificationBody(Export $export): string
     {
         $body = 'Your container export has completed and '.number_format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';

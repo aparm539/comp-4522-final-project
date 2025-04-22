@@ -38,18 +38,6 @@ class ContainerImporter extends Importer
         ];
     }
 
-    public static function getColumnLabels(): array
-    {
-        return [
-            'barcode' => 'Barcode',
-            'chemical.cas' => 'CAS #',
-            'quantity' => 'Quantity',
-            'unitofmeasure.abbreviation' => 'Unit',
-            'storageCabinet.location.room_number' => 'Room',
-            'storageCabinet.name' => 'Cabinet',
-        ];
-    }
-
     public function resolveRecord(): ?Container
     {
         $container = new Container;

@@ -11,8 +11,6 @@ class LocationForm
     public static function make(): array
     {
         return [
-            TextInput::make('barcode')
-                ->label('Barcode'),
             TextInput::make('room_number')
                 ->label('Room Number'),
             TextInput::make('description')

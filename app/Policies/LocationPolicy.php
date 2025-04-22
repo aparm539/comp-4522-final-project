@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Location;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -10,12 +9,12 @@ class LocationPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true; // All users can view locations
     }
 
-    public function view(User $user, Location $location): bool
+    public function view(): bool
     {
         return true; // All users can view individual locations
     }
@@ -25,12 +24,12 @@ class LocationPolicy
         return $user->hasRole('admin');
     }
 
-    public function update(User $user, Location $location): bool
+    public function update(User $user): bool
     {
         return $user->hasRole('admin');
     }
 
-    public function delete(User $user, Location $location): bool
+    public function delete(User $user): bool
     {
         return $user->hasRole('admin');
     }

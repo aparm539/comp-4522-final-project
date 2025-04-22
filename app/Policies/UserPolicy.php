@@ -9,12 +9,12 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return true; // All authenticated users can view the user list
     }
 
-    public function view(User $user, User $model): bool
+    public function view(): bool
     {
         return true; // All authenticated users can view individual users
     }
@@ -24,12 +24,12 @@ class UserPolicy
         return $user->isAdmin(); // Only admins can create new users
     }
 
-    public function update(User $user, User $model): bool
+    public function update(User $user): bool
     {
         return $user->isAdmin(); // Only admins can update users
     }
 
-    public function delete(User $user, User $model): bool
+    public function delete(User $user): bool
     {
         return $user->isAdmin(); // Only admins can delete users
     }

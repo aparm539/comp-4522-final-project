@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\UnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UnitOfMeasure>
+ * @extends Factory<UnitOfMeasure>
  */
 class UnitOfMeasureFactory extends Factory
 {

@@ -8,6 +8,7 @@ use App\Filament\Resources\LocationResource\LocationResource;
 use App\Filament\Resources\ReconciliationResource\ReconciliationResource;
 use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
 use App\Filament\Resources\UserResource\UserResource;
+use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -23,6 +24,9 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /**
+     * @throws Exception
+     */
     public function panel(Panel $panel): Panel
     {
         return $panel

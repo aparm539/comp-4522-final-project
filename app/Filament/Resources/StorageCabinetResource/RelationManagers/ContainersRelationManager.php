@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StorageCabinetResource\RelationManagers;
 
 use App\Models\Reconciliation;
+use App\Models\StorageCabinet;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -47,12 +48,11 @@ class ContainersRelationManager extends RelationManager
                 TextColumn::make('chemical.ishazardous')
                     ->badge()
                     ->formatStateUsing(fn ($state, $record) => match ($state) {
-                        true => 'danger',
-                        false => '-',
+                        1 => 'danger',
+                        0 => '-',
                     })
                     ->color(fn (string $state): string => match ($state) {
                         '1' => 'danger',
-                        '-' => 'primary',
                         default => 'primary'
                     })
                     ->label('Hazardous'),

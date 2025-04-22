@@ -10,6 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ *
+ * @property int id
+ * @property string barcode
+ * @property float quantity
+ * @property int unit_of_measure_id
+ * @property int chemical_id
+ * @property \DateTime created_at
+ * @property \DateTime updated_at
+ * @property int storage_cabinet_id
  */
 class Container extends Model
 {

@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ * @property int id
+ * @property string cas
+ * @property string name
+ * @property bool ishazardous
  */
 class Chemical extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
 
     public function containers(): HasMany
     {

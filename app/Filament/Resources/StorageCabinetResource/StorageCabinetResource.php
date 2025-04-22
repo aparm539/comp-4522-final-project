@@ -3,13 +3,9 @@
 namespace App\Filament\Resources\StorageCabinetResource;
 
 use App\Filament\Resources\StorageCabinetResource\RelationManagers\ContainersRelationManager;
-use App\Models\Location;
 use App\Models\StorageCabinet;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 
 class StorageCabinetResource extends Resource

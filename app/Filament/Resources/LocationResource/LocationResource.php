@@ -4,13 +4,8 @@ namespace App\Filament\Resources\LocationResource;
 
 use App\Filament\Resources\LocationResource\RelationManagers\StorageCabinetRelationManager;
 use App\Models\Location;
-use App\Models\User;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class LocationResource extends Resource

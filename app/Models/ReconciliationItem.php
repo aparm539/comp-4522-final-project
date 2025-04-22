@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @mixin Builder
+ * @property int id
+ * @property int reconciliation_id
+ * @property int container_id
+ * @property string status
  */
 class ReconciliationItem extends Model
 {
