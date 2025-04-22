@@ -222,17 +222,19 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                             ]);
 
                             $actionLabel = $data['action'] === 'reconciled' ? 'reconciled' : 'marked as missing';
-                            Notification::make()
-                                ->title('Reconciliation Completed')
-                                ->body("Successfully $actionLabel $unreconciledCount items.")
-                                ->success()
-                                ->send();
-                        } else {
-                            Notification::make()
-                                ->title('No Items to Process')
-                                ->body('All items have already been processed.')
-                                ->info()
-                                ->send();
+
+                        }
+                        Notification::make()
+                            ->title('Reconciliation Completed')
+                            ->body("Successfully $actionLabel $unreconciledCount items.")
+                            ->success()
+                            ->send();
+                        $reconciliation = Reconciliation::find($this->reconciliation_id);
+                        if ($reconciliation) {
+                            $reconciliation->update([
+                                'status' => 'completed',
+                                'ended_at' => date('Y-m-d H:i:s'),
+                            ]);
                         }
                     }),
             ]);
@@ -264,6 +266,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
             ]);
 
             Notification::make()
+                ->title('Reconciliation successful')
                 ->success()
                 ->send();
         }

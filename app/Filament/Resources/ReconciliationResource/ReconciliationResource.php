@@ -37,7 +37,9 @@ class ReconciliationResource extends Resource
     {
         return [
             'index' => Pages\ListReconciliations::route('/'),
+            'create' => Pages\CreateReconciliation::route('/create'),
             'view' => Pages\ViewReconciliation::route('/{record}'),
+
         ];
     }
 }
