@@ -16,8 +16,15 @@ class ContainerForm
     {
         return [
             Select::make('chemical_id')
-                ->label('CAS #')
-                ->options(Chemical::all()->pluck('cas', 'id'))
+                ->label('Chemical')
+                ->options(Chemical::query()
+                    ->with('whmisHazardClass')
+                    ->get()
+                    ->mapWithKeys(function (Chemical $chemical) {
+                        return [
+                            $chemical->id => "{$chemical->cas} - {$chemical->name} ({$chemical->whmisHazardClass->class_name})"
+                        ];
+                    }))
                 ->searchable()
                 ->required(),
             Select::make('unit_of_measure_id')

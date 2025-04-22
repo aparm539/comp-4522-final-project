@@ -45,20 +45,31 @@ class ContainersRelationManager extends RelationManager
                 TextColumn::make('storageCabinet')
                     ->formatStateUsing(fn ($state, $record) => ($record->storageCabinet->location->room_number.' '.$record->storageCabinet->name))
                     ->label('Location'),
-                TextColumn::make('chemical.ishazardous')
+                TextColumn::make('chemical.whmisHazardClass.class_name')
+                    ->label('Hazard Class')
                     ->badge()
-                    ->formatStateUsing(fn ($state, $record) => match ($state) {
-                        1 => 'danger',
-                        0 => '-',
+                    ->color(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
+                        'flame' => 'danger',
+                        'flame-over-circle' => 'danger',
+                        'gas-cylinder' => 'warning',
+                        'skull-crossbones' => 'danger',
+                        'corrosion' => 'danger',
+                        'health-hazard' => 'warning',
+                        'environment' => 'success',
+                        default => 'gray',
                     })
-                    ->color(fn (string $state): string => match ($state) {
-                        '1' => 'danger',
-                        default => 'primary'
-                    })
-                    ->label('Hazardous'),
+                    ->icon(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
+                        'flame' => 'heroicon-m-fire',
+                        'flame-over-circle' => 'heroicon-m-fire',
+                        'gas-cylinder' => 'heroicon-m-beaker',
+                        'skull-crossbones' => 'heroicon-m-exclamation-triangle',
+                        'corrosion' => 'heroicon-m-bolt',
+                        'health-hazard' => 'heroicon-m-heart',
+                        'environment' => 'heroicon-m-globe-alt',
+                        default => 'heroicon-m-minus',
+                    }),
                 TextColumn::make('storageCabinet.location.user.name')
                     ->label('Supervisor'),
-
             ])
             ->filters([
                 //
@@ -78,7 +89,6 @@ class ContainersRelationManager extends RelationManager
                                 ->warning()
                                 ->send();
                             $action->cancel();
-
                         }
 
                         return true;
@@ -104,7 +114,6 @@ class ContainersRelationManager extends RelationManager
                         return true;
                     }),
             ])
-
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

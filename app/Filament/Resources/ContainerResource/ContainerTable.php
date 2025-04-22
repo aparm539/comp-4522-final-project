@@ -56,20 +56,32 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('180px'),
-            TextColumn::make('chemical.ishazardous')
+            TextColumn::make('chemical.whmisHazardClass.class_name')
+                ->label('Hazard Class')
                 ->badge()
-                ->formatStateUsing(fn ($state, $record) => match ($state) {
-                    1 => 'danger',
-                    0 => '-',
+                ->color(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
+                    'flame' => 'danger',
+                    'flame-over-circle' => 'danger',
+                    'gas-cylinder' => 'warning',
+                    'skull-crossbones' => 'danger',
+                    'corrosion' => 'danger',
+                    'health-hazard' => 'warning',
+                    'environment' => 'success',
+                    default => 'gray',
                 })
-                ->color(fn (string $state): string => match ($state) {
-                    '1' => 'danger',
-                    default => 'primary'
+                ->icon(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
+                    'flame' => 'heroicon-m-fire',
+                    'flame-over-circle' => 'heroicon-m-fire',
+                    'gas-cylinder' => 'heroicon-m-beaker',
+                    'skull-crossbones' => 'heroicon-m-exclamation-triangle',
+                    'corrosion' => 'heroicon-m-bolt',
+                    'health-hazard' => 'heroicon-m-heart',
+                    'environment' => 'heroicon-m-globe-alt',
+                    default => 'heroicon-m-minus',
                 })
-                ->label('Hazardous')
                 ->sortable()
                 ->searchable()
-                ->width('100px'),
+                ->width('120px'),
             TextColumn::make('storageCabinet.location.user.name')
                 ->label('Supervisor')
                 ->sortable()
@@ -97,22 +109,10 @@ class ContainerTable
                 ->relationship('unitOfMeasure', 'abbreviation')
                 ->searchable()
                 ->preload(),
-            SelectFilter::make('hazardous')
-                ->options([
-                    '1' => 'Hazardous',
-                    '0' => 'Non-Hazardous',
-                ])
-                ->query(function (Builder $query, array $data) {
-                    if ($data['value'] === '1') {
-                        $query->whereHas('chemical', function ($q) {
-                            $q->where('ishazardous', true);
-                        });
-                    } elseif ($data['value'] === '0') {
-                        $query->whereHas('chemical', function ($q) {
-                            $q->where('ishazardous', false);
-                        });
-                    }
-                }),
+            SelectFilter::make('hazard_class')
+                ->relationship('chemical.whmisHazardClass', 'class_name')
+                ->searchable()
+                ->preload(),
         ];
     }
 
