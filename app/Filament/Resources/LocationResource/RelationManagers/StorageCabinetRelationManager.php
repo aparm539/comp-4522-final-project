@@ -18,8 +18,7 @@ class StorageCabinetRelationManager extends RelationManager
         return $form
             ->schema([
                 TextInput::make('name'),
-                TextInput::make('barcode')
-                    ->visible(fn ($record) => $record !== null), // Show only if the record exists (e.g., on edit)
+                TextInput::make('barcode'),
             ]);
     }
 

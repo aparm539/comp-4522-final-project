@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources\StorageCabinetResource\RelationManagers;
 
+use App\Models\Chemical;
+use App\Models\Location;
 use App\Models\Reconciliation;
 use App\Models\StorageCabinet;
-use Filament\Forms;
+use App\Models\UnitOfMeasure;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -22,9 +26,74 @@ class ContainersRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
+                Select::make('chemical_id')
+                    ->label('Chemical')
+                    ->options(Chemical::query()
+                        ->with('whmisHazardClass')
+                        ->get()
+                        ->mapWithKeys(function (Chemical $chemical) {
+                            return [
+                                $chemical->id => "{$chemical->cas} - {$chemical->name} ({$chemical->whmisHazardClass->class_name})",
+                            ];
+                        }))
+                    ->searchable()
+                    ->required(),
+                Select::make('unit_of_measure_id')
+                    ->label('Unit of Measure')
+                    ->options(UnitOfMeasure::all()->pluck('abbreviation', 'id'))
+                    ->searchable()
+                    ->required(),
+
+                TextInput::make('quantity')
+                    ->label('Quantity')
+                    ->numeric()
+                    ->required(),
+                Select::make('location_id')
+                    ->label('Location')
+                    ->dehydrated(false)
+                    ->options(function () {
+
+                        return Location::all()->pluck('room_number', 'id');
+                    })
+
+                    ->disableOptionWhen(function ($value) {
+                        $location = Location::find($value);
+
+                        return $location && $location->hasOngoingReconciliation();
+                    })
+                    ->helperText(function () {
+                        $ongoingLocations = Location::whereHas('reconciliations', function ($query) {
+                            $query->where('status', 'ongoing');
+                        })->get();
+
+                        if ($ongoingLocations->isNotEmpty()) {
+                            $locations = $ongoingLocations->pluck('room_number')->join(', ');
+
+                            return "The following locations are currently being reconciled and cannot be selected: $locations";
+                        }
+
+                        return null;
+                    })
+                    ->searchable()
+                    ->required(),
+                Select::make('storage_cabinet_id')
+                    ->label('Storage Cabinet')
+                    ->options(function ($get) {
+                        $location = $get('location_id');
+                        if ($location) {
+
+                            return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
+                        }
+
+                        return StorageCabinet::all()->pluck('name', 'id');
+
+                    })
                     ->required()
-                    ->maxLength(255),
+                    ->searchable(),
+                TextInput::make('barcode')
+                    ->label('Barcode')
+                    ->required(),
+
             ]);
     }
 
@@ -75,24 +144,7 @@ class ContainersRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->before(function ($record, $data, CreateAction $action) {
-                        $storageCabinetId = $this->getOwnerRecord()->id; // Get the storage cabinet ID
-                        $hasOngoingReconciliation = Reconciliation::where('storage_cabinet_id', $storageCabinetId)
-                            ->where('status', 'ongoing')
-                            ->exists();
-
-                        if ($hasOngoingReconciliation) {
-                            Notification::make()
-                                ->title('Action Blocked')
-                                ->body('Cannot add a container because a reconciliation is ongoing for this storage cabinet.')
-                                ->warning()
-                                ->send();
-                            $action->cancel();
-                        }
-
-                        return true;
-                    }),
+                CreateAction::make(),
             ])
             ->actions([
                 DeleteAction::make()

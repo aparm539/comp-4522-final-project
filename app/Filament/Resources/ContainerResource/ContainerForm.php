@@ -8,7 +8,6 @@ use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Model;
 
 class ContainerForm
 {
@@ -22,7 +21,7 @@ class ContainerForm
                     ->get()
                     ->mapWithKeys(function (Chemical $chemical) {
                         return [
-                            $chemical->id => "{$chemical->cas} - {$chemical->name} ({$chemical->whmisHazardClass->class_name})"
+                            $chemical->id => "{$chemical->cas} - {$chemical->name} ({$chemical->whmisHazardClass->class_name})",
                         ];
                     }))
                 ->searchable()
@@ -39,6 +38,7 @@ class ContainerForm
                 ->required(),
             Select::make('location_id')
                 ->label('Location')
+                ->dehydrated(false)
                 ->options(function () {
 
                     return Location::all()->pluck('room_number', 'id');
