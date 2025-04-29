@@ -14,6 +14,9 @@ class StorageCabinetForm
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
+            TextInput::make('barcode')
+                ->required()
+                ->maxLength(255),
             Select::make('location_id')
                 ->label('Location')
                 ->options(Location::all()->pluck('room_number', 'id'))
