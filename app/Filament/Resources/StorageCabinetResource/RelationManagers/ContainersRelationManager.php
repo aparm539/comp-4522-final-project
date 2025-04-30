@@ -3,9 +3,7 @@
 namespace App\Filament\Resources\StorageCabinetResource\RelationManagers;
 
 use App\Models\Chemical;
-use App\Models\Location;
 use App\Models\Reconciliation;
-use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -48,48 +46,7 @@ class ContainersRelationManager extends RelationManager
                     ->label('Quantity')
                     ->numeric()
                     ->required(),
-                Select::make('location_id')
-                    ->label('Location')
-                    ->dehydrated(false)
-                    ->options(function () {
 
-                        return Location::all()->pluck('room_number', 'id');
-                    })
-
-                    ->disableOptionWhen(function ($value) {
-                        $location = Location::find($value);
-
-                        return $location && $location->hasOngoingReconciliation();
-                    })
-                    ->helperText(function () {
-                        $ongoingLocations = Location::whereHas('reconciliations', function ($query) {
-                            $query->where('status', 'ongoing');
-                        })->get();
-
-                        if ($ongoingLocations->isNotEmpty()) {
-                            $locations = $ongoingLocations->pluck('room_number')->join(', ');
-
-                            return "The following locations are currently being reconciled and cannot be selected: $locations";
-                        }
-
-                        return null;
-                    })
-                    ->searchable()
-                    ->required(),
-                Select::make('storage_cabinet_id')
-                    ->label('Storage Cabinet')
-                    ->options(function ($get) {
-                        $location = $get('location_id');
-                        if ($location) {
-
-                            return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
-                        }
-
-                        return StorageCabinet::all()->pluck('name', 'id');
-
-                    })
-                    ->required()
-                    ->searchable(),
                 TextInput::make('barcode')
                     ->label('Barcode')
                     ->required(),

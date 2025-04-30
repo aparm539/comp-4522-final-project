@@ -18,7 +18,6 @@ use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ContainerTable
@@ -119,7 +118,15 @@ class ContainerTable
     public static function actions(): array
     {
         return [
-            EditAction::make()->slideOver(),
+            EditAction::make()
+                ->slideOver()
+                ->mutateRecordDataUsing(function (array $data): array {
+                    $container = Container::findOrFail($data['id'])->load('storageCabinet.location');
+                    $containerLocation = $container->storageCabinet->location;
+                    $data['location_id'] = $containerLocation->id;
+
+                    return $data;
+                }),
         ];
     }
 
