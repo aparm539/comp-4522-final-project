@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime created_at
  * @property \DateTime updated_at
  * @property int storage_cabinet_id
+ * @property int last_edit_author_id
  */
 class Container extends Model
 {
@@ -52,5 +53,10 @@ class Container extends Model
     public function reconciliationItems(): HasMany
     {
         return $this->hasMany(ReconciliationItem::class, 'container_id');
+    }
+
+    public function lastEditAuthor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'last_edit_author_id');
     }
 }

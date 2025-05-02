@@ -120,6 +120,12 @@ class ContainerTable
         return [
             EditAction::make()
                 ->slideOver()
+                ->modalContentFooter(fn (Container $record) => view(view: 'containers.footer-component', data: ['containerId' => 1]))
+                ->mutateFormDataUsing(function (array $data): array {
+                    $data['last_edit_author_id'] = auth()->user()->id;
+
+                    return $data;
+                })
                 ->mutateRecordDataUsing(function (array $data): array {
                     $container = Container::findOrFail($data['id'])->load('storageCabinet.location');
                     $containerLocation = $container->storageCabinet->location;
@@ -127,6 +133,7 @@ class ContainerTable
 
                     return $data;
                 }),
+
         ];
     }
 
