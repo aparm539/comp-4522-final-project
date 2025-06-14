@@ -63,7 +63,8 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->label('Storage Cabinet')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('container.barcode'),
+                TextColumn::make('container.barcode')
+                    ->label('Container'),
                 TextColumn::make('container.chemical.cas')
                     ->label('CAS #'),
                 TextColumn::make('container.chemical.name')
