@@ -24,13 +24,13 @@ class ContainerExporter extends Exporter
                 ->label('Quantity'),
             ExportColumn::make('unitofmeasure.abbreviation')
                 ->label('Unit'),
-            ExportColumn::make('storageCabinet.location.room_number')
+            ExportColumn::make('storageCabinet.lab.room_number')
                 ->label('Room'),
             ExportColumn::make('storageCabinet.name')
                 ->label('Cabinet'),
             ExportColumn::make('chemical.ishazardous')
                 ->label('Hazardous'),
-            ExportColumn::make('storageCabinet.location.user.name')
+            ExportColumn::make('storageCabinet.lab.user.name')
                 ->label('Supervisor'),
         ];
     }

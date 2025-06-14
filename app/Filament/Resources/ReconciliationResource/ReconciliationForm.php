@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ReconciliationResource;
 
-use App\Models\Location;
+use App\Models\Lab;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -41,9 +41,9 @@ class ReconciliationForm
                 ->hidden(fn ($get) => $get('status') !== 'completed')
                 ->date('ended_at')
                 ->closeOnDateSelection(),
-            Select::make('location_id')
-                ->label('Location')
-                ->options(Location::all()->pluck('room_number', 'id'))
+            Select::make('lab_id')
+                ->label('Lab')
+                ->options(Lab::all()->pluck('room_number', 'id'))
                 ->required(),
         ];
     }

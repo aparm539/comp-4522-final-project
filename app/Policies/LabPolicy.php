@@ -5,18 +5,18 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class LocationPolicy
+class LabPolicy
 {
     use HandlesAuthorization;
 
     public function viewAny(): bool
     {
-        return true; // All users can view locations
+        return true; // All users can view labs
     }
 
     public function view(): bool
     {
-        return true; // All users can view individual locations
+        return true; // All users can view individual labs
     }
 
     public function create(User $user): bool

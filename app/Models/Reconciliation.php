@@ -26,8 +26,8 @@ class Reconciliation extends Model
         return $this->hasMany(ReconciliationItem::class, 'reconciliation_id');
     }
 
-    public function location(): BelongsTo
+    public function lab(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Lab::class, 'lab_id');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Services\Container;
 
 use App\Models\Chemical;
 use App\Models\Container;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use Filament\Actions\Imports\ImportColumn;
@@ -29,7 +29,7 @@ class ContainerImporter extends Importer
             ImportColumn::make('unitofmeasure.abbreviation')
                 ->label('Unit')
                 ->requiredMapping(),
-            ImportColumn::make('storageCabinet.location.room_number')
+            ImportColumn::make('storageCabinet.lab.room_number')
                 ->label('Room')
                 ->requiredMapping(),
             ImportColumn::make('storageCabinet.name')
@@ -53,13 +53,13 @@ class ContainerImporter extends Importer
             return null;
         }
 
-        $location = Location::where('room_number', $this->data['storageCabinet.location.room_number'])->first();
-        if (! $location) {
+        $lab = Lab::where('room_number', $this->data['storageCabinet.lab.room_number'])->first();
+        if (! $lab) {
             return null;
         }
 
         $storageCabinet = StorageCabinet::where('name', $this->data['storageCabinet.name'])
-            ->where('location_id', $location->id)
+            ->where('lab_id', $lab->id)
             ->first();
         if (! $storageCabinet) {
             return null;

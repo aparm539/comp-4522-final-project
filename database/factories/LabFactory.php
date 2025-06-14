@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LocationFactory extends Factory
+class LabFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Location::class;
+    protected $model = Lab::class;
 
     /**
      * Define the model's default state.

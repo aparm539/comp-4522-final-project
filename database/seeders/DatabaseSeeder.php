@@ -3,10 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Container;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,19 +22,20 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
         ]);
-        User::factory(3)->create();
-        StorageCabinet::factory(5)
+        $users = User::factory(3)->create();
+        $storageCabinets = StorageCabinet::factory(5)
             ->recycle(
-                Location::factory()
+                Lab::factory()
                     ->recycle(
-                        User::factory()->create()
+                        $users->random()
                     )
                     ->create()
             )
             ->create();
         Container::factory(10)
             ->recycle(
-                StorageCabinet::factory()->create()
+                $storageCabinets,
+                $users->random()
             )
             ->create();
     }

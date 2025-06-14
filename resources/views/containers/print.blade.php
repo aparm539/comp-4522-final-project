@@ -59,7 +59,7 @@
                     <td>{{ $container->chemical->name }}</td>
                     <td>{{ $container->quantity }}</td>
                     <td>{{ $container->unitOfMeasure->abbreviation }}</td>
-                    <td>{{ $container->storageCabinet->location->room_number }}</td>
+                    <td>{{ $container->storageCabinet->lab->room_number }}</td>
                     <td>{{ $container->storageCabinet->name }}</td>
                     <td>{{ $container->chemical->ishazardous ? 'Yes' : 'No' }}</td>
                 </tr>

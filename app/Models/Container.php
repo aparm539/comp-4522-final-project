@@ -45,9 +45,9 @@ class Container extends Model
         return $this->belongsTo(Chemical::class);
     }
 
-    public function location(): BelongsTo
+    public function lab(): BelongsTo
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Lab::class, 'lab_id');
     }
 
     public function reconciliationItems(): HasMany

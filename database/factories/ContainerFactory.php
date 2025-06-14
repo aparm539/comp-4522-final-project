@@ -4,8 +4,10 @@ namespace Database\Factories;
 
 use App\Models\Container;
 use App\Models\StorageCabinet;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
+
 
 class ContainerFactory extends Factory
 {
@@ -30,6 +32,7 @@ class ContainerFactory extends Factory
             'unit_of_measure_id' => $this->faker->randomElement($unitOfMeasureIDs),
             'chemical_id' => random_int(1, 30),
             'storage_cabinet_id' => StorageCabinet::factory(),
+            'last_edit_author_id' => User::factory(),
         ];
     }
 }

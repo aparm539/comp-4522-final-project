@@ -4,7 +4,7 @@ namespace Tests\Unit\Services;
 
 use App\Models\Chemical;
 use App\Models\Container;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use App\Services\Container\ContainerService;
@@ -32,17 +32,17 @@ class ContainerServiceTest extends TestCase
         $chemical = Chemical::factory()->create();
         /** @var UnitOfMeasure $unitOfMeasure */
         $unitOfMeasure = UnitOfMeasure::factory()->create();
-        /** @var Location $location */
-        $location = Location::factory()->create();
+        /** @var Lab $lab */
+        $lab = Lab::factory()->create();
         /** @var StorageCabinet $storageCabinet */
         $storageCabinet = StorageCabinet::factory()->create([
-            'location_id' => $location->id,
+            'lab_id' => $lab->id,
         ]);
 
         $containers = Container::factory()->count(3)->create([
             'chemical_id' => $chemical->id,
             'unit_of_measure_id' => $unitOfMeasure->id,
-            'location_id' => $location->id,
+            'lab_id' => $lab->id,
             'storage_cabinet_id' => $storageCabinet->id,
         ]);
 
@@ -68,52 +68,88 @@ class ContainerServiceTest extends TestCase
         // Arrange
         $chemical = Chemical::factory()->create();
         $unitOfMeasure = UnitOfMeasure::factory()->create();
-        $oldLocation = Location::factory()->create();
+        $oldLab = Lab::factory()->create();
         $oldStorageCabinet = StorageCabinet::factory()->create([
-            'location_id' => $oldLocation->id,
+            'lab_id' => $oldLab->id,
         ]);
-        $newLocation = Location::factory()->create();
+        $newLab = Lab::factory()->create();
         $newStorageCabinet = StorageCabinet::factory()->create([
-            'location_id' => $newLocation->id,
+            'lab_id' => $newLab->id,
         ]);
 
         $containers = Container::factory()->count(3)->create([
             'chemical_id' => $chemical->id,
             'unit_of_measure_id' => $unitOfMeasure->id,
-            'location_id' => $oldLocation->id,
+            'lab_id' => $oldLab->id,
             'storage_cabinet_id' => $oldStorageCabinet->id,
         ]);
 
         $data = [
-            'location_id' => $newLocation->id,
+            'lab_id' => $newLab->id,
             'storage_cabinet_id' => $newStorageCabinet->id,
         ];
 
         // Act
-        $this->containerService->changeLocation($containers, $data);
+        $this->containerService->changeLab($containers, $data);
 
         // Assert
-        $containers->each(function ($container) use ($newLocation, $newStorageCabinet) {
-            $this->assertEquals($newLocation->id, $container->fresh()->location_id);
+        $containers->each(function ($container) use ($newLab, $newStorageCabinet) {
+            $this->assertEquals($newLab->id, $container->fresh()->lab_id);
             $this->assertEquals($newStorageCabinet->id, $container->fresh()->storage_cabinet_id);
         });
     }
 
-    public function test_it_can_get_unavailable_locations()
+    public function test_it_can_get_unavailable_labs()
     {
         // Arrange
-        $location = Location::factory()->create();
-        $location->reconciliations()->create([
+        $lab = Lab::factory()->create();
+        $lab->reconciliations()->create([
             'status' => 'ongoing',
         ]);
-        $availableLocation = Location::factory()->create();
+        $availableLab = Lab::factory()->create();
 
         // Act
-        $unavailableLocations = $this->containerService->getUnavailableLocations();
+        $unavailableLabs = $this->containerService->getUnavailableLabs();
 
         // Assert
-        $this->assertCount(1, $unavailableLocations);
-        $this->assertEquals($location->id, $unavailableLocations->first()->id);
-        $this->assertNotContains($availableLocation->id, $unavailableLocations->pluck('id'));
+        $this->assertCount(1, $unavailableLabs);
+        $this->assertEquals($lab->id, $unavailableLabs->first()->id);
+        $this->assertNotContains($availableLab->id, $unavailableLabs->pluck('id'));
+    }
+
+    public function test_it_can_change_lab_for_multiple_containers()
+    {
+        // Arrange
+        $chemical = Chemical::factory()->create();
+        $unitOfMeasure = UnitOfMeasure::factory()->create();
+        $oldLab = Lab::factory()->create();
+        $oldStorageCabinet = StorageCabinet::factory()->create([
+            'lab_id' => $oldLab->id,
+        ]);
+        $newLab = Lab::factory()->create();
+        $newStorageCabinet = StorageCabinet::factory()->create([
+            'lab_id' => $newLab->id,
+        ]);
+
+        $containers = Container::factory()->count(3)->create([
+            'chemical_id' => $chemical->id,
+            'unit_of_measure_id' => $unitOfMeasure->id,
+            'lab_id' => $oldLab->id,
+            'storage_cabinet_id' => $oldStorageCabinet->id,
+        ]);
+
+        $data = [
+            'lab_id' => $newLab->id,
+            'storage_cabinet_id' => $newStorageCabinet->id,
+        ];
+
+        // Act
+        $this->containerService->changeLab($containers, $data);
+
+        // Assert
+        $containers->each(function ($container) use ($newLab, $newStorageCabinet) {
+            $this->assertEquals($newLab->id, $container->fresh()->lab_id);
+            $this->assertEquals($newStorageCabinet->id, $container->fresh()->storage_cabinet_id);
+        });
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ContainerResource;
 
 use App\Models\Chemical;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
@@ -36,29 +36,25 @@ class ContainerForm
                 ->label('Quantity')
                 ->numeric()
                 ->required(),
-            Select::make('location_id')
-                ->label('Location')
+            Select::make('lab_id')
+                ->label('Lab')
                 ->dehydrated(false)
                 ->options(function () {
-
-                    return Location::all()->pluck('room_number', 'id');
+                    return Lab::all()->pluck('room_number', 'id');
                 })
                 ->disableOptionWhen(function ($value) {
-                    $location = Location::find($value);
-
-                    return $location && $location->hasOngoingReconciliation();
+                    $lab = Lab::find($value);
+                    return $lab && $lab->hasOngoingReconciliation();
                 })
                 ->helperText(function () {
-                    $ongoingLocations = Location::whereHas('reconciliations', function ($query) {
+                    $ongoingLabs = Lab::whereHas('reconciliations', function ($query) {
                         $query->where('status', 'ongoing');
                     })->get();
 
-                    if ($ongoingLocations->isNotEmpty()) {
-                        $locations = $ongoingLocations->pluck('room_number')->join(', ');
-
-                        return "The following locations are currently being reconciled and cannot be selected: $locations";
+                    if ($ongoingLabs->isNotEmpty()) {
+                        $labs = $ongoingLabs->pluck('room_number')->join(', ');
+                        return "The following labs are currently being reconciled and cannot be selected: $labs";
                     }
-
                     return null;
                 })
                 ->searchable()
@@ -66,14 +62,11 @@ class ContainerForm
             Select::make('storage_cabinet_id')
                 ->label('Storage Cabinet')
                 ->options(function ($get) {
-                    $location = $get('location_id');
-                    if ($location) {
-
-                        return StorageCabinet::where('location_id', $location)->pluck('name', 'id');
+                    $lab = $get('lab_id');
+                    if ($lab) {
+                        return StorageCabinet::where('lab_id', $lab)->pluck('name', 'id');
                     }
-
                     return StorageCabinet::all()->pluck('name', 'id');
-
                 })
                 ->required()
                 ->searchable(),

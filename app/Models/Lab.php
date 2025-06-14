@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string room_number
  * @property string description
  */
-class Location extends Model
+class Lab extends Model
 {
     use HasFactory;
     public $timestamps = false;
@@ -28,17 +28,17 @@ class Location extends Model
 
     public function containers(): HasMany
     {
-        return $this->hasMany(Container::class, 'location_id');
+        return $this->hasMany(Container::class, 'lab_id');
     }
 
     public function storageCabinets(): HasMany
     {
-        return $this->hasMany(StorageCabinet::class, 'location_id');
+        return $this->hasMany(StorageCabinet::class, 'lab_id');
     }
 
     public function reconciliations(): HasMany
     {
-        return $this->hasMany(Reconciliation::class, 'location_id');
+        return $this->hasMany(Reconciliation::class, 'lab_id');
     }
 
     public function hasOngoingReconciliation(): bool

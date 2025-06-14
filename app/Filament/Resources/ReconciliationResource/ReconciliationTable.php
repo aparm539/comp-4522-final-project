@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ReconciliationResource;
 
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\Reconciliation;
 use App\Models\ReconciliationItem;
 use Filament\Tables\Actions\Action;
@@ -19,9 +19,9 @@ class ReconciliationTable
     public static function columns(): array
     {
         return [
-            TextColumn::make('location.room_number')
-                ->label('Location')
-                ->formatStateUsing(fn ($state, $record) => $record->location->room_number),
+            TextColumn::make('lab.room_number')
+                ->label('Lab')
+                ->formatStateUsing(fn ($state, $record) => $record->lab->room_number),
             IconColumn::make('status')
                 ->icon(fn (string $state): string => match ($state) {
                     'stopped' => 'heroicon-o-no-symbol',
@@ -57,7 +57,7 @@ class ReconciliationTable
         return [
             Group::make('status')
                 ->collapsible(),
-            Group::make('location.room_number')
+            Group::make('lab.room_number')
                 ->collapsible(),
         ];
     }
@@ -73,8 +73,8 @@ class ReconciliationTable
     public static function headerActions(): array
     {
         return [
-            Action::make('Create Reconciliations for All Locations')
-                ->action(fn () => self::createReconciliationsForAllLocations()),
+            Action::make('Create Reconciliations for All Labs')
+                ->action(fn () => self::createReconciliationsForAllLabs()),
         ];
     }
 
@@ -87,18 +87,17 @@ class ReconciliationTable
         ];
     }
 
-    public static function createReconciliationsForAllLocations(): void
+    public static function createReconciliationsForAllLabs(): void
     {
-        foreach (Location::all() as $location) {
+        foreach (Lab::all() as $lab) {
             $reconciliation = new Reconciliation;
             $reconciliation->status = 'ongoing';
             $reconciliation->started_at = now();
-            $reconciliation->location_id = $location->id;
+            $reconciliation->lab_id = $lab->id;
             $reconciliation->save();
 
-
-            // Get all containers from all storage cabinets in this location
-            foreach ($location->storageCabinets as $storageCabinet) {
+            // Get all containers from all storage cabinets in this lab
+            foreach ($lab->storageCabinets as $storageCabinet) {
                 foreach ($storageCabinet->containers as $container) {
                     $reconciliationItem = new ReconciliationItem;
                     $reconciliationItem->container()->associate($container);

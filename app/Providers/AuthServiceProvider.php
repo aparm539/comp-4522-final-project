@@ -4,13 +4,13 @@ namespace App\Providers;
 
 use App\Models\Chemical;
 use App\Models\Container;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\Reconciliation;
 use App\Models\StorageCabinet;
 use App\Models\User;
 use App\Policies\ChemicalPolicy;
 use App\Policies\ContainerPolicy;
-use App\Policies\LocationPolicy;
+use App\Policies\LabPolicy;
 use App\Policies\ReconciliationPolicy;
 use App\Policies\StorageCabinetPolicy;
 use App\Policies\UserPolicy;
@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Chemical::class => ChemicalPolicy::class,
         Container::class => ContainerPolicy::class,
-        Location::class => LocationPolicy::class,
+        Lab::class => LabPolicy::class,
         StorageCabinet::class => StorageCabinetPolicy::class,
         Reconciliation::class => ReconciliationPolicy::class,
         User::class => UserPolicy::class,

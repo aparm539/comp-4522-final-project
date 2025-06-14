@@ -3,8 +3,8 @@
 namespace App\Services\Container;
 
 use App\Models\Container;
-use App\Models\Location;
-use App\Services\Container\Exceptions\ContainerLocationUpdateException;
+use App\Models\Lab;
+use App\Services\Container\Exceptions\ContainerLabUpdateException;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -53,16 +53,16 @@ readonly class ContainerService
     }
 
     /**
-     * Change location for multiple containers.
+     * Change lab for multiple containers.
      *
-     * @throws ContainerLocationUpdateException
+     * @throws ContainerLabUpdateException
      */
-    public function changeLocation(Collection $records, array $data): void
+    public function changeLab(Collection $records, array $data): void
     {
         try {
             DB::beginTransaction();
 
-            $this->logger?->info('Changing container locations', [
+            $this->logger?->info('Changing container labs', [
                 'count' => $records->count(),
                 'data' => $data,
             ]);
@@ -75,19 +75,19 @@ readonly class ContainerService
 
             DB::commit();
 
-            $this->logger?->info('Successfully changed container locations', [
+            $this->logger?->info('Successfully changed container labs', [
                 'count' => $records->count(),
             ]);
         } catch (Exception $e) {
             DB::rollBack();
 
-            $this->logger?->error('Failed to change container locations', [
+            $this->logger?->error('Failed to change container labs', [
                 'error' => $e->getMessage(),
                 'data' => $data,
             ]);
 
-            throw new ContainerLocationUpdateException(
-                'Failed to update container locations: '.$e->getMessage(),
+            throw new ContainerLabUpdateException(
+                'Failed to update container labs: '.$e->getMessage(),
                 $e
             );
         }
@@ -101,9 +101,9 @@ readonly class ContainerService
 
     }
 
-    public function getUnavailableLocations(): Collection
+    public function getUnavailableLabs(): Collection
     {
-        return Location::whereHas('reconciliations', function ($query) {
+        return Lab::whereHas('reconciliations', function ($query) {
             $query->where('status', 'ongoing');
         })->get();
     }

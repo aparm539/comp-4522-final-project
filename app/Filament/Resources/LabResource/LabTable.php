@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\LocationResource;
+namespace App\Filament\Resources\LabResource;
 
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 
-class LocationTable
+class LabTable
 {
     public static function columns(): array
     {
@@ -35,11 +35,11 @@ class LocationTable
             BulkActionGroup::make([
                 DeleteBulkAction::make()
                     ->visible(
-                        function (Location $location) {
+                        function (Lab $lab) {
                             /** @var User $user */
                             $user = auth()->user();
 
-                            return $user->can('delete', $location);
+                            return $user->can('delete', $lab);
                         }),
             ]),
         ];

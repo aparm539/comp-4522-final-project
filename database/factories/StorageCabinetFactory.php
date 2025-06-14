@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +22,7 @@ class StorageCabinetFactory extends Factory
         return [
             'barcode' => $this->faker->unique()->bothify('MRUC******'),
             'name' => $this->faker->bothify('shelf #'),
-            'location_id' => Location::factory(),
+            'lab_id' => Lab::factory(),
         ];
     }
 }

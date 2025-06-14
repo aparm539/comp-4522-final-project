@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\StorageCabinetResource;
 
-use App\Models\Location;
+use App\Models\Lab;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
@@ -17,9 +17,9 @@ class StorageCabinetForm
             TextInput::make('barcode')
                 ->required()
                 ->maxLength(255),
-            Select::make('location_id')
-                ->label('Location')
-                ->options(Location::all()->pluck('room_number', 'id'))
+            Select::make('lab_id')
+                ->label('Lab')
+                ->options(Lab::all()->pluck('room_number', 'id'))
                 ->required()
                 ->searchable(),
         ];

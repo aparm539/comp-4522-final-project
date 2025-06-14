@@ -4,7 +4,7 @@ namespace App\Services\Container\Exceptions;
 
 use Exception;
 
-class ContainerLocationUpdateException extends Exception
+class ContainerLabUpdateException extends Exception
 {
     public function __construct(string $message, ?Exception $previous = null)
     {

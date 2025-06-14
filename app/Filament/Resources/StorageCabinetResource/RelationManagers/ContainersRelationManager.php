@@ -69,8 +69,8 @@ class ContainersRelationManager extends RelationManager
                     ->formatStateUsing(fn ($state, $record) => ($record->quantity.' '.$record->unitofmeasure->abbreviation))
                     ->label('Quantity'),
                 TextColumn::make('storageCabinet')
-                    ->formatStateUsing(fn ($state, $record) => ($record->storageCabinet->location->room_number.' '.$record->storageCabinet->name))
-                    ->label('Location'),
+                    ->formatStateUsing(fn ($state, $record) => ($record->storageCabinet->lab->room_number.' '.$record->storageCabinet->name))
+                    ->label('Lab'),
                 TextColumn::make('chemical.whmisHazardClass.class_name')
                     ->label('Hazard Class')
                     ->badge()
@@ -94,7 +94,7 @@ class ContainersRelationManager extends RelationManager
                         'environment' => 'heroicon-m-globe-alt',
                         default => 'heroicon-m-minus',
                     }),
-                TextColumn::make('storageCabinet.location.user.name')
+                TextColumn::make('storageCabinet.lab.user.name')
                     ->label('Supervisor'),
             ])
             ->filters([

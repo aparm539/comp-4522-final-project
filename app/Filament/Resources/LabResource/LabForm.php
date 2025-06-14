@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\LocationResource;
+namespace App\Filament\Resources\LabResource;
 
 use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
-class LocationForm
+class LabForm
 {
     public static function make(): array
     {

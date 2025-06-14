@@ -14,9 +14,9 @@ class StorageCabinetTable
     public static function columns(): array
     {
         return [
-            TextColumn::make('location.user.name')
+            TextColumn::make('lab.user.name')
                 ->Label('Supervisor'),
-            TextColumn::make('location.room_number'),
+            TextColumn::make('lab.room_number'),
             TextColumn::make('name')
                 ->Label('Storage Cabinet'),
         ];

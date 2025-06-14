@@ -4,7 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\ChemicalResource\ChemicalResource;
 use App\Filament\Resources\ContainerResource\ContainerResource;
-use App\Filament\Resources\LocationResource\LocationResource;
+use App\Filament\Resources\LabResource\LabResource;
 use App\Filament\Resources\ReconciliationResource\ReconciliationResource;
 use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
 use App\Filament\Resources\UserResource\UserResource;
@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->resources([
                 ChemicalResource::class,
                 ContainerResource::class,
-                LocationResource::class,
+                LabResource::class,
                 ReconciliationResource::class,
                 StorageCabinetResource::class,
                 UserResource::class])

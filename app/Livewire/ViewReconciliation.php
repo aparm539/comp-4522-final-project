@@ -246,7 +246,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
             ->whereHas('container', function ($query) use ($barcode) {
                 $query->where('barcode', $barcode);
             })
-            ->with(['container.location'])
+            ->with(['container.lab'])
             ->first();
 
         if (! $reconciliationItem) {

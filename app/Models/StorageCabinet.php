@@ -16,16 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property DateTime updated_at
  * @property string barcode
  * @property string name
- * @property int location_id
+ * @property int lab_id
  */
 class StorageCabinet extends Model
 {
     use HasFactory;
     public $timestamps = false;
 
-    public function location(): BelongsTo
+    public function lab(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Lab::class, 'lab_id');
     }
 
     public function containers(): HasMany

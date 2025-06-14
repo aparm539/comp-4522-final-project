@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ContainerResource;
 
 use App\Models\Container;
-use App\Models\Location;
+use App\Models\Lab;
 use App\Models\StorageCabinet;
 use App\Models\User;
 use App\Services\Container\ContainerExporter;
@@ -49,8 +49,8 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('60px'),
-            TextColumn::make('storageCabinet.location.room_number')
-                ->label('Location')
+            TextColumn::make('storageCabinet.lab.room_number')
+                ->label('Lab')
                 ->formatStateUsing(fn ($state, $record) => $state.' - '.$record->storageCabinet->name)
                 ->sortable()
                 ->searchable()
@@ -81,7 +81,7 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('120px'),
-            TextColumn::make('storageCabinet.location.user.name')
+            TextColumn::make('storageCabinet.lab.user.name')
                 ->label('Supervisor')
                 ->sortable()
                 ->searchable()
@@ -96,8 +96,8 @@ class ContainerTable
                 ->relationship('chemical', 'name')
                 ->searchable()
                 ->preload(),
-            SelectFilter::make('location')
-                ->relationship('storageCabinet.location', 'room_number')
+            SelectFilter::make('lab')
+                ->relationship('storageCabinet.lab', 'room_number')
                 ->searchable()
                 ->preload(),
             SelectFilter::make('storage_cabinet')
@@ -122,14 +122,14 @@ class ContainerTable
                 ->slideOver()
                 ->modalContentFooter(fn (Container $record) => view(view: 'containers.footer-component', data: ['containerId' => 1]))
                 ->mutateFormDataUsing(function (array $data): array {
-                    $data['last_edit_author_id'] = auth()->user()->id;
+                    $data['last_edit_author_id'] = auth()?->user()?->id;
 
                     return $data;
                 })
                 ->mutateRecordDataUsing(function (array $data): array {
-                    $container = Container::findOrFail($data['id'])->load('storageCabinet.location');
-                    $containerLocation = $container->storageCabinet->location;
-                    $data['location_id'] = $containerLocation->id;
+                    $container = Container::findOrFail($data['id'])->load('storageCabinet.lab');
+                    $containerLab = $container->storageCabinet->lab;
+                    $data['lab_id'] = $containerLab->id;
 
                     return $data;
                 }),
@@ -169,8 +169,8 @@ class ContainerTable
 
                     return $user->can('delete', $container);
                 }),
-            BulkAction::make('changeLocation')
-                ->label('Change Location')
+            BulkAction::make('changeLab')
+                ->label('Change Lab')
                 ->icon('heroicon-o-map')
                 ->visible(function (Container $container): bool {
                     /** @var User $user */
@@ -179,26 +179,26 @@ class ContainerTable
                     return $user->can('update', $container);
                 })
                 ->form([
-                    Select::make('location_id')
-                        ->label('Location')
+                    Select::make('lab_id')
+                        ->label('Lab')
                         ->options(function () {
-                            return Location::all()->mapWithKeys(function ($location) {
-                                return [$location->id => $location->room_number];
+                            return Lab::all()->mapWithKeys(function ($lab) {
+                                return [$lab->id => $lab->room_number];
                             });
                         })
                         ->disableOptionWhen(function ($value) {
-                            /** @var Location $location */
-                            $location = Location::find($value);
+                            /** @var Lab $lab */
+                            $lab = Lab::find($value);
 
-                            return $location && $location->hasOngoingReconciliation();
+                            return $lab && $lab->hasOngoingReconciliation();
                         })
                         ->helperText(function () {
-                            $ongoingLocations = app(ContainerService::class)->getUnavailableLocations();
+                            $ongoingLabs = app(ContainerService::class)->getUnavailableLabs();
 
-                            if ($ongoingLocations->isNotEmpty()) {
-                                $locations = $ongoingLocations->pluck('room_number')->join(', ');
+                            if ($ongoingLabs->isNotEmpty()) {
+                                $labs = $ongoingLabs->pluck('room_number')->join(', ');
 
-                                return "The following locations are currently being reconciled and cannot be selected: $locations";
+                                return "The following labs are currently being reconciled and cannot be selected: $labs";
                             }
 
                             return null;
@@ -208,17 +208,17 @@ class ContainerTable
                     Select::make('storage_cabinet_id')
                         ->label('Storage Cabinet')
                         ->options(function ($get) {
-                            return StorageCabinet::where('location_id', $get('location_id'))
+                            return StorageCabinet::where('lab_id', $get('lab_id'))
                                 ->pluck('name', 'id');
                         })
                         ->searchable()
                         ->required(),
                 ])
-                ->action(fn (Collection $records, array $data) => app(ContainerService::class)->changeLocation($records, $data))
+                ->action(fn (Collection $records, array $data) => app(ContainerService::class)->changeLab($records, $data))
                 ->requiresConfirmation()
-                ->modalHeading('Change Location')
-                ->modalDescription('Are you sure you want to change the location and storage cabinet of the selected containers?')
-                ->modalSubmitActionLabel('Yes, change location'),
+                ->modalHeading('Change Lab')
+                ->modalDescription('Are you sure you want to change the lab and storage cabinet of the selected containers?')
+                ->modalSubmitActionLabel('Yes, change lab'),
         ];
     }
 }
