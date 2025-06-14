@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::rename('locations', 'labs');
+                // Rename location_id to lab_id in storage_cabinets
+        Schema::table('storage_cabinets', function (Blueprint $table) {
+            $table->renameColumn('location_id', 'lab_id');
+        });
+        // Rename location_id to lab_id in reconciliations
+        Schema::table('reconciliations', function (Blueprint $table) {
+            $table->renameColumn('location_id', 'lab_id');
+        });
 
-        // if locations table exists
-        if (Schema::hasTable('locations')) {
-            Schema::rename('locations', 'labs');
-                    // Rename location_id to lab_id in storage_cabinets
-            Schema::table('storage_cabinets', function (Blueprint $table) {
-                $table->renameColumn('location_id', 'lab_id');
-            });
-            // Rename location_id to lab_id in reconciliations
-            Schema::table('reconciliations', function (Blueprint $table) {
-                $table->renameColumn('location_id', 'lab_id');
-            });
-        }
 
     }
 
@@ -32,10 +29,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // if labs table exists
-        if (Schema::hasTable('labs')) {
-            Schema::rename('labs', 'locations');
-        }
+
+        Schema::rename('labs', 'locations');
+
 
         // Rename lab_id back to location_id in storage_cabinets
         Schema::table('storage_cabinets', function (Blueprint $table) {

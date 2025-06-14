@@ -5,7 +5,7 @@ namespace App\Services\Container;
 use App\Models\Chemical;
 use App\Models\Container;
 use App\Models\Lab;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
@@ -29,11 +29,11 @@ class ContainerImporter extends Importer
             ImportColumn::make('unitofmeasure.abbreviation')
                 ->label('Unit')
                 ->requiredMapping(),
-            ImportColumn::make('storageCabinet.lab.room_number')
+            ImportColumn::make('storageLocation.lab.room_number')
                 ->label('Room')
                 ->requiredMapping(),
-            ImportColumn::make('storageCabinet.name')
-                ->label('Cabinet')
+            ImportColumn::make('storageLocation.name')
+                ->label('Location')
                 ->requiredMapping(),
         ];
     }
@@ -53,22 +53,22 @@ class ContainerImporter extends Importer
             return null;
         }
 
-        $lab = Lab::where('room_number', $this->data['storageCabinet.lab.room_number'])->first();
+        $lab = Lab::where('room_number', $this->data['storageLocation.lab.room_number'])->first();
         if (! $lab) {
             return null;
         }
 
-        $storageCabinet = StorageCabinet::where('name', $this->data['storageCabinet.name'])
+        $storageLocation = StorageLocation::where('name', $this->data['storageLocation.name'])
             ->where('lab_id', $lab->id)
             ->first();
-        if (! $storageCabinet) {
+        if (! $storageLocation) {
             return null;
         }
 
         // Set the relationships
         $container->chemical_id = $chemical->id;
         $container->unit_of_measure_id = $unitOfMeasure->id;
-        $container->storage_cabinet_id = $storageCabinet->id;
+        $container->storage_location_id = $storageLocation->id;
 
         // Set other attributes
         $container->quantity = $this->data['quantity'];

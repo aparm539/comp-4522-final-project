@@ -16,8 +16,8 @@ class CreateReconciliation extends CreateRecord
         $reconciliation = $this->record;
         $lab = Lab::find($reconciliation->lab_id);
 
-        foreach ($lab->storageCabinets as $storageCabinet) {
-            foreach ($storageCabinet->containers as $container) {
+        foreach ($lab->storageLocations as $storageLocation) {
+            foreach ($storageLocation->containers as $container) {
                 $reconciliationItem = new ReconciliationItem;
                 $reconciliationItem->container()->associate($container);
                 $reconciliationItem->reconciliation()->associate($reconciliation);

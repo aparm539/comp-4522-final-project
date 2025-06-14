@@ -31,9 +31,9 @@ class Lab extends Model
         return $this->hasMany(Container::class, 'lab_id');
     }
 
-    public function storageCabinets(): HasMany
+    public function storageLocation(): HasMany
     {
-        return $this->hasMany(StorageCabinet::class, 'lab_id');
+        return $this->hasMany(StorageLocation::class, 'lab_id');
     }
 
     public function reconciliations(): HasMany

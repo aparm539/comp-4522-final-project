@@ -47,7 +47,7 @@
                 <th>Quantity</th>
                 <th>Unit</th>
                 <th>Room</th>
-                <th>Cabinet</th>
+                <th>Storage Location</th>
                 <th>Hazardous</th>
             </tr>
         </thead>
@@ -59,8 +59,8 @@
                     <td>{{ $container->chemical->name }}</td>
                     <td>{{ $container->quantity }}</td>
                     <td>{{ $container->unitOfMeasure->abbreviation }}</td>
-                    <td>{{ $container->storageCabinet->lab->room_number }}</td>
-                    <td>{{ $container->storageCabinet->name }}</td>
+                    <td>{{ $container->storageLocation->lab->room_number }}</td>
+                    <td>{{ $container->storageLocation->name }}</td>
                     <td>{{ $container->chemical->ishazardous ? 'Yes' : 'No' }}</td>
                 </tr>
             @endforeach
@@ -71,4 +71,4 @@
         <p>Total Containers: {{ count($containers) }}</p>
     </div>
 </body>
-</html> 
+</html>

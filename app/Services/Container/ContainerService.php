@@ -69,7 +69,7 @@ readonly class ContainerService
 
             $records->each(function ($record) use ($data) {
                 $record->update([
-                    'storage_cabinet_id' => $data['storage_cabinet_id'],
+                    'storage_location_id' => $data['storage_location_id'],
                 ]);
             });
 

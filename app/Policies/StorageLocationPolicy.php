@@ -2,22 +2,22 @@
 
 namespace App\Policies;
 
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class StorageCabinetPolicy
+class StorageLocationPolicy
 {
     use HandlesAuthorization;
 
     public function viewAny(): bool
     {
-        return true; // All users can view storage cabinets
+        return true; // All users can view storage locations
     }
 
     public function view(User $user): bool
     {
-        return true; // All users can view individual storage cabinets
+        return true; // All users can view individual storage locations
     }
 
     public function create(User $user): bool

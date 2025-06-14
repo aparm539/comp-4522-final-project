@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\StorageCabinetResource;
+namespace App\Filament\Resources\StorageLocationResource;
 
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 
-class StorageCabinetTable
+class StorageLocationTable
 {
     public static function columns(): array
     {
@@ -18,7 +18,7 @@ class StorageCabinetTable
                 ->Label('Supervisor'),
             TextColumn::make('lab.room_number'),
             TextColumn::make('name')
-                ->Label('Storage Cabinet'),
+                ->Label('Storage Location'),
         ];
     }
 
@@ -35,11 +35,11 @@ class StorageCabinetTable
             BulkActionGroup::make([
                 DeleteBulkAction::make()
 
-                    ->visible(function (StorageCabinet $storageCabinet) {
+                    ->visible(function (StorageLocation $storageLocation) {
                         /** @var User $user */
                         $user = auth()->user();
 
-                        return $user->can('delete', $storageCabinet);
+                        return $user->can('delete', $storageLocation);
                     }),
             ]),
         ];

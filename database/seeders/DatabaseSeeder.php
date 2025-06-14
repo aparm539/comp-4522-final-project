@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Container;
 use App\Models\Lab;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
         ]);
         $users = User::factory(3)->create();
-        $storageCabinets = StorageCabinet::factory(5)
+        $storageLocations = StorageLocation::factory(5)
             ->recycle(
                 Lab::factory()
                     ->recycle(
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ->create();
         Container::factory(10)
             ->recycle(
-                $storageCabinets,
+                $storageLocations,
                 $users->random()
             )
             ->create();

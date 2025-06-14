@@ -96,9 +96,9 @@ class ReconciliationTable
             $reconciliation->lab_id = $lab->id;
             $reconciliation->save();
 
-            // Get all containers from all storage cabinets in this lab
-            foreach ($lab->storageCabinets as $storageCabinet) {
-                foreach ($storageCabinet->containers as $container) {
+            // Get all containers from all storage locations in this lab
+            foreach ($lab->storageLocations as $storageLocation) {
+                foreach ($storageLocation->containers as $container) {
                     $reconciliationItem = new ReconciliationItem;
                     $reconciliationItem->container()->associate($container);
                     $reconciliationItem->reconciliation()->associate($reconciliation);

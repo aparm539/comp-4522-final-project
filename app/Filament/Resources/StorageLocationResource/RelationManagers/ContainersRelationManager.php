@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StorageCabinetResource\RelationManagers;
+namespace App\Filament\Resources\StorageLocationResource\RelationManagers;
 
 use App\Models\Chemical;
 use App\Models\Reconciliation;
@@ -68,8 +68,8 @@ class ContainersRelationManager extends RelationManager
                 TextColumn::make('unitofmeasure.abbreviation')
                     ->formatStateUsing(fn ($state, $record) => ($record->quantity.' '.$record->unitofmeasure->abbreviation))
                     ->label('Quantity'),
-                TextColumn::make('storageCabinet')
-                    ->formatStateUsing(fn ($state, $record) => ($record->storageCabinet->lab->room_number.' '.$record->storageCabinet->name))
+                TextColumn::make('storageLocation')
+                    ->formatStateUsing(fn ($state, $record) => ($record->storageLocation->lab->room_number.' '.$record->storageLocation->name))
                     ->label('Lab'),
                 TextColumn::make('chemical.whmisHazardClass.class_name')
                     ->label('Hazard Class')
@@ -94,7 +94,7 @@ class ContainersRelationManager extends RelationManager
                         'environment' => 'heroicon-m-globe-alt',
                         default => 'heroicon-m-minus',
                     }),
-                TextColumn::make('storageCabinet.lab.user.name')
+                TextColumn::make('storageLocation.lab.user.name')
                     ->label('Supervisor'),
             ])
             ->filters([
@@ -106,15 +106,15 @@ class ContainersRelationManager extends RelationManager
             ->actions([
                 DeleteAction::make()
                     ->before(function ($record, DeleteAction $action) {
-                        $storageCabinetId = $this->getOwnerRecord()->id; // Get the storage cabinet ID
-                        $hasOngoingReconciliation = Reconciliation::where('storage_cabinet_id', $storageCabinetId)
+                        $storageLocationId = $this->getOwnerRecord()->id; // Get the storage location ID
+                        $hasOngoingReconciliation = Reconciliation::where('storage_location_id', $storageLocationId)
                             ->where('status', 'ongoing')
                             ->exists();
 
                         if ($hasOngoingReconciliation) {
                             Notification::make()
                                 ->title('Action Blocked')
-                                ->body('Cannot delete a container because a reconciliation is ongoing for this storage cabinet.')
+                                ->body('Cannot delete a container because a reconciliation is ongoing for this storage Location.')
                                 ->warning()
                                 ->send();
                             $action->cancel();

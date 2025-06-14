@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string name
  * @property int lab_id
  */
-class StorageCabinet extends Model
+class StorageLocation extends Model
 {
     use HasFactory;
     public $timestamps = false;
@@ -30,6 +30,6 @@ class StorageCabinet extends Model
 
     public function containers(): HasMany
     {
-        return $this->hasMany(Container::class, 'storage_cabinet_id');
+        return $this->hasMany(Container::class, 'storage_location_id');
     }
 }

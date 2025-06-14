@@ -6,13 +6,13 @@ use App\Models\Chemical;
 use App\Models\Container;
 use App\Models\Lab;
 use App\Models\Reconciliation;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\User;
 use App\Policies\ChemicalPolicy;
 use App\Policies\ContainerPolicy;
 use App\Policies\LabPolicy;
 use App\Policies\ReconciliationPolicy;
-use App\Policies\StorageCabinetPolicy;
+use App\Policies\StorageLocationPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         Chemical::class => ChemicalPolicy::class,
         Container::class => ContainerPolicy::class,
         Lab::class => LabPolicy::class,
-        StorageCabinet::class => StorageCabinetPolicy::class,
+        StorageLocation::class => StorageLocationPolicy::class,
         Reconciliation::class => ReconciliationPolicy::class,
         User::class => UserPolicy::class,
     ];

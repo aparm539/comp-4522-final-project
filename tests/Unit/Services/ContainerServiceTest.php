@@ -5,7 +5,7 @@ namespace Tests\Unit\Services;
 use App\Models\Chemical;
 use App\Models\Container;
 use App\Models\Lab;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use App\Services\Container\ContainerService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -34,8 +34,8 @@ class ContainerServiceTest extends TestCase
         $unitOfMeasure = UnitOfMeasure::factory()->create();
         /** @var Lab $lab */
         $lab = Lab::factory()->create();
-        /** @var StorageCabinet $storageCabinet */
-        $storageCabinet = StorageCabinet::factory()->create([
+        /** @var StorageLocation $storageLocation */
+        $storageLocation = StorageLocation::factory()->create([
             'lab_id' => $lab->id,
         ]);
 
@@ -43,7 +43,7 @@ class ContainerServiceTest extends TestCase
             'chemical_id' => $chemical->id,
             'unit_of_measure_id' => $unitOfMeasure->id,
             'lab_id' => $lab->id,
-            'storage_cabinet_id' => $storageCabinet->id,
+            'storage_location_id' => $storageLocation->id,
         ]);
 
         $pdfMock = Mockery::mock('overload:'.Pdf::class);
@@ -69,11 +69,11 @@ class ContainerServiceTest extends TestCase
         $chemical = Chemical::factory()->create();
         $unitOfMeasure = UnitOfMeasure::factory()->create();
         $oldLab = Lab::factory()->create();
-        $oldStorageCabinet = StorageCabinet::factory()->create([
+        $oldstorageLocation = StorageLocation::factory()->create([
             'lab_id' => $oldLab->id,
         ]);
         $newLab = Lab::factory()->create();
-        $newStorageCabinet = StorageCabinet::factory()->create([
+        $newstorageLocation = StorageLocation::factory()->create([
             'lab_id' => $newLab->id,
         ]);
 
@@ -81,21 +81,21 @@ class ContainerServiceTest extends TestCase
             'chemical_id' => $chemical->id,
             'unit_of_measure_id' => $unitOfMeasure->id,
             'lab_id' => $oldLab->id,
-            'storage_cabinet_id' => $oldStorageCabinet->id,
+            'storage_location_id' => $oldstorageLocation->id,
         ]);
 
         $data = [
             'lab_id' => $newLab->id,
-            'storage_cabinet_id' => $newStorageCabinet->id,
+            'storage_location_id' => $newstorageLocation->id,
         ];
 
         // Act
         $this->containerService->changeLab($containers, $data);
 
         // Assert
-        $containers->each(function ($container) use ($newLab, $newStorageCabinet) {
+        $containers->each(function ($container) use ($newLab, $newstorageLocation) {
             $this->assertEquals($newLab->id, $container->fresh()->lab_id);
-            $this->assertEquals($newStorageCabinet->id, $container->fresh()->storage_cabinet_id);
+            $this->assertEquals($newstorageLocation->id, $container->fresh()->storage_location_id);
         });
     }
 
@@ -123,11 +123,11 @@ class ContainerServiceTest extends TestCase
         $chemical = Chemical::factory()->create();
         $unitOfMeasure = UnitOfMeasure::factory()->create();
         $oldLab = Lab::factory()->create();
-        $oldStorageCabinet = StorageCabinet::factory()->create([
+        $oldstorageLocation = StorageLocation::factory()->create([
             'lab_id' => $oldLab->id,
         ]);
         $newLab = Lab::factory()->create();
-        $newStorageCabinet = StorageCabinet::factory()->create([
+        $newstorageLocation = StorageLocation::factory()->create([
             'lab_id' => $newLab->id,
         ]);
 
@@ -135,21 +135,21 @@ class ContainerServiceTest extends TestCase
             'chemical_id' => $chemical->id,
             'unit_of_measure_id' => $unitOfMeasure->id,
             'lab_id' => $oldLab->id,
-            'storage_cabinet_id' => $oldStorageCabinet->id,
+            'storage_location_id' => $oldstorageLocation->id,
         ]);
 
         $data = [
             'lab_id' => $newLab->id,
-            'storage_cabinet_id' => $newStorageCabinet->id,
+            'storage_location_id' => $newstorageLocation->id,
         ];
 
         // Act
         $this->containerService->changeLab($containers, $data);
 
         // Assert
-        $containers->each(function ($container) use ($newLab, $newStorageCabinet) {
+        $containers->each(function ($container) use ($newLab, $newstorageLocation) {
             $this->assertEquals($newLab->id, $container->fresh()->lab_id);
-            $this->assertEquals($newStorageCabinet->id, $container->fresh()->storage_cabinet_id);
+            $this->assertEquals($newstorageLocation->id, $container->fresh()->storage_location_id);
         });
     }
 }

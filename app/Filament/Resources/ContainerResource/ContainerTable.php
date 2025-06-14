@@ -4,7 +4,7 @@ namespace App\Filament\Resources\ContainerResource;
 
 use App\Models\Container;
 use App\Models\Lab;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\User;
 use App\Services\Container\ContainerExporter;
 use App\Services\Container\ContainerImporter;
@@ -49,9 +49,9 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('60px'),
-            TextColumn::make('storageCabinet.lab.room_number')
+            TextColumn::make('storageLocation.lab.room_number')
                 ->label('Lab')
-                ->formatStateUsing(fn ($state, $record) => $state.' - '.$record->storageCabinet->name)
+                ->formatStateUsing(fn ($state, $record) => $state.' - '.$record->storageLocation->name)
                 ->sortable()
                 ->searchable()
                 ->width('180px'),
@@ -81,7 +81,7 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('120px'),
-            TextColumn::make('storageCabinet.lab.user.name')
+            TextColumn::make('storageLocation.lab.user.name')
                 ->label('Supervisor')
                 ->sortable()
                 ->searchable()
@@ -97,11 +97,11 @@ class ContainerTable
                 ->searchable()
                 ->preload(),
             SelectFilter::make('lab')
-                ->relationship('storageCabinet.lab', 'room_number')
+                ->relationship('storageLocation.lab', 'room_number')
                 ->searchable()
                 ->preload(),
-            SelectFilter::make('storage_cabinet')
-                ->relationship('storageCabinet', 'name')
+            SelectFilter::make('storage_location')
+                ->relationship('storageLocation', 'name')
                 ->searchable()
                 ->preload(),
             SelectFilter::make('unit_of_measure')
@@ -127,8 +127,8 @@ class ContainerTable
                     return $data;
                 })
                 ->mutateRecordDataUsing(function (array $data): array {
-                    $container = Container::findOrFail($data['id'])->load('storageCabinet.lab');
-                    $containerLab = $container->storageCabinet->lab;
+                    $container = Container::findOrFail($data['id'])->load('storageLocation.lab');
+                    $containerLab = $container->storageLocation->lab;
                     $data['lab_id'] = $containerLab->id;
 
                     return $data;
@@ -205,10 +205,10 @@ class ContainerTable
                         })
                         ->searchable()
                         ->required(),
-                    Select::make('storage_cabinet_id')
-                        ->label('Storage Cabinet')
+                    Select::make('storage_location_id')
+                        ->label('Storage Location')
                         ->options(function ($get) {
-                            return StorageCabinet::where('lab_id', $get('lab_id'))
+                            return StorageLocation::where('lab_id', $get('lab_id'))
                                 ->pluck('name', 'id');
                         })
                         ->searchable()
@@ -217,7 +217,7 @@ class ContainerTable
                 ->action(fn (Collection $records, array $data) => app(ContainerService::class)->changeLab($records, $data))
                 ->requiresConfirmation()
                 ->modalHeading('Change Lab')
-                ->modalDescription('Are you sure you want to change the lab and storage cabinet of the selected containers?')
+                ->modalDescription('Are you sure you want to change the lab and storage location of the selected containers?')
                 ->modalSubmitActionLabel('Yes, change lab'),
         ];
     }

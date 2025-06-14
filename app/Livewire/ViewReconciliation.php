@@ -59,8 +59,8 @@ class ViewReconciliation extends Component implements HasForms, HasTable
         return $table
             ->query(ReconciliationItem::with('container')->where('reconciliation_id', $this->reconciliation_id))
             ->columns([
-                TextColumn::make('container.StorageCabinet.name')
-                    ->label('Storage Cabinet')
+                TextColumn::make('container.storageLocation.name')
+                    ->label('Storage Location')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('container.barcode'),
@@ -77,8 +77,8 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     }),
             ])
             ->groups([
-                Group::make('container.storageCabinet.name')
-                    ->label('Storage Cabinet')
+                Group::make('container.storageLocation.name')
+                    ->label('Storage Location')
                     ->collapsible(),
             ])
             ->actions([

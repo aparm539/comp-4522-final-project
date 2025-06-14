@@ -6,7 +6,7 @@ use App\Filament\Resources\ChemicalResource\ChemicalResource;
 use App\Filament\Resources\ContainerResource\ContainerResource;
 use App\Filament\Resources\LabResource\LabResource;
 use App\Filament\Resources\ReconciliationResource\ReconciliationResource;
-use App\Filament\Resources\StorageCabinetResource\StorageCabinetResource;
+use App\Filament\Resources\StorageLocationResource\StorageLocationResource;
 use App\Filament\Resources\UserResource\UserResource;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
                 ContainerResource::class,
                 LabResource::class,
                 ReconciliationResource::class,
-                StorageCabinetResource::class,
+                StorageLocationResource::class,
                 UserResource::class])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->middleware([

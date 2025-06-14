@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\StorageCabinetResource;
+namespace App\Filament\Resources\StorageLocationResource;
 
 use App\Models\Lab;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
-class StorageCabinetForm
+class StorageLocationForm
 {
     public static function make(): array
     {

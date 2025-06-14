@@ -4,7 +4,7 @@ namespace App\Filament\Resources\ContainerResource;
 
 use App\Models\Chemical;
 use App\Models\Lab;
-use App\Models\StorageCabinet;
+use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -59,14 +59,14 @@ class ContainerForm
                 })
                 ->searchable()
                 ->required(),
-            Select::make('storage_cabinet_id')
-                ->label('Storage Cabinet')
+            Select::make('storage_location_id')
+                ->label('Storage Location')
                 ->options(function ($get) {
                     $lab = $get('lab_id');
                     if ($lab) {
-                        return StorageCabinet::where('lab_id', $lab)->pluck('name', 'id');
+                        return StorageLocation::where('lab_id', $lab)->pluck('name', 'id');
                     }
-                    return StorageCabinet::all()->pluck('name', 'id');
+                    return StorageLocation::all()->pluck('name', 'id');
                 })
                 ->required()
                 ->searchable(),

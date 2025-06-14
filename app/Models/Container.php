@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int chemical_id
  * @property \DateTime created_at
  * @property \DateTime updated_at
- * @property int storage_cabinet_id
+ * @property int storage_location_id
  * @property int last_edit_author_id
  */
 class Container extends Model
@@ -35,9 +35,9 @@ class Container extends Model
         return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure_id');
     }
 
-    public function storageCabinet(): BelongsTo
+    public function storageLocation(): BelongsTo
     {
-        return $this->belongsTo(StorageCabinet::class, 'storage_cabinet_id');
+        return $this->belongsTo(StorageLocation::class, 'storage_location_id');
     }
 
     public function chemical(): BelongsTo

@@ -8,9 +8,9 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class StorageCabinetRelationManager extends RelationManager
+class StorageLocationRelationManager extends RelationManager
 {
-    protected static string $relationship = 'storageCabinets';
+    protected static string $relationship = 'storageLocations';
 
     protected static ?string $recordTitleAttribute = 'name';
 

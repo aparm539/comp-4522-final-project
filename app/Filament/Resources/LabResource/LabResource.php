@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\LabResource;
 
 use App\Filament\Resources\LabResource\Pages;
-use App\Filament\Resources\LabResource\RelationManagers\StorageCabinetRelationManager;
+use App\Filament\Resources\LabResource\RelationManagers\StorageLocationRelationManager;
 use App\Models\Lab;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -37,7 +37,7 @@ class LabResource extends Resource
     public static function getRelations(): array
     {
         return [
-            StorageCabinetRelationManager::class,
+            StorageLocationRelationManager::class,
         ];
     }
 
