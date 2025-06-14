@@ -44,8 +44,8 @@ class AdminPanelProvider extends PanelProvider
                 ChemicalResource::class,
                 ContainerResource::class,
                 LabResource::class,
-                ReconciliationResource::class,
                 StorageLocationResource::class,
+                ReconciliationResource::class,
                 UserResource::class])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->middleware([
