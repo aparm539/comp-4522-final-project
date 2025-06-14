@@ -14,8 +14,7 @@ class StorageLocationTable
     public static function columns(): array
     {
         return [
-            TextColumn::make('lab.user.name')
-                ->Label('Supervisor'),
+
             TextColumn::make('lab.room_number'),
             TextColumn::make('name')
                 ->Label('Storage Location'),

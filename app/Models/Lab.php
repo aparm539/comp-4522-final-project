@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @mixin Builder
  *
  * @property int id
- * @property int supervisor_id
  * @property string room_number
  * @property string description
  */
@@ -21,10 +20,7 @@ class Lab extends Model
     use HasFactory;
     public $timestamps = false;
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'supervisor_id');
-    }
+
 
     public function containers(): HasMany
     {

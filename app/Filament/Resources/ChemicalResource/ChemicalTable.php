@@ -15,7 +15,8 @@ class ChemicalTable
     public static function columns(): array
     {
         return [
-            TextColumn::make('CAS #')
+            TextColumn::make('cas')
+                ->label("CAS #")
                 ->searchable()
                 ->sortable(),
             TextColumn::make('name')
