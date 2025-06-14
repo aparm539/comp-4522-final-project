@@ -17,8 +17,7 @@ class LabTable
             TextColumn::make('room_number'),
             TextColumn::make('description')
                 ->limit(20),
-            TextColumn::make('user.name')
-                ->label('Supervisor'),
+
         ];
     }
 

@@ -11,7 +11,9 @@ class ChemicalForm
     public static function make(): array
     {
         return [
-            TextInput::make('CAS #')->required(),
+            TextInput::make('cas')
+                ->label('CAS #')
+                ->required(),
             TextInput::make('name')->required(),
             Select::make('whmis_hazard_class_id')
                 ->label('WHMIS Hazard Class')
@@ -20,5 +22,4 @@ class ChemicalForm
                 ->required(),
         ];
     }
-
 }

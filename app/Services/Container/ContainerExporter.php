@@ -30,8 +30,7 @@ class ContainerExporter extends Exporter
                 ->label('Location'),
             ExportColumn::make('chemical.ishazardous')
                 ->label('Hazardous'),
-            ExportColumn::make('storageLocation.lab.user.name')
-                ->label('Supervisor'),
+
         ];
     }
 

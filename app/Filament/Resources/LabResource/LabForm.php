@@ -15,10 +15,7 @@ class LabForm
                 ->label('Room Number'),
             TextInput::make('description')
                 ->label('Description'),
-            Select::make('supervisor_id')
-                ->label('Supervisor')
-                ->options(User::all()->pluck('name', 'id'))
-                ->searchable(),
+
         ];
     }
 

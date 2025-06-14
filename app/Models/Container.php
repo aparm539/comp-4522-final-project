@@ -25,10 +25,7 @@ class Container extends Model
 {
     use HasFactory;
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'supervisor_id');
-    }
+
 
     public function unitOfMeasure(): BelongsTo
     {

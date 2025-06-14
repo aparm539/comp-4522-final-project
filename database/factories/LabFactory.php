@@ -23,7 +23,7 @@ class LabFactory extends Factory
         return [
             'room_number' => $this->faker->bothify('B2##'),
             'description' => $this->faker->sentence(),
-            'supervisor_id' => User::factory(),
+
         ];
     }
 }

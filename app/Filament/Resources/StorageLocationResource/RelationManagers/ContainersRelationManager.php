@@ -94,8 +94,7 @@ class ContainersRelationManager extends RelationManager
                         'environment' => 'heroicon-m-globe-alt',
                         default => 'heroicon-m-minus',
                     }),
-                TextColumn::make('storageLocation.lab.user.name')
-                    ->label('Supervisor'),
+
             ])
             ->filters([
                 //

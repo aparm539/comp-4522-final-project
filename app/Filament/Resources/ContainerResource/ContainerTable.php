@@ -77,11 +77,7 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('120px'),
-            TextColumn::make('storageLocation.lab.user.name')
-                ->label('Supervisor')
-                ->sortable()
-                ->searchable()
-                ->width('120px'),
+
         ];
     }
 
