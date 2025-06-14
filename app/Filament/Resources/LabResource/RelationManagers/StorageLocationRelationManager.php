@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\LabResource\RelationManagers;
 
-use Filament\Forms;
+use App\Filament\Resources\StorageLocationResource\StorageLocationResource;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
 use Filament\Tables\Table;
 
 class StorageLocationRelationManager extends RelationManager
@@ -16,38 +15,12 @@ class StorageLocationRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+        return StorageLocationResource::form($form);
     }
 
     public function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('containers_count')
-                    ->counts('containers')
-                    ->label('Containers'),
-            ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+        return StorageLocationResource::table($table);
+
     }
 }
