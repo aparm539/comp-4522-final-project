@@ -41,14 +41,10 @@ class ContainerTable
                 ->searchable()
                 ->width('150px'),
             TextColumn::make('quantity')
+                ->formatStateUsing(fn ($state, $record) => $state.' '.$record->unitofmeasure->abbreviation)
                 ->sortable()
                 ->searchable()
                 ->width('80px'),
-            TextColumn::make('unitofmeasure.abbreviation')
-                ->label('Unit')
-                ->sortable()
-                ->searchable()
-                ->width('60px'),
             TextColumn::make('storageLocation.lab.room_number')
                 ->label('Lab')
                 ->formatStateUsing(fn ($state, $record) => $state.' - '.$record->storageLocation->name)
