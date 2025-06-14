@@ -184,13 +184,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                             ->label('Container Barcode')
                             ->placeholder('Scan barcode or press Enter...')
                             ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, $set) {
-                                if (! empty($state)) {
-                                    $this->processBarcode($state);
-                                    $set('barcode', '');
-                                }
-                            }),
+                            ->live(),
                     ])
                     ->disabled($isStopped)
                     ->action(function (array $data) {
