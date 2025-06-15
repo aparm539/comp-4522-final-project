@@ -10,10 +10,4 @@ class ListStorageLocations extends ListRecords
 {
     protected static string $resource = StorageLocationResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
 }

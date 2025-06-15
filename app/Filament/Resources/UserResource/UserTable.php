@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserResource;
 
 use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -30,6 +31,10 @@ class UserTable
         return [
             EditAction::make(),
         ];
+    }
+    public static function headerActions(): array
+    {
+        return [CreateAction::make()];
     }
 
     public static function bulkActions(): array

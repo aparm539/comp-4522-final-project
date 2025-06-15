@@ -26,7 +26,8 @@ class ChemicalResource extends Resource
         return $table
             ->columns(ChemicalTable::columns())
             ->actions(ChemicalTable::actions())
-            ->bulkActions(ChemicalTable::bulkActions());
+            ->bulkActions(ChemicalTable::bulkActions())
+            ->headerActions(ChemicalTable::headerActions());
     }
 
     public static function getPages(): array

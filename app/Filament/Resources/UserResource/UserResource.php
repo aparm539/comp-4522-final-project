@@ -28,7 +28,8 @@ class UserResource extends Resource
         return $table
             ->columns(UserTable::columns())
             ->actions(UserTable::actions())
-            ->bulkActions(UserTable::bulkActions());
+            ->bulkActions(UserTable::bulkActions())
+            ->headerActions(UserTable::headerActions());
     }
 
     public static function getRelations(): array

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ChemicalResource;
 use App\Models\Chemical;
 use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -70,5 +71,9 @@ class ChemicalTable
                     }),
             ]),
         ];
+    }
+
+    public static function HeaderActions(): array {
+        return [CreateAction::make(),];
     }
 }

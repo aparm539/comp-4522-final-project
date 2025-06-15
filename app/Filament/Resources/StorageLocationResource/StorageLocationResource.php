@@ -27,7 +27,8 @@ class StorageLocationResource extends Resource
         return $table
             ->columns(StorageLocationTable::columns())
             ->actions(StorageLocationTable::actions())
-            ->bulkActions(StorageLocationTable::bulkActions());
+            ->bulkActions(StorageLocationTable::bulkActions())
+            ->headerActions(StorageLocationTable::headerActions());
     }
 
     public static function getRelations(): array

@@ -12,6 +12,7 @@ use App\Services\Container\ContainerService;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ExportAction;
@@ -132,6 +133,7 @@ class ContainerTable
     public static function headerActions(): array
     {
         return [
+            CreateAction::make(),
             ExportAction::make()
                 ->exporter(ContainerExporter::class),
             ImportAction::make()

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\StorageLocationResource;
 use App\Models\StorageLocation;
 use App\Models\User;
 use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -26,6 +27,10 @@ class StorageLocationTable
         return [
             EditAction::make(),
         ];
+    }
+    public static function headerActions(): array
+    {
+        return [CreateAction::make()];
     }
 
     public static function bulkActions(): array

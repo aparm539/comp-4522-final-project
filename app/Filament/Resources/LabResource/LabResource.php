@@ -30,7 +30,8 @@ class LabResource extends Resource
         return $table
             ->columns(LabTable::columns())
             ->actions(LabTable::actions())
-            ->bulkActions(LabTable::bulkActions());
+            ->bulkActions(LabTable::bulkActions())
+            ->headerActions(LabTable::headerActions());
 
     }
 

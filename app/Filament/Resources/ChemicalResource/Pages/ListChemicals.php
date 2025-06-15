@@ -9,11 +9,4 @@ use Filament\Resources\Pages\ListRecords;
 class ListChemicals extends ListRecords
 {
     protected static string $resource = ChemicalResource::class;
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
 }

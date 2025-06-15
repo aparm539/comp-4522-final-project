@@ -10,10 +10,4 @@ class ListLabs extends ListRecords
 {
     protected static string $resource = LabResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
-} 
+}
