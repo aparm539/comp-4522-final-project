@@ -2,15 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Resources\ContainerResource\Pages\ListContainers;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
-use App\Filament\Resources\ContainerResource\Pages\ListContainers;
-use App\Models\User;
 
 class ContainerResourceListTest extends TestCase
 {
     use RefreshDatabase;
+
     /** @test */
     public function container_resource_list_page_renders_successfully()
     {

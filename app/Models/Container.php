@@ -25,8 +25,6 @@ class Container extends Model
 {
     use HasFactory;
 
-
-
     public function unitOfMeasure(): BelongsTo
     {
         return $this->belongsTo(UnitOfMeasure::class, 'unit_of_measure_id');

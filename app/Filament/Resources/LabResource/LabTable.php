@@ -37,7 +37,6 @@ class LabTable
     public static function bulkActions(): array
     {
         return [
-            BulkActionGroup::make([
                 DeleteBulkAction::make()
                     ->visible(
                         function (Lab $lab) {
@@ -46,7 +45,6 @@ class LabTable
 
                             return $user->can('delete', $lab);
                         }),
-            ]),
         ];
     }
 }

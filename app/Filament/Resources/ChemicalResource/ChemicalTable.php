@@ -4,12 +4,10 @@ namespace App\Filament\Resources\ChemicalResource;
 
 use App\Models\Chemical;
 use App\Models\User;
-use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
 
 class ChemicalTable
 {
@@ -17,7 +15,7 @@ class ChemicalTable
     {
         return [
             TextColumn::make('cas')
-                ->label("CAS #")
+                ->label('CAS #')
                 ->searchable()
                 ->sortable(),
             TextColumn::make('name')
@@ -58,22 +56,23 @@ class ChemicalTable
         ];
     }
 
-    public static function bulkActions(): array
+    public static function headerActions(): array
     {
         return [
-            BulkActionGroup::make([
-                DeleteBulkAction::make()
-                    ->visible(function (Chemical $chemical) {
-                        /** @var User $user */
-                        $user = auth()->user();
-
-                        return $user->can('delete', $chemical);
-                    }),
-            ]),
+            CreateAction::make(),
         ];
     }
 
-    public static function HeaderActions(): array {
-        return [CreateAction::make(),];
+    public static function bulkActions(): array
+    {
+        return [
+            DeleteBulkAction::make()
+                ->visible(function (Chemical $chemical): bool {
+                    /** @var User|null $user */
+                    $user = auth()->user();
+
+                    return $user?->can('delete', $chemical) ?? false;
+                }),
+        ];
     }
 }

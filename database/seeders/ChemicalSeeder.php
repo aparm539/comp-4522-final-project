@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\WhmisHazardClass;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\WhmisHazardClass;
 
 class ChemicalSeeder extends Seeder
 {

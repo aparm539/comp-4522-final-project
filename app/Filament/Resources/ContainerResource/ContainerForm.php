@@ -44,6 +44,7 @@ class ContainerForm
                 })
                 ->disableOptionWhen(function ($value) {
                     $lab = Lab::find($value);
+
                     return $lab && $lab->hasOngoingReconciliation();
                 })
                 ->helperText(function () {
@@ -53,8 +54,10 @@ class ContainerForm
 
                     if ($ongoingLabs->isNotEmpty()) {
                         $labs = $ongoingLabs->pluck('room_number')->join(', ');
+
                         return "The following labs are currently being reconciled and cannot be selected: $labs";
                     }
+
                     return null;
                 })
                 ->searchable()
@@ -66,6 +69,7 @@ class ContainerForm
                     if ($lab) {
                         return StorageLocation::where('lab_id', $lab)->pluck('name', 'id');
                     }
+
                     return StorageLocation::all()->pluck('name', 'id');
                 })
                 ->required()

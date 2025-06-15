@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property DateTime created_at
  * @property DateTime updated_at
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class StorageLocation extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     public function lab(): BelongsTo

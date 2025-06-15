@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property string status
  * @property string notes

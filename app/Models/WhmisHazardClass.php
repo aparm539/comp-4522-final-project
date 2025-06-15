@@ -22,4 +22,4 @@ class WhmisHazardClass extends Model
     {
         return $this->hasMany(Chemical::class);
     }
-} 
+}

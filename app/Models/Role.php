@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property string name
  * @property string description
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     public function users(): BelongsToMany

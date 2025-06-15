@@ -28,6 +28,7 @@ class StorageLocationTable
             EditAction::make(),
         ];
     }
+
     public static function headerActions(): array
     {
         return [CreateAction::make()];
@@ -36,8 +37,7 @@ class StorageLocationTable
     public static function bulkActions(): array
     {
         return [
-            BulkActionGroup::make([
-                DeleteBulkAction::make()
+            DeleteBulkAction::make()
 
                     ->visible(function (StorageLocation $storageLocation) {
                         /** @var User $user */
@@ -45,7 +45,6 @@ class StorageLocationTable
 
                         return $user->can('delete', $storageLocation);
                     }),
-            ]),
         ];
     }
 }

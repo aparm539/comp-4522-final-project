@@ -32,6 +32,7 @@ class UserTable
             EditAction::make(),
         ];
     }
+
     public static function headerActions(): array
     {
         return [CreateAction::make()];
@@ -40,9 +41,7 @@ class UserTable
     public static function bulkActions(): array
     {
         return [
-            BulkActionGroup::make([
-                DeleteBulkAction::make(),
-            ]),
+            DeleteBulkAction::make(),
         ];
     }
 }

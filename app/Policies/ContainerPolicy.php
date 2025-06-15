@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Container;
 use App\Models\User;
 
 class ContainerPolicy

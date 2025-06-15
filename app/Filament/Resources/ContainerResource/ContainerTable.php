@@ -23,8 +23,30 @@ use Illuminate\Support\Collection;
 
 class ContainerTable
 {
+    /**
+     * Placeholder buttons to show in toolbar when no records selected.
+     *
+     * @return array<int, array{label:string,color:string,icon?:string}>
+     */
+    public static function placeholderBulkButtons(): array
+    {
+        return [
+            [
+                'label' => __('filament-actions::delete.multiple.label'),
+                'color' => 'danger',
+                'icon' => 'heroicon-m-trash',
+            ],
+            [
+                'label' => 'Change Lab',
+                'color' => 'primary',
+                'icon' => 'heroicon-o-map',
+            ],
+        ];
+    }
+
     public static function columns(): array
     {
+
         return [
             TextColumn::make('barcode')
                 ->sortable()

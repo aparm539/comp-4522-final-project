@@ -2,13 +2,10 @@
 
 namespace App\Filament\Resources\LabResource;
 
-use App\Filament\Resources\LabResource\Pages;
 use App\Filament\Resources\LabResource\RelationManagers\StorageLocationRelationManager;
 use App\Models\Lab;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 
 class LabResource extends Resource

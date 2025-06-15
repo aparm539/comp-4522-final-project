@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ChemicalResource\Pages;
 
 use App\Filament\Resources\ChemicalResource\ChemicalResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListChemicals extends ListRecords

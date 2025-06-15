@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property string name
  * @property string abbreviation

@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Lab;
 use App\Models\StorageLocation;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @extends Factory<StorageLocation>

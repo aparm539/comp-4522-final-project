@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\LabResource;
 
-use App\Models\User;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
 class LabForm
@@ -18,5 +16,4 @@ class LabForm
 
         ];
     }
-
 }

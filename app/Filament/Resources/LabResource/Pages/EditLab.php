@@ -17,4 +17,4 @@ class EditLab extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-} 
+}

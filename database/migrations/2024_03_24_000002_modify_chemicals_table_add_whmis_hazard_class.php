@@ -24,4 +24,4 @@ return new class extends Migration
             $table->dropColumn('whmis_hazard_class_id');
         });
     }
-}; 
+};

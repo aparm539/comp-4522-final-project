@@ -24,7 +24,8 @@ class ContainerHistory extends Component implements HasForms, HasTable
         $this->containerId = $containerId;
     }
 
-    public function history(): array{
+    public function history(): array
+    {
         return DB::select("
   SELECT *, ROW_START, ROW_END FROM containers FOR SYSTEM_TIME ALL WHERE id = $this->containerId
 ");

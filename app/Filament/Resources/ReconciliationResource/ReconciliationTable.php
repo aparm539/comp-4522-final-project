@@ -83,9 +83,7 @@ class ReconciliationTable
     public static function bulkActions(): array
     {
         return [
-            BulkActionGroup::make([
-                DeleteBulkAction::make(),
-            ]),
+            DeleteBulkAction::make(),
         ];
     }
 

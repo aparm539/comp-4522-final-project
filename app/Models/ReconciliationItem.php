@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property int reconciliation_id
  * @property int container_id
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ReconciliationItem extends Model
 {
     public $timestamps = false;
+
     public function container(): BelongsTo
     {
         return $this->belongsTo(Container::class, 'container_id');

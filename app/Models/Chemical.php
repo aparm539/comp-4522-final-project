@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin Builder
+ *
  * @property int id
  * @property string cas
  * @property string name
@@ -18,12 +19,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Chemical extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
         'cas',
         'name',
-        'whmis_hazard_class_id'
+        'whmis_hazard_class_id',
     ];
 
     public function containers(): HasMany

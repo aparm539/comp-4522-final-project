@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\StorageLocation;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
