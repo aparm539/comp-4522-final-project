@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\StorageLocationResource;
 
+use App\Filament\Resources\LabResource\RelationManagers\StorageLocationRelationManager;
 use App\Models\Lab;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -21,7 +22,8 @@ class StorageLocationForm
                 ->label('Lab')
                 ->options(Lab::all()->pluck('room_number', 'id'))
                 ->required()
-                ->searchable(),
+                ->searchable()
+                ->hiddenOn(StorageLocationRelationManager::class),
         ];
     }
 }

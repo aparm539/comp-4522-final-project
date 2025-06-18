@@ -9,6 +9,7 @@ use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Hidden;
+use App\Filament\Resources\StorageLocationResource\RelationManagers\ContainersRelationManager;
 
 class ContainerForm
 {
@@ -62,7 +63,8 @@ class ContainerForm
                     return null;
                 })
                 ->searchable()
-                ->required(),
+                ->required()
+                ->hiddenOn(ContainersRelationManager::class),
             Select::make('storage_location_id')
                 ->label('Storage Location')
                 ->options(function ($get) {
@@ -74,7 +76,8 @@ class ContainerForm
                     return StorageLocation::all()->pluck('name', 'id');
                 })
                 ->required()
-                ->searchable(),
+                ->searchable()
+                ->hiddenOn(ContainersRelationManager::class),
             TextInput::make('barcode')
                 ->label('Barcode')
                 ->required(),
