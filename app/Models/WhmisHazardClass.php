@@ -16,10 +16,23 @@ class WhmisHazardClass extends Model
         'symbol',
     ];
 
+    protected $casts = [
+        // Casts the `symbol` column to our enum for convenient icon retrieval.
+        'symbol' => \App\Enums\WhmisPictogram::class,
+    ];
+
     public $timestamps = false;
 
     public function chemicals(): BelongsToMany
     {
         return $this->belongsToMany(Chemical::class);
+    }
+
+    /**
+     * Convenient accessor to obtain the Heroicon name for this hazard class.
+     */
+    public function getIconAttribute(): string
+    {
+        return $this->symbol->icon();
     }
 }

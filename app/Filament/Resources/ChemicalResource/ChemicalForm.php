@@ -14,12 +14,9 @@ class ChemicalForm
                 ->label('CAS #')
                 ->required(),
             TextInput::make('name')->required(),
-            Select::make('whmisHazardClasses')
-                ->label('WHMIS Hazard Classes')
-                ->relationship('whmisHazardClasses', 'class_name')
-                ->preload()
-                ->required()
-                ->multiple(),
+            \App\Forms\Components\HazardClassSelect::make('whmisHazardClasses')
+                ->relationship('whmisHazardClasses', 'id')
+                ->required(),
         ];
     }
 }

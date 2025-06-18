@@ -18,6 +18,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,10 +77,10 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('180px'),
-            TextColumn::make('hazard_classes')
-                ->label('Hazard Classes')
-                ->getStateUsing(fn ($record): string => $record->chemical->whmisHazardClasses->pluck('class_name')->join(', '))
-                ->badge()
+            ViewColumn::make('hazard_icons')
+                ->label('Hazards')
+                ->tooltip(fn ($record): string => $record->chemical->whmisHazardClasses->pluck('class_name')->join(', '))
+                ->view('filament.tables.columns.container-hazard-icons')
                 ->searchable(false)
                 ->sortable(false)
                 ->width('120px'),

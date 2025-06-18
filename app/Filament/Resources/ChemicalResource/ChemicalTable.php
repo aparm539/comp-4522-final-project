@@ -8,6 +8,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 
 class ChemicalTable
 {
@@ -21,10 +22,10 @@ class ChemicalTable
             TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            TextColumn::make('hazard_classes')
-                ->label('Hazard Classes')
-                ->getStateUsing(fn (Chemical $record): string => $record->whmisHazardClasses->pluck('class_name')->join(', '))
-                ->badge()
+            ViewColumn::make('hazard_icons')
+                ->label('Hazards')
+                ->tooltip(fn (Chemical $record): string => $record->whmisHazardClasses->pluck('class_name')->join(', '))
+                ->view('filament.tables.columns.chemical-hazard-icons')
                 ->searchable(false)
                 ->sortable(false),
         ];
@@ -49,7 +50,7 @@ class ChemicalTable
         return [
             DeleteBulkAction::make()
                 ->visible(function (Chemical $chemical): bool {
-                    /** @var User|null $user */
+                    /** @var \App\Models\User|null $user */
                     $user = auth()->user();
 
                     return $user?->can('delete', $chemical) ?? false;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="367.33334"
+   height="367.33334"
+   viewBox="0 0 367.33334 367.33334"
+   sodipodi:docname="gas_cylinder.eps"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:page
+       x="0"
+       y="0"
+       inkscape:label="1"
+       id="page1"
+       width="367.33334"
+       height="367.33334"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     id="g1"
+     inkscape:groupmode="layer"
+     inkscape:label="1">
+    <g
+       id="group-R5">
+      <path
+         id="path2"
+         d="M 2582.9,1381.28 1383.13,181.5 183.363,1381.28 1383.13,2581.05 2582.9,1381.28"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(0.13333333,0,0,-0.13333333,0,367.33333)" />
+      <path
+         id="path3"
+         d="M 2513.08,1377.38 1377.72,2512.85 242.273,1377.38 1377.72,242.031 Z M 1377.55,0 0,1377.52 1377.55,2755 2755.05,1377.52 1377.55,0"
+         style="fill:#ef2e31;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(0.13333333,0,0,-0.13333333,0,367.33333)" />
+      <path
+         id="path4"
+         d="M 723.684,1262.95 C 763.23,1127.46 841.238,1143.4 841.238,1143.4 l 875.682,231.58 c 33.17,8.66 39.79,35.57 39.79,35.57 l 22.13,62.61 c 8.57,25.36 42.52,33.55 42.52,33.55 l 184.98,48.05 c 32.32,8.54 21.19,49.75 21.19,49.75 l -0.14,0.53 c 0,0 -10.52,41.43 -42.93,32.97 l -184.67,-48.7 c 0,0 -33.73,-9.58 -53.59,8.39 l -49.9,43.72 c 0,0 -18.93,20.25 -52.13,11.6 L 767.355,1425.63 c 0,0 -75.839,-24.24 -43.886,-161.74 l 0.215,-0.94"
+         style="fill:#241d10;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(0.13333333,0,0,-0.13333333,0,367.33333)" />
+    </g>
+  </g>
+</svg>
