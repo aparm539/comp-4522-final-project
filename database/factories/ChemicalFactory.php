@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Chemical;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\WhmisHazardClass;
 
 /**
  * @extends Factory<Chemical>
@@ -20,7 +21,7 @@ class ChemicalFactory extends Factory
         return [
             'cas' => $this->faker->bothify('??-###-##'),
             'name' => $this->faker->word(),
-            'ishazardous' => $this->faker->boolean(),
+            'whmis_hazard_class_id' => WhmisHazardClass::inRandomOrder()->first()->id,
         ];
     }
 }

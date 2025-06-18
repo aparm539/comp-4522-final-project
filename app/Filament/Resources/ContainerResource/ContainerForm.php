@@ -8,6 +8,7 @@ use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Hidden;
 
 class ContainerForm
 {
@@ -77,6 +78,10 @@ class ContainerForm
             TextInput::make('barcode')
                 ->label('Barcode')
                 ->required(),
+            Hidden::make('last_edit_author_id')
+                ->label('Last Edit Author')
+                ->required()
+                ->default(auth()?->user()?->id),
 
         ];
     }
