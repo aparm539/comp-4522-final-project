@@ -96,7 +96,7 @@
                                 <!-- Location -->
                                 @if ($locationChanged)
                                     <span class="text-lg font-medium text-blue-600">
-                                        Moved from {{ $previousLocation?->name ?? 'Unknown' }} to {{ $currentLocation?->name ?? 'Unknown' }}
+                                        Moved from {{ $previousLocation?->lab?->room_number ?? 'Unknown Lab' }} {{ $previousLocation?->name ?? 'Unknown' }} to {{ $currentLocation?->lab?->room_number ?? 'Unknown Lab' }} {{ $currentLocation?->name ?? 'Unknown' }}
                                     </span>
                                 @else
                                     <span class="text-gray-500 italic">
