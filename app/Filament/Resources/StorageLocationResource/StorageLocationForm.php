@@ -16,7 +16,6 @@ class StorageLocationForm
                 ->required()
                 ->maxLength(255),
             TextInput::make('barcode')
-                ->required()
                 ->maxLength(255),
             Select::make('lab_id')
                 ->label('Lab')
