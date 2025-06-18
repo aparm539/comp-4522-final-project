@@ -18,7 +18,9 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ContainerTable
@@ -111,14 +113,42 @@ class ContainerTable
                 ->relationship('chemical', 'name')
                 ->searchable()
                 ->preload(),
-            SelectFilter::make('lab')
-                ->relationship('storageLocation.lab', 'room_number')
-                ->searchable()
-                ->preload(),
-            SelectFilter::make('storage_location')
-                ->relationship('storageLocation', 'name')
-                ->searchable()
-                ->preload(),
+            
+            /*
+             * Combined Lab / Storage Location dependent filter.
+             */
+            Filter::make('location')
+                ->label('Lab & Storage Location')
+                ->form([
+                    Select::make('lab_id')
+                        ->label('Lab')
+                        ->options(fn (): array => Lab::query()->pluck('room_number', 'id')->all())
+                        ->reactive()
+                        ->afterStateUpdated(fn (callable $set) => $set('storage_location_id', null)),
+                    Select::make('storage_location_id')
+                        ->label('Storage Location')
+                        ->options(function (callable $get): array {
+                            $labId = $get('lab_id');
+
+                            $query = StorageLocation::query();
+
+                            if (filled($labId)) {
+                                $query->where('lab_id', $labId);
+                            }
+
+                            return $query->pluck('name', 'id')->all();
+                        })
+                        ->disabled(fn (callable $get) => blank($get('lab_id')))
+                        ->searchable(),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query
+                        ->when($data['lab_id'] ?? null, function (Builder $query, $labId): Builder {
+                            return $query->whereHas('storageLocation.lab', fn (Builder $q) => $q->where('id', $labId));
+                        })
+                        ->when($data['storage_location_id'] ?? null, fn (Builder $query, $storageLocationId): Builder => $query->where('storage_location_id', $storageLocationId));
+                }),
+
             SelectFilter::make('unit_of_measure')
                 ->relationship('unitOfMeasure', 'abbreviation')
                 ->searchable()
