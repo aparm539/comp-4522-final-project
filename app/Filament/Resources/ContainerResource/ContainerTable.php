@@ -76,31 +76,12 @@ class ContainerTable
                 ->sortable()
                 ->searchable()
                 ->width('180px'),
-            TextColumn::make('chemical.whmisHazardClass.class_name')
-                ->label('Hazard Class')
+            TextColumn::make('hazard_classes')
+                ->label('Hazard Classes')
+                ->getStateUsing(fn ($record): string => $record->chemical->whmisHazardClasses->pluck('class_name')->join(', '))
                 ->badge()
-                ->color(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
-                    'flame' => 'danger',
-                    'flame-over-circle' => 'danger',
-                    'gas-cylinder' => 'warning',
-                    'skull-crossbones' => 'danger',
-                    'corrosion' => 'danger',
-                    'health-hazard' => 'warning',
-                    'environment' => 'success',
-                    default => 'gray',
-                })
-                ->icon(fn ($record): string => match ($record->chemical->whmisHazardClass->symbol) {
-                    'flame' => 'heroicon-m-fire',
-                    'flame-over-circle' => 'heroicon-m-fire',
-                    'gas-cylinder' => 'heroicon-m-beaker',
-                    'skull-crossbones' => 'heroicon-m-exclamation-triangle',
-                    'corrosion' => 'heroicon-m-bolt',
-                    'health-hazard' => 'heroicon-m-heart',
-                    'environment' => 'heroicon-m-globe-alt',
-                    default => 'heroicon-m-minus',
-                })
-                ->sortable()
-                ->searchable()
+                ->searchable(false)
+                ->sortable(false)
                 ->width('120px'),
 
         ];
@@ -153,10 +134,7 @@ class ContainerTable
                 ->relationship('unitOfMeasure', 'abbreviation')
                 ->searchable()
                 ->preload(),
-            SelectFilter::make('hazard_class')
-                ->relationship('chemical.whmisHazardClass', 'class_name')
-                ->searchable()
-                ->preload(),
+            // Hazard class filter removed temporarily due to many-to-many relation complexity
         ];
     }
 

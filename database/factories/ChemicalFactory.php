@@ -21,7 +21,16 @@ class ChemicalFactory extends Factory
         return [
             'cas' => $this->faker->bothify('??-###-##'),
             'name' => $this->faker->word(),
-            'whmis_hazard_class_id' => WhmisHazardClass::inRandomOrder()->first()->id,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Chemical $chemical): void {
+            $hazardClass = WhmisHazardClass::inRandomOrder()->first();
+            if ($hazardClass !== null) {
+                $chemical->whmisHazardClasses()->attach($hazardClass->id);
+            }
+        });
     }
 }

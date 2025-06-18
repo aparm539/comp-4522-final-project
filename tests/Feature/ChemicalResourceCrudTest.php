@@ -47,9 +47,9 @@ it('an admin can create a chemical', function () {
     ]);
 
     $data = [
-        'cas'                   => '64-17-5',
-        'name'                  => 'Ethanol',
-        'whmis_hazard_class_id' => $hazardClass->id,
+        'cas'                => '64-17-5',
+        'name'               => 'Ethanol',
+        'whmisHazardClasses' => [$hazardClass->id],
     ];
 
     Livewire::test(ListChemicals::class)
@@ -73,9 +73,9 @@ it('an admin can update a chemical', function () {
     ]);
 
     /** @var Chemical $chemical */
-    $chemical = Chemical::factory()->create([
-        'whmis_hazard_class_id' => $hazardClass->id,
-    ]);
+    $chemical = Chemical::factory()->create();
+
+    $chemical->whmisHazardClasses()->attach($hazardClass->id);
 
     Livewire::test(ListChemicals::class)
         ->mountTableAction('edit', $chemical)
@@ -98,9 +98,11 @@ it('an admin can bulk delete chemicals', function () {
         'symbol'       => 'flame',
     ]);
 
-    $chemicals = Chemical::factory()->count(3)->create([
-        'whmis_hazard_class_id' => $hazardClass->id,
-    ]);
+    $chemicals = Chemical::factory()->count(3)->create();
+
+    foreach ($chemicals as $chem) {
+        $chem->whmisHazardClasses()->attach($hazardClass->id);
+    }
 
     Livewire::test(ListChemicals::class)
         ->callTableBulkAction('delete', $chemicals);

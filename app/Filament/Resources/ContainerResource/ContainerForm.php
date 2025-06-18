@@ -19,7 +19,7 @@ class ContainerForm
             Select::make('chemical_id')
                 ->label('Chemical')
                 ->options(Chemical::query()
-                    ->with('whmisHazardClass')
+                    ->with('whmisHazardClasses')
                     ->get()
                     ->mapWithKeys(function (Chemical $chemical) {
                         return [

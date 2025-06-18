@@ -21,31 +21,12 @@ class ChemicalTable
             TextColumn::make('name')
                 ->searchable()
                 ->sortable(),
-            TextColumn::make('whmisHazardClass.class_name')
-                ->label('Hazard Class')
+            TextColumn::make('hazard_classes')
+                ->label('Hazard Classes')
+                ->getStateUsing(fn (Chemical $record): string => $record->whmisHazardClasses->pluck('class_name')->join(', '))
                 ->badge()
-                ->color(fn (Chemical $record): string => match ($record->whmisHazardClass->symbol) {
-                    'flame' => 'danger',
-                    'flame-over-circle' => 'danger',
-                    'gas-cylinder' => 'warning',
-                    'skull-crossbones' => 'danger',
-                    'corrosion' => 'danger',
-                    'health-hazard' => 'warning',
-                    'environment' => 'success',
-                    default => 'gray',
-                })
-                ->icon(fn (Chemical $record): string => match ($record->whmisHazardClass->symbol) {
-                    'flame' => 'heroicon-m-fire',
-                    'flame-over-circle' => 'heroicon-m-fire',
-                    'gas-cylinder' => 'heroicon-m-beaker',
-                    'skull-crossbones' => 'heroicon-m-exclamation-triangle',
-                    'corrosion' => 'heroicon-m-bolt',
-                    'health-hazard' => 'heroicon-m-heart',
-                    'environment' => 'heroicon-m-globe-alt',
-                    default => 'heroicon-m-minus',
-                })
-                ->searchable()
-                ->sortable(),
+                ->searchable(false)
+                ->sortable(false),
         ];
     }
 

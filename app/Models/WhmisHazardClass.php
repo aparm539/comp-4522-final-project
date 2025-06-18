@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class WhmisHazardClass extends Model
 {
@@ -18,8 +18,8 @@ class WhmisHazardClass extends Model
 
     public $timestamps = false;
 
-    public function chemicals(): HasMany
+    public function chemicals(): BelongsToMany
     {
-        return $this->hasMany(Chemical::class);
+        return $this->belongsToMany(Chemical::class);
     }
 }

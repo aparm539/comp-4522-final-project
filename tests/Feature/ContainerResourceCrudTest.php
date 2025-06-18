@@ -46,9 +46,8 @@ it('an admin can create a container', function () {
         'symbol'      => 'flame',
     ]);
 
-    $chemical = Chemical::factory()->create([
-        'whmis_hazard_class_id' => $hazardClass->id,
-    ]);
+    $chemical = Chemical::factory()->create();
+    $chemical->whmisHazardClasses()->attach($hazardClass->id);
 
     /** @var UnitOfMeasure $unit */
     $unit = UnitOfMeasure::factory()->create();
@@ -92,9 +91,8 @@ it('an admin can update a container', function () {
         'symbol'      => 'flame',
     ]);
 
-    $chemical = Chemical::factory()->create([
-        'whmis_hazard_class_id' => $hazardClass->id,
-    ]);
+    $chemical = Chemical::factory()->create();
+    $chemical->whmisHazardClasses()->attach($hazardClass->id);
 
     $unit  = UnitOfMeasure::factory()->create();
     $lab   = Lab::factory()->create();
@@ -133,9 +131,8 @@ it('an admin can bulk delete containers', function () {
         'symbol'      => 'flame',
     ]);
 
-    $chemical = Chemical::factory()->create([
-        'whmis_hazard_class_id' => $hazardClass->id,
-    ]);
+    $chemical = Chemical::factory()->create();
+    $chemical->whmisHazardClasses()->attach($hazardClass->id);
 
     $unit  = UnitOfMeasure::factory()->create();
     $lab   = Lab::factory()->create();

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Chemical;
 use App\Models\WhmisHazardClass;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ChemicalSeeder extends Seeder
 {
@@ -19,6 +19,7 @@ class ChemicalSeeder extends Seeder
         $healthHazardId = WhmisHazardClass::where('class_name', 'Health Hazard')->first()->id;
         $corrosiveId = WhmisHazardClass::where('class_name', 'Corrosive Materials')->first()->id;
 
+        // Each item keeps a reference to its primary WHMIS hazard class for seeding
         $chemicals = [
             ['cas' => '60-31-1', 'name' => 'Acetylcholine Chloride', 'whmis_hazard_class_id' => $acuteToxicityId],
             ['cas' => '9031-72-5', 'name' => 'Alcohol Dehydrogenase', 'whmis_hazard_class_id' => $healthHazardId],
@@ -54,6 +55,16 @@ class ChemicalSeeder extends Seeder
             ['cas' => '8002-43-5', 'name' => 'L-a-Phosphatidylcholine', 'whmis_hazard_class_id' => $healthHazardId],
         ];
 
-        DB::table('chemicals')->insert($chemicals);
+        foreach ($chemicals as $chemicalData) {
+            $hazardClassId = $chemicalData['whmis_hazard_class_id'];
+
+            // Remove the hazard class ID from the attributes before insertion
+            unset($chemicalData['whmis_hazard_class_id']);
+
+            /** @var Chemical $chemical */
+            $chemical = Chemical::create($chemicalData);
+
+            $chemical->whmisHazardClasses()->attach($hazardClassId);
+        }
     }
 }
