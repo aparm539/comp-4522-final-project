@@ -42,8 +42,8 @@ class ContainerHistory extends Component implements HasForms, HasTable
                 TextColumn::make('ROW_END')
                     ->label('End Date')
                     ->dateTime(),
-                TextColumn::make('quantity')
-                    ->label('Quantity'),
+                TextColumn::make('storageLocation.name')
+                    ->label('Location'),
             ]);
     }
 

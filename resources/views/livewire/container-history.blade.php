@@ -5,16 +5,19 @@
 
             $history = $this->history();
             $processedHistory = [];
-            $previousQuantity = null;
+            $previousLocationId = null;
 
-            // Calculate differences
+            // Determine location changes
             foreach ($history as $item) {
-                $change = is_null($previousQuantity) ? null : $item->quantity - $previousQuantity;
+                $locationChanged = ! is_null($previousLocationId) && $item->storage_location_id !== $previousLocationId;
+
                 $processedHistory[] = [
                     'item' => $item,
-                    'change' => $change,
+                    'locationChanged' => $locationChanged,
+                    'previousLocationId' => $previousLocationId,
                 ];
-                $previousQuantity = $item->quantity;
+
+                $previousLocationId = $item->storage_location_id;
             }
 
             // Reverse the processed history for display
@@ -63,15 +66,19 @@
 
         {{-- Changes Section --}}
         <div>
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Changes History</h2>
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Location History</h2>
 
             <div class="overflow-x-auto">
                 <div class="space-y-4">
                     @foreach ($processedHistory as $entry)
+                        @php if (! $entry['locationChanged']) { continue; } @endphp
                         @php
                             $item = $entry['item'];
-                            $container = \App\Models\Container::find($item->id);
-                            $change = $entry['change'];
+                            $locationChanged = $entry['locationChanged'];
+                            $previousLocationId = $entry['previousLocationId'];
+
+                            $currentLocation = \App\Models\StorageLocation::find($item->storage_location_id);
+                            $previousLocation = $previousLocationId ? \App\Models\StorageLocation::find($previousLocationId) : null;
 
                             $dateTime = new DateTime($item->ROW_START);
                             $dateTime->setTimezone(new DateTimeZone('America/Edmonton'));
@@ -86,19 +93,16 @@
                             </div>
                             <!-- Details -->
                             <div class="p-4 flex flex-col space-y-1">
-                                <!-- Change -->
-                                @if (!is_null($change))
-                                    <span class="text-lg font-medium {{ $change > 0 ? 'text-green-600' : 'text-red-600' }}">
-                        {{ $change > 0 ? '+' : '' }}{{ round($change, 2) }}
-                                        {{ $container->unitOfMeasure->abbreviation }}
-                    </span>
+                                <!-- Location -->
+                                @if ($locationChanged)
+                                    <span class="text-lg font-medium text-blue-600">
+                                        Moved from {{ $previousLocation?->name ?? 'Unknown' }} to {{ $currentLocation?->name ?? 'Unknown' }}
+                                    </span>
                                 @else
-                                    <span class="text-gray-500 italic">No Change</span>
+                                    <span class="text-gray-500 italic">
+                                        Location: {{ $currentLocation?->name ?? 'Unknown' }}
+                                    </span>
                                 @endif
-                                <!-- Quantity -->
-                                <span class="text-xs text-gray-500">
-                    Quantity: {{ $item->quantity }} {{ $container->unitOfMeasure->abbreviation }}
-                </span>
                                 <!-- Changed By -->
                                 <span class="text-sm text-gray-600">
                     Changed By: <span class="font-medium text-gray-800">{{ $user?->name ?? 'Unknown' }}</span>
