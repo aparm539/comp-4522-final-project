@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Filament\Resources\ReconciliationResource\Pages\ListReconciliations;
 use App\Models\Reconciliation;
 use App\Models\ReconciliationItem;
 use Filament\Forms\Components\Select;
@@ -209,12 +210,17 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                             ->required(),
                     ])
                     ->action(function (array $data) {
-                        $unreconciledCount = ReconciliationItem::where('status', 'pending')->count();
+                        $unreconciledCount = ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+                            ->where('status', 'pending')
+                            ->count();
+                        $actionLabel = '';
 
                         if ($unreconciledCount > 0) {
-                            ReconciliationItem::where('status', 'pending')->update([
-                                'status' => $data['action'],
-                            ]);
+                            ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+                                ->where('status', 'pending')
+                                ->update([
+                                    'status' => $data['action'],
+                                ]);
 
                             $actionLabel = $data['action'] === 'reconciled' ? 'reconciled' : 'marked as missing';
 
@@ -231,6 +237,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                                 'ended_at' => date('Y-m-d H:i:s'),
                             ]);
                         }
+                        return redirect()->to(ListReconciliations::getUrl());
                     }),
             ]);
     }
