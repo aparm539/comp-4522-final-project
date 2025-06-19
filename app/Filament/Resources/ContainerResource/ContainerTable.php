@@ -95,10 +95,7 @@ class ContainerTable
                 ->relationship('chemical', 'name')
                 ->searchable()
                 ->preload(),
-            
-            /*
-             * Combined Lab / Storage Location dependent filter.
-             */
+
             Filter::make('location')
                 ->label('Lab & Storage Location')
                 ->form([
@@ -135,7 +132,6 @@ class ContainerTable
                 ->relationship('unitOfMeasure', 'abbreviation')
                 ->searchable()
                 ->preload(),
-            // Hazard class filter removed temporarily due to many-to-many relation complexity
         ];
     }
 

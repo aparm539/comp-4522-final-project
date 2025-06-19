@@ -15,6 +15,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\View\View;
@@ -130,6 +131,15 @@ class ViewReconciliation extends Component implements HasForms, HasTable
             ->bulkActions([
                 // ...
             ])
+            ->filters([
+                SelectFilter::make('status')
+                    ->multiple()
+                    ->options([
+                        'pending' => 'Pending',
+                        'reconciled' => 'Reconciled',
+                        'missing' => 'Missing',
+                    ]),
+            ])
             ->headerActions([
                 Action::make('Pause Reconciliation')
                     ->label('Pause Reconciliation')
@@ -237,6 +247,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                                 'ended_at' => date('Y-m-d H:i:s'),
                             ]);
                         }
+
                         return redirect()->to(ListReconciliations::getUrl());
                     }),
             ]);
