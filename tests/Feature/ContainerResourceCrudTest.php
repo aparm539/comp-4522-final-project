@@ -4,13 +4,14 @@ use App\Filament\Resources\ContainerResource\Pages\ListContainers;
 use App\Models\Chemical;
 use App\Models\Container;
 use App\Models\Lab;
-use App\Models\Role;
 use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
-use App\Models\WhmisHazardClass;
-use Illuminate\Support\Str;
+
 use Livewire\Livewire;
+
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
 
 // Define helper only if it hasn't been defined in another test file.
 if (! function_exists('getAdminUser')) {
@@ -18,20 +19,8 @@ if (! function_exists('getAdminUser')) {
      * Returns a user with the "admin" role attached.
      */
     function getAdminUser(): User
-    {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        // Ensure an "admin" role exists and attach it to the user.
-        $role = Role::firstOrCreate([
-            'name' => 'admin',
-        ], [
-            'description' => 'Users with full administrative permissions',
-        ]);
-
-        $user->roles()->sync([$role->id]);
-
-        return $user;
+    {   
+        return User::whereHas('roles', static fn ($q) => $q->where('name', 'admin'))->first();
     }
 }
 
@@ -39,26 +28,15 @@ if (! function_exists('getAdminUser')) {
 it('an admin can create a container', function () {
     $this->actingAs(getAdminUser());
 
-    // Create prerequisite data.
-    $hazardClass = WhmisHazardClass::create([
-        'class_name'  => 'Flammable',
-        'description' => 'Flammable liquids',
-        'symbol'      => 'flame',
-    ]);
-
-    $chemical = Chemical::factory()->create();
-    $chemical->whmisHazardClasses()->attach($hazardClass->id);
-
-    /** @var UnitOfMeasure $unit */
-    $unit = UnitOfMeasure::factory()->create();
-
-    /** @var Lab $lab */
-    $lab = Lab::factory()->create();
+    // Use seeded data where possible.
+    $chemical = Chemical::inRandomOrder()->first();
+    $unit     = UnitOfMeasure::inRandomOrder()->first();
 
     /** @var StorageLocation $storageLocation */
-    $storageLocation = StorageLocation::factory()->create([
-        'lab_id' => $lab->id,
-    ]);
+    $storageLocation = StorageLocation::inRandomOrder()->first();
+
+    /** @var Lab $lab */
+    $lab = $storageLocation->lab;
 
     $data = [
         'chemical_id'         => $chemical->id,
@@ -67,7 +45,7 @@ it('an admin can create a container', function () {
         'storage_location_id' => $storageLocation->id,
         'lab_id'              => $lab->id,
         'barcode'             => 'MRUC123456',
-        'last_edit_author_id' => auth()?->user()?->id,
+        'last_edit_author_id' => getAdminUser()->id,
     ];
 
     Livewire::test(ListContainers::class)
@@ -84,67 +62,27 @@ it('an admin can create a container', function () {
 it('an admin can update a container', function () {
     $this->actingAs(getAdminUser());
 
-    // Prerequisites
-    $hazardClass = WhmisHazardClass::create([
-        'class_name'  => 'Flammable',
-        'description' => 'Flammable liquids',
-        'symbol'      => 'flame',
-    ]);
-
-    $chemical = Chemical::factory()->create();
-    $chemical->whmisHazardClasses()->attach($hazardClass->id);
-
-    $unit  = UnitOfMeasure::factory()->create();
-    $lab   = Lab::factory()->create();
-    $storageLocation = StorageLocation::factory()->create([
-        'lab_id' => $lab->id,
-    ]);
-
     /** @var Container $container */
-    $container = Container::factory()->create([
-        'chemical_id'         => $chemical->id,
-        'unit_of_measure_id'  => $unit->id,
-        'quantity'            => 5,
-        'storage_location_id' => $storageLocation->id,
-        'barcode'             => 'MRUC123456',
-    ]);
+    $container = Container::inRandomOrder()->first();
+
+    $originalQuantity = $container->quantity;
 
     Livewire::test(ListContainers::class)
         ->mountTableAction('edit', $container)
         ->setTableActionData([
-            'quantity' => 15,
+            'quantity' => $originalQuantity + 10,
         ])
         ->callMountedTableAction()
         ->assertHasNoTableActionErrors();
 
-    expect($container->refresh()->quantity)->toEqual(15.0);
+    expect($container->refresh()->quantity)->toEqual($originalQuantity + 10);
 });
 
 /** @test */
 it('an admin can bulk delete containers', function () {
     $this->actingAs(getAdminUser());
 
-    // Prerequisites
-    $hazardClass = WhmisHazardClass::create([
-        'class_name'  => 'Flammable',
-        'description' => 'Flammable liquids',
-        'symbol'      => 'flame',
-    ]);
-
-    $chemical = Chemical::factory()->create();
-    $chemical->whmisHazardClasses()->attach($hazardClass->id);
-
-    $unit  = UnitOfMeasure::factory()->create();
-    $lab   = Lab::factory()->create();
-    $storageLocation = StorageLocation::factory()->create([
-        'lab_id' => $lab->id,
-    ]);
-
-    $containers = Container::factory()->count(3)->create([
-        'chemical_id'         => $chemical->id,
-        'unit_of_measure_id'  => $unit->id,
-        'storage_location_id' => $storageLocation->id,
-    ]);
+    $containers = Container::inRandomOrder()->limit(3)->get();
 
     Livewire::test(ListContainers::class)
         ->callTableBulkAction('delete', $containers);

@@ -7,7 +7,7 @@ use Livewire\Livewire;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('container resource list page renders successfully', function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::inRandomOrder()->first());
     Livewire::test(ListContainers::class)
         ->assertSuccessful();
 });
