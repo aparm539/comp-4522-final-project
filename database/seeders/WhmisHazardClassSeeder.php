@@ -11,13 +11,8 @@ class WhmisHazardClassSeeder extends Seeder
     {
         $hazardClasses = [
             [
-                'class_name' => 'Flammable Gases',
+                'class_name' => 'Flammable',
                 'description' => 'Gases that can ignite (catch fire) at room temperature.',
-                'symbol' => 'flame',
-            ],
-            [
-                'class_name' => 'Flammable Liquids',
-                'description' => 'Liquids that can ignite at room temperature or that give off flammable vapours.',
                 'symbol' => 'flame',
             ],
             [
@@ -51,9 +46,19 @@ class WhmisHazardClassSeeder extends Seeder
                 'symbol' => 'environment',
             ],
             [
-                'class_name' => 'Non-Hazardous',
-                'description' => 'Materials that do not meet any hazard classification criteria.',
-                'symbol' => 'none',
+                'class_name' => 'Harmful / Irritant',
+                'description' => 'Materials that are harmful or irritating.',
+                'symbol' => 'exclamation-mark',
+            ],
+            [
+                'class_name' => 'Explosive',
+                'description' => 'Materials that may explode under certain conditions.',
+                'symbol' => 'exploding-bomb',
+            ],
+            [
+                'class_name' => 'Biohazardous',
+                'description' => 'Materials that contain living organisms or toxins that can cause disease.',
+                'symbol' => 'biohazardous',
             ],
         ];
 

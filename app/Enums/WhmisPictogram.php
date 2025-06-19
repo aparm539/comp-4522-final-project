@@ -19,7 +19,6 @@ enum WhmisPictogram: string
     case EXPLODING_BOMB     = 'exploding-bomb';
     case BIOHAZARDOUS       = 'biohazardous';
     case EXCLAMATION_MARK   = 'exclamation-mark';
-    case NONE               = 'none';
 
     /**
      * Returns the icon identifier used by Blade Icons / Filament.
@@ -37,8 +36,7 @@ enum WhmisPictogram: string
             self::ENVIRONMENT => 'environment',
             self::EXPLODING_BOMB => 'exploding_bomb',
             self::BIOHAZARDOUS => 'biohazardous',
-            self::EXCLAMATION_MARK => 'exclamation_mark',
-            self::NONE => 'exclamation_mark',
+            self::EXCLAMATION_MARK => 'exclamation_mark',   
         };
     }
 } 
