@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Chemical;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\WhmisHazardClass;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Chemical>

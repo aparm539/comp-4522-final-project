@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,9 +12,9 @@ return new class extends Migration
         DB::table('whmis_hazard_classes')
             ->where('class_name', 'Flammable Gases')
             ->update([
-                'class_name'   => 'Flammable',
-                'description'  => 'Gases that can ignite (catch fire) at room temperature.',
-                'symbol'       => 'flame',
+                'class_name' => 'Flammable',
+                'description' => 'Gases that can ignite (catch fire) at room temperature.',
+                'symbol' => 'flame',
             ]);
 
         DB::table('whmis_hazard_classes')
@@ -28,19 +26,19 @@ return new class extends Migration
 
         $newClasses = [
             [
-                'class_name'  => 'Harmful / Irritant',
+                'class_name' => 'Harmful / Irritant',
                 'description' => 'Materials that are harmful or irritating.',
-                'symbol'      => 'exclamation-mark',
+                'symbol' => 'exclamation-mark',
             ],
             [
-                'class_name'  => 'Explosive',
+                'class_name' => 'Explosive',
                 'description' => 'Materials that may explode under certain conditions.',
-                'symbol'      => 'exploding-bomb',
+                'symbol' => 'exploding-bomb',
             ],
             [
-                'class_name'  => 'Biohazardous',
+                'class_name' => 'Biohazardous',
                 'description' => 'Materials that contain living organisms or toxins that can cause disease.',
-                'symbol'      => 'biohazardous',
+                'symbol' => 'biohazardous',
             ],
         ];
 
@@ -65,27 +63,27 @@ return new class extends Migration
         DB::table('whmis_hazard_classes')->updateOrInsert(
             ['class_name' => 'Flammable Liquids'],
             [
-                'class_name'  => 'Flammable Liquids',
+                'class_name' => 'Flammable Liquids',
                 'description' => 'Liquids that can ignite at room temperature or that give off flammable vapours.',
-                'symbol'      => 'flame',
+                'symbol' => 'flame',
             ]
         );
 
         DB::table('whmis_hazard_classes')->updateOrInsert(
             ['class_name' => 'Non-Hazardous'],
             [
-                'class_name'  => 'Non-Hazardous',
+                'class_name' => 'Non-Hazardous',
                 'description' => 'Materials that do not meet any hazard classification criteria.',
-                'symbol'      => 'none',
+                'symbol' => 'none',
             ]
         );
 
         DB::table('whmis_hazard_classes')
             ->where('class_name', 'Flammable')
             ->update([
-                'class_name'  => 'Flammable Gases',
+                'class_name' => 'Flammable Gases',
                 'description' => 'Gases that can ignite (catch fire) at room temperature.',
-                'symbol'      => 'flame',
+                'symbol' => 'flame',
             ]);
     }
-}; 
+};

@@ -51,8 +51,8 @@ it('an admin can create a chemical', function () {
     $hazardClass = WhmisHazardClass::inRandomOrder()->first();
 
     $data = [
-        'cas'                => '64-17-5',
-        'name'               => 'Ethanol',
+        'cas' => '64-17-5',
+        'name' => 'Ethanol',
         'whmisHazardClasses' => [$hazardClass->id],
     ];
 
@@ -96,4 +96,4 @@ it('an admin can bulk delete chemicals', function () {
     foreach ($chemicals as $chemical) {
         expect(Chemical::find($chemical->id))->toBeNull();
     }
-}); 
+});

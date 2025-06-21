@@ -9,7 +9,6 @@ use Livewire\Livewire;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-
 // Define helper only if it hasn't been defined in another test file.
 if (! function_exists('getAdminUser')) {
     /**
@@ -49,9 +48,9 @@ it('an admin can create a storage location', function () {
     $lab = Lab::factory()->create();
 
     $data = [
-        'name'    => 'Cabinet A',
+        'name' => 'Cabinet A',
         'barcode' => 'CAB123',
-        'lab_id'  => $lab->id,
+        'lab_id' => $lab->id,
     ];
 
     Livewire::test(ListStorageLocations::class)
@@ -102,4 +101,4 @@ it('an admin can bulk delete storage locations', function () {
     foreach ($locations as $location) {
         expect(StorageLocation::find($location->id))->toBeNull();
     }
-}); 
+});

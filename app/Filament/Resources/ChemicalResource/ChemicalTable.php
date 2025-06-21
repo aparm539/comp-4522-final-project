@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ChemicalResource;
 
 use App\Models\Chemical;
-use App\Models\User;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;

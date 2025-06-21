@@ -2,20 +2,18 @@
 
 namespace App\Filament\Resources\ReconciliationResource\RelationManagers;
 
-use App\Models\ReconciliationItem;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Grouping\Group;
-use Filament\Tables\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\ReconciliationResource\Pages\ListReconciliations;
-
-
+use App\Models\ReconciliationItem;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Table;
 
 class ReconciliationItemsRelationManager extends RelationManager
 {
@@ -242,7 +240,7 @@ class ReconciliationItemsRelationManager extends RelationManager
 
     protected function processBarcode(string $barcode): void
     {
-            $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
+        $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
             ->whereHas('container', function ($query) use ($barcode) {
                 $query->where('barcode', $barcode);
             })

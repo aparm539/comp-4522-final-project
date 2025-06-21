@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\ContainerResource;
 
+use App\Filament\Resources\StorageLocationResource\RelationManagers\ContainersRelationManager;
 use App\Models\Chemical;
 use App\Models\Lab;
 use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Hidden;
-use App\Filament\Resources\StorageLocationResource\RelationManagers\ContainersRelationManager;
 
 class ContainerForm
 {

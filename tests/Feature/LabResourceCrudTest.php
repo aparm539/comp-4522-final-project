@@ -8,7 +8,6 @@ use Livewire\Livewire;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-
 // Define helper only if it hasn't been defined in another test file.
 if (! function_exists('getAdminUser')) {
     /**
@@ -89,4 +88,4 @@ it('an admin can bulk delete labs', function () {
     foreach ($labs as $lab) {
         expect(Lab::find($lab->id))->toBeNull();
     }
-}); 
+});

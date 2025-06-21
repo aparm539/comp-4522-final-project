@@ -7,11 +7,9 @@ use App\Models\Lab;
 use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
 use App\Models\User;
-
 use Livewire\Livewire;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 
 // Define helper only if it hasn't been defined in another test file.
 if (! function_exists('getAdminUser')) {
@@ -19,7 +17,7 @@ if (! function_exists('getAdminUser')) {
      * Returns a user with the "admin" role attached.
      */
     function getAdminUser(): User
-    {   
+    {
         return User::whereHas('roles', static fn ($q) => $q->where('name', 'admin'))->first();
     }
 }
@@ -30,7 +28,7 @@ it('an admin can create a container', function () {
 
     // Use seeded data where possible.
     $chemical = Chemical::inRandomOrder()->first();
-    $unit     = UnitOfMeasure::inRandomOrder()->first();
+    $unit = UnitOfMeasure::inRandomOrder()->first();
 
     /** @var StorageLocation $storageLocation */
     $storageLocation = StorageLocation::inRandomOrder()->first();
@@ -39,12 +37,12 @@ it('an admin can create a container', function () {
     $lab = $storageLocation->lab;
 
     $data = [
-        'chemical_id'         => $chemical->id,
-        'unit_of_measure_id'  => $unit->id,
-        'quantity'            => 10,
+        'chemical_id' => $chemical->id,
+        'unit_of_measure_id' => $unit->id,
+        'quantity' => 10,
         'storage_location_id' => $storageLocation->id,
-        'lab_id'              => $lab->id,
-        'barcode'             => 'MRUC123456',
+        'lab_id' => $lab->id,
+        'barcode' => 'MRUC123456',
         'last_edit_author_id' => getAdminUser()->id,
     ];
 
@@ -90,4 +88,4 @@ it('an admin can bulk delete containers', function () {
     foreach ($containers as $container) {
         expect(Container::find($container->id))->toBeNull();
     }
-}); 
+});

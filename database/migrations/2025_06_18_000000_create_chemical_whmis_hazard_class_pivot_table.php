@@ -7,7 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         // Create pivot table
@@ -29,7 +30,7 @@ return new class extends Migration {
                     $rows = [];
                     foreach ($chemicals as $chemical) {
                         $rows[] = [
-                            'chemical_id'          => $chemical->id,
+                            'chemical_id' => $chemical->id,
                             'whmis_hazard_class_id' => $chemical->whmis_hazard_class_id,
                         ];
                     }
@@ -71,4 +72,4 @@ return new class extends Migration {
 
         Schema::dropIfExists('chemical_whmis_hazard_class');
     }
-}; 
+};

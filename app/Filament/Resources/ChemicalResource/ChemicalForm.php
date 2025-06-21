@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ChemicalResource;
 
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
 class ChemicalForm
