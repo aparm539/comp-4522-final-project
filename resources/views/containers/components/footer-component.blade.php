@@ -1,0 +1,1 @@
+@livewire('container-history', ['containerId' => $containerId]) 

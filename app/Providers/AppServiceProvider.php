@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
                     return '';
                 }
 
-                return view('filament.tables.disabled-bulk-buttons', [
+                return view('filament.tables.partials.disabled-bulk-buttons', [
                     'buttons' => $buttons,
                 ])->render();
             },

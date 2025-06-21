@@ -80,7 +80,7 @@ class ContainerTable
             ViewColumn::make('hazard_icons')
                 ->label('Hazards')
                 ->tooltip(fn ($record): string => $record->chemical->whmisHazardClasses->pluck('class_name')->join(', '))
-                ->view('filament.tables.columns.container-hazard-icons')
+                ->view('filament.tables.columns.hazard-icons')
                 ->searchable(false)
                 ->sortable(false)
                 ->width('120px'),
@@ -140,7 +140,7 @@ class ContainerTable
         return [
             EditAction::make()
                 ->slideOver()
-                ->modalContentFooter(fn (Container $record) => view(view: 'containers.footer-component', data: ['containerId' => 1]))
+                ->modalContentFooter(fn (Container $record) => view(view: 'containers.components.footer-component', data: ['containerId' => $record->id]))
                 ->mutateFormDataUsing(function (array $data): array {
                     $data['last_edit_author_id'] = auth()?->user()?->id;
 

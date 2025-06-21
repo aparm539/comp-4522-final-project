@@ -6,6 +6,7 @@ use App\Models\Reconciliation;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
+use App\Filament\Resources\ReconciliationResource\RelationManagers\ReconciliationItemsRelationManager;
 
 class ReconciliationResource extends Resource
 {
@@ -14,8 +15,6 @@ class ReconciliationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $activeNavigationIcon = 'heroicon-s-clipboard-document-list';
-
-    protected static string $view = 'filament.resources.reconciliation.pages.view-reconciliation';
 
     public static function form(Form $form): Form
     {
@@ -40,6 +39,13 @@ class ReconciliationResource extends Resource
             'create' => Pages\CreateReconciliation::route('/create'),
             'view' => Pages\ViewReconciliation::route('/{record}'),
 
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            ReconciliationItemsRelationManager::class,
         ];
     }
 }

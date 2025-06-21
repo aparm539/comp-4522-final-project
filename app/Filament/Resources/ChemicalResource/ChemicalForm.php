@@ -14,7 +14,7 @@ class ChemicalForm
                 ->label('CAS #')
                 ->required(),
             TextInput::make('name')->required(),
-            \App\Forms\Components\HazardClassSelect::make('whmisHazardClasses')
+            \App\Livewire\HazardClassSelect::make('whmisHazardClasses')
                 ->relationship('whmisHazardClasses', 'id')
                 ->required(),
         ];

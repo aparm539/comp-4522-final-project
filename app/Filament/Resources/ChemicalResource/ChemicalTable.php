@@ -25,7 +25,7 @@ class ChemicalTable
             ViewColumn::make('hazard_icons')
                 ->label('Hazards')
                 ->tooltip(fn (Chemical $record): string => $record->whmisHazardClasses->pluck('class_name')->join(', '))
-                ->view('filament.tables.columns.chemical-hazard-icons')
+                ->view('filament.tables.columns.hazard-icons')
                 ->searchable(false)
                 ->sortable(false),
         ];

@@ -9,5 +9,4 @@ class ViewReconciliation extends ViewRecord
 {
     protected static string $resource = ReconciliationResource::class;
 
-    protected static string $view = 'filament.resources.reconciliation.pages.view-reconciliation';
 }

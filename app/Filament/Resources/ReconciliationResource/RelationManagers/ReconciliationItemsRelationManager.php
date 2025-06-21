@@ -1,37 +1,25 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Filament\Resources\ReconciliationResource\RelationManagers;
 
-use App\Filament\Resources\ReconciliationResource\Pages\ListReconciliations;
-use App\Models\Reconciliation;
 use App\Models\ReconciliationItem;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Grouping\Group;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
-use Illuminate\View\View;
-use Livewire\Component;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Actions\Action;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
+use App\Filament\Resources\ReconciliationResource\Pages\ListReconciliations;
 
-class ViewReconciliation extends Component implements HasForms, HasTable
+
+
+class ReconciliationItemsRelationManager extends RelationManager
 {
-    use InteractsWithForms;
-    use InteractsWithTable;
-
-    public int $reconciliation_id;
-
-    public function mount($reconciliation_id): void
-    {
-        $this->reconciliation_id = $reconciliation_id;
-    }
+    protected static string $relationship = 'reconciliationItems';
 
     public function form(Form $form): Form
     {
@@ -55,11 +43,10 @@ class ViewReconciliation extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        $reconciliation = Reconciliation::find($this->reconciliation_id);
+        $reconciliation = $this->getOwnerRecord();
         $isStopped = $reconciliation && $reconciliation->status === 'stopped';
 
         return $table
-            ->query(ReconciliationItem::with('container')->where('reconciliation_id', $this->reconciliation_id))
             ->columns([
                 TextColumn::make('container.storageLocation.name')
                     ->label('Storage Location')
@@ -150,7 +137,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->disabled($isStopped)
                     ->visible(! $isStopped)
                     ->action(function () {
-                        $reconciliation = Reconciliation::find($this->reconciliation_id);
+                        $reconciliation = $this->getOwnerRecord();
 
                         if ($reconciliation) {
                             $reconciliation->update([
@@ -173,7 +160,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                     ->modalDescription('Are you sure you want to resume this reconciliation?')
                     ->visible($isStopped)
                     ->action(function () {
-                        $reconciliation = Reconciliation::find($this->reconciliation_id);
+                        $reconciliation = $this->getOwnerRecord();
 
                         if ($reconciliation) {
                             $reconciliation->update([
@@ -220,13 +207,13 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                             ->required(),
                     ])
                     ->action(function (array $data) {
-                        $unreconciledCount = ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+                        $unreconciledCount = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
                             ->where('status', 'pending')
                             ->count();
                         $actionLabel = '';
 
                         if ($unreconciledCount > 0) {
-                            ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+                            ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
                                 ->where('status', 'pending')
                                 ->update([
                                     'status' => $data['action'],
@@ -240,7 +227,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                             ->body("Successfully $actionLabel $unreconciledCount items.")
                             ->success()
                             ->send();
-                        $reconciliation = Reconciliation::find($this->reconciliation_id);
+                        $reconciliation = $this->getOwnerRecord();
                         if ($reconciliation) {
                             $reconciliation->update([
                                 'status' => 'completed',
@@ -255,7 +242,7 @@ class ViewReconciliation extends Component implements HasForms, HasTable
 
     protected function processBarcode(string $barcode): void
     {
-        $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->reconciliation_id)
+            $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
             ->whereHas('container', function ($query) use ($barcode) {
                 $query->where('barcode', $barcode);
             })
@@ -284,10 +271,5 @@ class ViewReconciliation extends Component implements HasForms, HasTable
                 ->send();
         }
 
-    }
-
-    public function render(): View
-    {
-        return view('livewire.list-reconciliation-items');
     }
 }
