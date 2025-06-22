@@ -6,6 +6,7 @@ use App\Models\Chemical;
 use App\Models\Lab;
 use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
+use App\Models\WhmisHazardClass;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Hidden;
@@ -22,8 +23,13 @@ class ContainerForm
                     ->with('whmisHazardClasses')
                     ->get()
                     ->mapWithKeys(function (Chemical $chemical) {
+                        $hazardClasses = $chemical->whmisHazardClasses;
+                        $classNames = "";
+                        foreach ($hazardClasses as $hazardClass) {
+                            $classNames .= ", " . $hazardClass->class_name;
+                        }
                         return [
-                            $chemical->id => "{$chemical->cas} - {$chemical->name} ({$chemical->whmisHazardClass->class_name})",
+                            $chemical->id => "{$chemical->cas} - {$chemical->name}{$classNames}",
                         ];
                     }))
                 ->searchable()
