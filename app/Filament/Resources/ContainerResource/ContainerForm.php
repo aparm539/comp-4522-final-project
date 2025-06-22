@@ -2,15 +2,14 @@
 
 namespace App\Filament\Resources\ContainerResource;
 
+use App\Filament\Resources\StorageLocationResource\RelationManagers\ContainersRelationManager;
 use App\Models\Chemical;
 use App\Models\Lab;
 use App\Models\StorageLocation;
 use App\Models\UnitOfMeasure;
-use App\Models\WhmisHazardClass;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Hidden;
-use App\Filament\Resources\StorageLocationResource\RelationManagers\ContainersRelationManager;
 
 class ContainerForm
 {
@@ -24,10 +23,11 @@ class ContainerForm
                     ->get()
                     ->mapWithKeys(function (Chemical $chemical) {
                         $hazardClasses = $chemical->whmisHazardClasses;
-                        $classNames = "";
+                        $classNames = '';
                         foreach ($hazardClasses as $hazardClass) {
-                            $classNames .= ", " . $hazardClass->class_name;
+                            $classNames .= ', '.$hazardClass->class_name;
                         }
+
                         return [
                             $chemical->id => "{$chemical->cas} - {$chemical->name}{$classNames}",
                         ];

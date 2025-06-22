@@ -4,7 +4,6 @@ namespace App\Filament\Resources\LabResource;
 
 use App\Models\Lab;
 use App\Models\User;
-use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -15,7 +14,8 @@ class LabTable
     public static function columns(): array
     {
         return [
-            TextColumn::make('room_number'),
+            TextColumn::make('room_number')
+                ->sortable(),
             TextColumn::make('description')
                 ->limit(20),
 
@@ -37,14 +37,14 @@ class LabTable
     public static function bulkActions(): array
     {
         return [
-                DeleteBulkAction::make()
-                    ->visible(
-                        function (Lab $lab) {
-                            /** @var User $user */
-                            $user = auth()->user();
+            DeleteBulkAction::make()
+                ->visible(
+                    function (Lab $lab) {
+                        /** @var User $user */
+                        $user = auth()->user();
 
-                            return $user->can('delete', $lab);
-                        }),
+                        return $user->can('delete', $lab);
+                    }),
         ];
     }
 }

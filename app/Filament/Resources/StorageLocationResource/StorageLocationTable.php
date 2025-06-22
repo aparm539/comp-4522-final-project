@@ -4,7 +4,6 @@ namespace App\Filament\Resources\StorageLocationResource;
 
 use App\Models\StorageLocation;
 use App\Models\User;
-use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -16,9 +15,11 @@ class StorageLocationTable
     {
         return [
 
-            TextColumn::make('lab.room_number'),
+            TextColumn::make('lab.room_number')
+                ->sortable(),
             TextColumn::make('name')
-                ->Label('Storage Location'),
+                ->Label('Storage Location')
+                ->sortable(),
         ];
     }
 
@@ -38,13 +39,12 @@ class StorageLocationTable
     {
         return [
             DeleteBulkAction::make()
+                ->visible(function (StorageLocation $storageLocation) {
+                    /** @var User $user */
+                    $user = auth()->user();
 
-                    ->visible(function (StorageLocation $storageLocation) {
-                        /** @var User $user */
-                        $user = auth()->user();
-
-                        return $user->can('delete', $storageLocation);
-                    }),
+                    return $user->can('delete', $storageLocation);
+                }),
         ];
     }
 }
