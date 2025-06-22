@@ -18,6 +18,12 @@ final class HazardClassSelect extends CheckboxList
 
         // Render label for each record with icon + name.
         $this->getOptionLabelFromRecordUsing(function (WhmisHazardClass $record): string {
+            if ($record->icon === 'blank_square') {
+                return '<span class="inline-flex items-start gap-2">'
+                   .'<span>'.e($record->class_name).'</span>'
+                    .'</span>';
+            }
+
             return '<span class="inline-flex items-start gap-2">'
                 .view('filament::components.icon', [
                     'icon' => $record->icon,
