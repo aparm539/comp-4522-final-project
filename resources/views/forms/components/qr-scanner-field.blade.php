@@ -25,13 +25,40 @@
                         }
                         
                         async start() {
-                            const stream = await navigator.mediaDevices.getUserMedia({
-                                video: { facingMode: this.options.preferredCamera || 'environment' }
-                            });
-                            this.video.srcObject = stream;
-                            await this.video.play();
-                            this.isScanning = true;
-                            this.scan();
+                            try {
+                                // iOS Safari requires specific constraints
+                                const constraints = {
+                                    video: {
+                                        facingMode: this.options.preferredCamera || 'environment',
+                                        width: { ideal: 1280 },
+                                        height: { ideal: 720 }
+                                    }
+                                };
+                                
+                                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                                this.video.srcObject = stream;
+                                this.video.setAttribute('playsinline', 'true');
+                                this.video.muted = true;
+                                await this.video.play();
+                                this.isScanning = true;
+                                this.scan();
+                            } catch (error) {
+                                // Try with less restrictive constraints on iOS
+                                try {
+                                    const fallbackConstraints = {
+                                        video: true
+                                    };
+                                    const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+                                    this.video.srcObject = stream;
+                                    this.video.setAttribute('playsinline', 'true');
+                                    this.video.muted = true;
+                                    await this.video.play();
+                                    this.isScanning = true;
+                                    this.scan();
+                                } catch (fallbackError) {
+                                    throw new Error(`Camera access failed: ${fallbackError.name || fallbackError.message || 'Unknown error'}`);
+                                }
+                            }
                         }
                         
                         async stop() {
@@ -66,10 +93,31 @@
                         
                         static async hasCamera() {
                             try {
+                                // Check if mediaDevices is available
+                                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                                    return false;
+                                }
+                                
                                 const devices = await navigator.mediaDevices.enumerateDevices();
-                                return devices.some(device => device.kind === 'videoinput');
+                                const hasVideoInput = devices.some(device => device.kind === 'videoinput');
+                                
+                                // On iOS, sometimes enumerateDevices returns empty labels
+                                // Try to request camera access to get proper device info
+                                if (!hasVideoInput || devices.every(d => d.kind === 'videoinput' && !d.label)) {
+                                    try {
+                                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                                        // If we got a stream, camera exists
+                                        stream.getTracks().forEach(track => track.stop());
+                                        return true;
+                                    } catch {
+                                        return false;
+                                    }
+                                }
+                                
+                                return hasVideoInput;
                             } catch {
-                                return false;
+                                // Final fallback: assume camera exists if getUserMedia is available
+                                return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
                             }
                         }
                     };
@@ -86,6 +134,12 @@
                 });
             },
             async init() {
+                // Check HTTPS requirement for iOS
+                if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                    this.error = 'Camera access requires HTTPS. Please use a secure connection.';
+                    return;
+                }
+                
                 await this.ensureQrScanner();
                 
                 // Check if device has camera
@@ -121,6 +175,7 @@
                 }
                 
                 if (!this.hasCamera) {
+                    this.error = 'No camera available on this device';
                     return;
                 }
                 
@@ -132,8 +187,29 @@
                     this.error = null;
                 } catch (err) {
                     console.error('Error starting scanner:', err);
-                    this.error = 'Failed to start camera: ' + err.message;
+                    
+                    // Provide specific error messages for common iOS issues
+                    let errorMessage = 'Failed to start camera';
+                    
+                    if (err.name === 'NotAllowedError') {
+                        errorMessage = 'Camera permission denied. Please allow camera access in your browser settings.';
+                    } else if (err.name === 'NotFoundError') {
+                        errorMessage = 'No camera found on this device.';
+                    } else if (err.name === 'NotSupportedError') {
+                        errorMessage = 'Camera not supported in this browser.';
+                    } else if (err.name === 'NotReadableError') {
+                        errorMessage = 'Camera is already in use by another application.';
+                    } else if (err.name === 'OverconstrainedError') {
+                        errorMessage = 'Camera constraints not supported. Try refreshing the page.';
+                    } else if (err.message) {
+                        errorMessage = err.message;
+                    }
+                    
+                    this.error = errorMessage;
                     this.isScanning = false;
+                    
+                    // Hide video on error
+                    video.style.display = 'none';
                 }
             },
             async stopScanner() {
