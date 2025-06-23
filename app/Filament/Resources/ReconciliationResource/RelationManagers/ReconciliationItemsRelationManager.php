@@ -11,11 +11,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\ReconciliationResource\Pages\ListReconciliations;
-
-
+use \App\Filament\Forms\Components\QrScannerField;
 
 class ReconciliationItemsRelationManager extends RelationManager
 {
@@ -178,11 +176,9 @@ class ReconciliationItemsRelationManager extends RelationManager
                 Action::make('Reconcile by Barcode')
                     ->label('Reconcile Barcode')
                     ->form([
-                        TextInput::make('barcode')
+                        QrScannerField::make('barcode')
                             ->label('Container Barcode')
-                            ->placeholder('Scan barcode or press Enter...')
-                            ->required()
-                            ->live(),
+                            ->required(),
                     ])
                     ->disabled($isStopped)
                     ->action(function (array $data) {
@@ -240,9 +236,9 @@ class ReconciliationItemsRelationManager extends RelationManager
             ]);
     }
 
-    protected function processBarcode(string $barcode): void
+    public function processBarcode(string $barcode): void
     {
-            $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
+        $reconciliationItem = ReconciliationItem::where('reconciliation_id', $this->getOwnerRecord()->id)
             ->whereHas('container', function ($query) use ($barcode) {
                 $query->where('barcode', $barcode);
             })
@@ -260,7 +256,6 @@ class ReconciliationItemsRelationManager extends RelationManager
         }
 
         if ($reconciliationItem->status === 'pending') {
-
             $reconciliationItem->update([
                 'status' => 'reconciled',
             ]);
@@ -270,6 +265,5 @@ class ReconciliationItemsRelationManager extends RelationManager
                 ->success()
                 ->send();
         }
-
     }
 }
