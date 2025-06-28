@@ -14,6 +14,7 @@
                 
                 // First check if we can use the native BarcodeDetector
                 if ('BarcodeDetector' in window) {
+                    console.log('BarcodeDetector is available');
                     // Create a simple QrScanner-like interface using BarcodeDetector
                     window.QrScanner = class {
                         constructor(video, onResult, options = {}) {
