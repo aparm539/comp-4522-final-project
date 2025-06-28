@@ -173,7 +173,9 @@
                 );
             },
             async startScanner() {
+                console.log('Starting scanner');
                 if (!this.scanner) {
+                    console.log('Scanner is not initialized');
                     await this.init();
                 }
                 
@@ -183,9 +185,13 @@
                 }
                 
                 try {
+                    
                     const video = this.$refs.video;
+                    console.log('Video element:', video);
                     video.style.display = 'block';
+                    console.log('Starting scanner');
                     await this.scanner.start();
+                    console.log('Scanner started');
                     this.isScanning = true;
                     this.error = null;
                 } catch (err) {
