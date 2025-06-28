@@ -254,7 +254,9 @@
             x-ref="video" 
             class="w-full max-w-md mx-auto rounded-md shadow bg-black" 
             style="display: none;"
-            playsinline
+            autoPlay="true"
+            playsInline="true"
+            muted="true"
         ></video>
 
         <!-- Error message -->
