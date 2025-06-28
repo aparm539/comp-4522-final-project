@@ -44,6 +44,6 @@ class ChemicalPolicy
     public function delete(User $user): bool
     {
 
-        return $user->isAdmin() || $user->isResearcher(); // Only admins can delete chemicals
+        return $user->isAdmin(); // Only admins can delete chemicals
     }
 }

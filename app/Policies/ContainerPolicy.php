@@ -43,6 +43,6 @@ class ContainerPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->isAdmin(); // Only admins can delete containers
+        return $user->isAdmin() || $user->isResearcher(); // Only admins can delete containers
     }
 }
