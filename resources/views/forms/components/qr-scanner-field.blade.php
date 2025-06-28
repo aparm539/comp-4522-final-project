@@ -188,6 +188,9 @@
                     
                     const video = this.$refs.video;
                     console.log('Video element:', video);
+                    video.setAttribute('autoplay', '');
+                    video.setAttribute('muted', '');
+                    video.setAttribute('playsinline', '');
                     video.style.display = 'block';
                     console.log('Starting scanner');
                     await this.scanner.start();
