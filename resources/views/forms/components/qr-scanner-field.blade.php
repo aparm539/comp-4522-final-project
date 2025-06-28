@@ -124,6 +124,7 @@
                     };
                     return;
                 }
+                console.log('BarcodeDetector is not available');
                 
                 // Fallback: Load QrScanner from CDN but handle worker path
                 await new Promise((resolve, reject) => {
@@ -133,6 +134,7 @@
                     script.onerror = reject;
                     document.head.appendChild(script);
                 });
+                console.log('QrScanner loaded from CDN');
             },
             async init() {
                 // Check HTTPS requirement for iOS
