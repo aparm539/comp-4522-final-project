@@ -130,11 +130,11 @@
                 await new Promise((resolve, reject) => {
                     const script = document.createElement('script');
                     script.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js';
-                    script.onload = () => resolve();
+                    script.onload = () => resolve( console.log('QrScanner loaded from CDN'));
                     script.onerror = reject;
                     document.head.appendChild(script);
                 });
-                console.log('QrScanner loaded from CDN');
+                
             },
             async init() {
                 // Check HTTPS requirement for iOS
@@ -188,9 +188,6 @@
                     
                     const video = this.$refs.video;
                     console.log('Video element:', video);
-                    video.setAttribute('autoplay', '');
-                    video.setAttribute('muted', '');
-                    video.setAttribute('playsinline', '');
                     video.style.display = 'block';
                     console.log('Starting scanner');
                     await this.scanner.start();
