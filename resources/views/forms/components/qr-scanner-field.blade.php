@@ -7,30 +7,23 @@
         x-data="{
             isScanning: false,
             error: null,
-            hasCamera: false,
             stream: null,
             videoTrack: null,
             
             async init() {
-                try {
-                    // Check if camera is available
-                    this.hasCamera = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
-                    console.log('Camera API available:', this.hasCamera);
-                } catch (err) {
-                    console.warn('Could not check for cameras:', err);
-                    this.error = 'Could not check for camera availability';
-                }
+                
             },
             
             async startCamera() {
                 try {
                     const video = this.$refs.video;
                     
-                    // Get camera stream with preferred environment (back) camera
+                    
                     this.stream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: 'environment' },
+                        video: { width: 1280, facingMode: 'environment'},
                         audio: false
                     });
+                    console.log(this.stream);
                     
                     // Attach stream to video element
                     video.srcObject = this.stream;
@@ -147,17 +140,9 @@
                 type="button" 
                 class="filament-button filament-button--size-md inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-3 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700" 
                 @click="toggleCamera"
-                :disabled="!hasCamera"
             >
                 <span x-text="isScanning ? 'Stop Camera' : 'Start Camera'"></span>
             </button>
-            
-            <span 
-                x-show="!hasCamera && !error" 
-                class="text-gray-500 text-sm"
-            >
-                No camera available
-            </span>
         </div>
     </div>
 </x-dynamic-component> 
