@@ -2,6 +2,10 @@
     /** @var \App\Filament\Forms\Components\QrScannerField $field */
 @endphp
 
+<!-- Add QR Scanner scripts from CDN -->
+<script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js"></script>
+<script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     <div
         x-data="{
@@ -9,185 +13,37 @@
             isScanning: false,
             hasCamera: false,
             error: null,
-            async ensureQrScanner() {
-                if (window.QrScanner) return;
-                
-                // First check if we can use the native BarcodeDetector
-                if ('BarcodeDetector' in window) {
-                    console.log('BarcodeDetector is available');
-                    // Create a simple QrScanner-like interface using BarcodeDetector
-                    window.QrScanner = class {
-                        constructor(video, onResult, options = {}) {
-                            this.video = video;
-                            this.onResult = onResult;
-                            this.options = options;
-                            this.isScanning = false;
-                            this.detector = new BarcodeDetector({ formats: ['qr_code'] });
-                        }
-                        
-                        async start() {
-                            try {
-                                // iOS Safari requires specific constraints
-                                const constraints = {
-                                    video: {
-                                        facingMode: this.options.preferredCamera || 'environment',
-                                        width: { ideal: 1280 },
-                                        height: { ideal: 720 }
-                                    }
-                                };
-                                
-                                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                                this.video.srcObject = stream;
-                                this.video.setAttribute('playsinline', 'true');
-                                this.video.muted = true;
-                                await this.video.play();
-                                this.isScanning = true;
-                                this.scan();
-                            } catch (error) {
-                                // Try with less restrictive constraints on iOS
-                                try {
-                                    const fallbackConstraints = {
-                                        video: true
-                                    };
-                                    const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
-                                    this.video.srcObject = stream;
-                                    this.video.setAttribute('playsinline', 'true');
-                                    this.video.muted = true;
-                                    await this.video.play();
-                                    this.isScanning = true;
-                                    this.scan();
-                                } catch (fallbackError) {
-                                    throw new Error(`Camera access failed: ${fallbackError.name || fallbackError.message || 'Unknown error'}`);
-                                }
-                            }
-                        }
-                        
-                        async stop() {
-                            this.isScanning = false;
-                            if (this.video.srcObject) {
-                                this.video.srcObject.getTracks().forEach(track => track.stop());
-                                this.video.srcObject = null;
-                            }
-                        }
-                        
-                        async scan() {
-                            if (!this.isScanning) return;
-                            
-                            try {
-                                const barcodes = await this.detector.detect(this.video);
-                                if (barcodes.length > 0) {
-                                    const result = this.options.returnDetailedScanResult 
-                                        ? { data: barcodes[0].rawValue }
-                                        : barcodes[0].rawValue;
-                                    this.onResult(result);
-                                    return;
-                                }
-                            } catch (err) {
-                                console.log('Scan error:', err);
-                            }
-                            
-                            // Continue scanning
-                            if (this.isScanning) {
-                                setTimeout(() => this.scan(), 100);
-                            }
-                        }
-                        
-                        static async hasCamera() {
-                            try {
-                                // Check if mediaDevices is available
-                                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-                                    return false;
-                                }
-                                
-                                const devices = await navigator.mediaDevices.enumerateDevices();
-                                const hasVideoInput = devices.some(device => device.kind === 'videoinput');
-                                
-                                // On iOS, sometimes enumerateDevices returns empty labels
-                                // Try to request camera access to get proper device info
-                                if (!hasVideoInput || devices.every(d => d.kind === 'videoinput' && !d.label)) {
-                                    try {
-                                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                                        // If we got a stream, camera exists
-                                        stream.getTracks().forEach(track => track.stop());
-                                        return true;
-                                    } catch {
-                                        return false;
-                                    }
-                                }
-                                
-                                return hasVideoInput;
-                            } catch {
-                                // Final fallback: assume camera exists if getUserMedia is available
-                                return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-                            }
-                        }
-                    };
-                    return;
-                }
-                console.log('BarcodeDetector is not available');
-                
-                // Fallback: Load QrScanner from CDN but handle worker path
-                await new Promise((resolve, reject) => {
-                    const script = document.createElement('script');
-                    script.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js';
-                    script.onload = () => resolve( console.log('QrScanner loaded from CDN'));
-                    script.onerror = reject;
-                    document.head.appendChild(script);
-                });
-                
-            },
             async init() {
-                // Check HTTPS requirement for iOS
-                if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-                    this.error = 'Camera access requires HTTPS. Please use a secure connection.';
-                    return;
-                }
-                
-                await this.ensureQrScanner();
-                
-                // Check if device has camera
-                this.hasCamera = await window.QrScanner.hasCamera();
-                
-                if (!this.hasCamera) {
-                    this.error = 'No camera found on this device';
-                    return;
-                }
-                
-                // Create QrScanner instance with proper options
-                const video = this.$refs.video;
-                this.scanner = new window.QrScanner(
-                    video,
-                    result => {
-                        console.log('decoded qr code:', result);
-                        // Set the scanned value to the form field
-                        $wire.set('{{ $field->getStatePath() }}', result.data || result);
-                        this.stopScanner();
-                    },
-                    {
-                        returnDetailedScanResult: true,
-                        preferredCamera: 'environment', // Use back camera on mobile
-                        highlightScanRegion: true,
-                        highlightCodeOutline: true,
-                        maxScansPerSecond: 5
-                    }
-                );
-            },
-            async startScanner() {
-                console.log('Starting scanner');
-                if (!this.scanner) {
-                    console.log('Scanner is not initialized');
-                    await this.init();
-                }
-                
-                if (!this.hasCamera) {
-                    this.error = 'No camera available on this device';
-                    return;
-                }
-                
                 try {
+                    // Check if camera is available
+                    this.hasCamera = await QrScanner.hasCamera();
                     
                     const video = this.$refs.video;
-                    console.log('Video element:', video);
+                    // Create QrScanner instance with proper options
+                    this.scanner = new QrScanner(
+                        video,
+                        result => {
+                            console.log('decoded qr code:', result);
+                            // Set the scanned value to the form field
+                            $wire.set('{{ $field->getStatePath() }}', result.data || result);
+                            this.stopScanner();
+                        },
+                        {
+                            returnDetailedScanResult: true,
+                            preferredCamera: 'environment', // Use back camera on mobile
+                            highlightScanRegion: true,
+                            highlightCodeOutline: true,
+                            maxScansPerSecond: 5
+                        }
+                    );
+                } catch (err) {
+                    console.error('Error initializing scanner:', err);
+                    this.error = 'Failed to initialize camera: ' + err.message;
+                }
+            },
+            async startScanner() {
+                try {
+                    const video = this.$refs.video;
                     video.style.display = 'block';
                     console.log('Starting scanner');
                     await this.scanner.start();
@@ -196,28 +52,11 @@
                     this.error = null;
                 } catch (err) {
                     console.error('Error starting scanner:', err);
-                    
-                    // Provide specific error messages for common iOS issues
-                    let errorMessage = 'Failed to start camera';
-                    
-                    if (err.name === 'NotAllowedError') {
-                        errorMessage = 'Camera permission denied. Please allow camera access in your browser settings.';
-                    } else if (err.name === 'NotFoundError') {
-                        errorMessage = 'No camera found on this device.';
-                    } else if (err.name === 'NotSupportedError') {
-                        errorMessage = 'Camera not supported in this browser.';
-                    } else if (err.name === 'NotReadableError') {
-                        errorMessage = 'Camera is already in use by another application.';
-                    } else if (err.name === 'OverconstrainedError') {
-                        errorMessage = 'Camera constraints not supported. Try refreshing the page.';
-                    } else if (err.message) {
-                        errorMessage = err.message;
-                    }
-                    
-                    this.error = errorMessage;
+                    this.error = 'Error accessing camera: ' + err.message;
                     this.isScanning = false;
                     
                     // Hide video on error
+                    const video = this.$refs.video;
                     video.style.display = 'none';
                 }
             },
@@ -242,6 +81,7 @@
             }
         }"
         x-init="init()"
+        x-on:beforeunload="stopScanner()"
         class="space-y-2"
     >
         <!-- Input field for barcode/QR code -->
