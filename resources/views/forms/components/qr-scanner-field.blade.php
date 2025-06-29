@@ -2,21 +2,21 @@
     /** @var \App\Filament\Forms\Components\QrScannerField $field */
 @endphp
 
-<!-- Add QR Scanner scripts from CDN -->
-<script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js"></script>
-<script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
-
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     <div
         x-data="{
             scanner: null,
             isScanning: false,
             error: null,
+            qrScannerLoaded: false,
             async init() {
+                // Dynamically load QR Scanner scripts
+                await this.loadQrScannerScripts();
+                
                 try {                    
                     const video = this.$refs.video;
                     // Create QrScanner instance with proper options
-                    this.scanner = new QrScanner(
+                    this.scanner = new window.QrScanner(
                         video,
                         result => {
                             console.log('decoded qr code:', result);
@@ -37,7 +37,39 @@
                     this.error = 'Failed to initialize camera: ' + err.message;
                 }
             },
+            // Dynamically load QR Scanner scripts
+            async loadQrScannerScripts() {
+                return new Promise((resolve) => {
+                    // First load the worker script
+                    const workerScript = document.createElement('script');
+                    workerScript.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js';
+                    document.head.appendChild(workerScript);
+                    
+                    // Then load the main script
+                    const mainScript = document.createElement('script');
+                    mainScript.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js';
+                    
+                    // When main script is loaded, resolve
+                    mainScript.onload = () => {
+                        this.qrScannerLoaded = true;
+                        console.log('QR Scanner scripts loaded successfully');
+                        resolve();
+                    };
+                    
+                    mainScript.onerror = (err) => {
+                        console.error('Failed to load QR Scanner scripts:', err);
+                        this.error = 'Failed to load QR Scanner library';
+                    };
+                    
+                    document.head.appendChild(mainScript);
+                });
+            },
             async startScanner() {
+                if (!this.scanner) {
+                    await this.init();
+                    return;
+                }
+                
                 try {
                     const video = this.$refs.video;
                     video.style.display = 'block';
