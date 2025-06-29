@@ -11,13 +11,9 @@
         x-data="{
             scanner: null,
             isScanning: false,
-            hasCamera: false,
             error: null,
             async init() {
-                try {
-                    // Check if camera is available
-                    this.hasCamera = await QrScanner.hasCamera();
-                    
+                try {                    
                     const video = this.$refs.video;
                     // Create QrScanner instance with proper options
                     this.scanner = new QrScanner(
