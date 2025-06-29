@@ -8,12 +8,54 @@
             scanner: null,
             isScanning: false,
             error: null,
-            qrScannerLoaded: false,
+            hasCamera: false,
             async init() {
-                // Dynamically load QR Scanner scripts
-                await this.loadQrScannerScripts();
+                try {
+                    // Dynamically load QR Scanner script (main only)
+                    await this.loadQrScannerScript();
+                    
+                    // Check if camera is available
+                    try {
+                        this.hasCamera = await window.QrScanner.hasCamera();
+                        console.log('Camera available:', this.hasCamera);
+                    } catch (err) {
+                        console.warn('Could not check for cameras:', err);
+                        // Assume camera exists and let the scanner handle permissions
+                        this.hasCamera = true;
+                    }
+                    
+                    // Set worker path explicitly
+                    window.QrScanner.WORKER_PATH = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js';
+                } catch (err) {
+                    console.error('Error initializing QR scanner library:', err);
+                    this.error = 'Failed to initialize scanner library: ' + err.message;
+                }
+            },
+            // Dynamically load QR Scanner script
+            async loadQrScannerScript() {
+                return new Promise((resolve, reject) => {
+                    // Load the main script only
+                    const mainScript = document.createElement('script');
+                    mainScript.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js';
+                    
+                    // When main script is loaded, resolve
+                    mainScript.onload = () => {
+                        console.log('QR Scanner script loaded successfully');
+                        resolve();
+                    };
+                    
+                    mainScript.onerror = (err) => {
+                        console.error('Failed to load QR Scanner script:', err);
+                        reject(new Error('Failed to load QR Scanner library'));
+                    };
+                    
+                    document.head.appendChild(mainScript);
+                });
+            },
+            async setupScanner() {
+                if (this.scanner) return;
                 
-                try {                    
+                try {
                     const video = this.$refs.video;
                     // Create QrScanner instance with proper options
                     this.scanner = new window.QrScanner(
@@ -33,49 +75,22 @@
                         }
                     );
                 } catch (err) {
-                    console.error('Error initializing scanner:', err);
-                    this.error = 'Failed to initialize camera: ' + err.message;
+                    console.error('Error creating scanner instance:', err);
+                    this.error = 'Failed to create scanner: ' + err.message;
+                    throw err;
                 }
-            },
-            // Dynamically load QR Scanner scripts
-            async loadQrScannerScripts() {
-                return new Promise((resolve) => {
-                    // First load the worker script
-                    const workerScript = document.createElement('script');
-                    workerScript.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner-worker.min.js';
-                    document.head.appendChild(workerScript);
-                    
-                    // Then load the main script
-                    const mainScript = document.createElement('script');
-                    mainScript.src = 'https://unpkg.com/qr-scanner@1.4.2/qr-scanner.umd.min.js';
-                    
-                    // When main script is loaded, resolve
-                    mainScript.onload = () => {
-                        this.qrScannerLoaded = true;
-                        console.log('QR Scanner scripts loaded successfully');
-                        resolve();
-                    };
-                    
-                    mainScript.onerror = (err) => {
-                        console.error('Failed to load QR Scanner scripts:', err);
-                        this.error = 'Failed to load QR Scanner library';
-                    };
-                    
-                    document.head.appendChild(mainScript);
-                });
             },
             async startScanner() {
-                if (!this.scanner) {
-                    await this.init();
-                    return;
-                }
-                
                 try {
+                    await this.setupScanner();
+                    
                     const video = this.$refs.video;
                     video.style.display = 'block';
+                    
                     console.log('Starting scanner');
                     await this.scanner.start();
-                    console.log('Scanner started');
+                    console.log('Scanner started successfully');
+                    
                     this.isScanning = true;
                     this.error = null;
                 } catch (err) {
@@ -132,7 +147,7 @@
             class="w-full max-w-md mx-auto rounded-md shadow bg-black" 
             style="display: none;"
             autoPlay="true"
-            playsInline="true"
+            playsinline="true"
             muted="true"
         ></video>
 
@@ -140,18 +155,19 @@
         <div x-show="error" x-text="error" class="text-red-600 text-sm"></div>
 
         <!-- Scanner controls -->
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
             <button 
                 type="button" 
                 class="filament-button filament-button--size-md inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-3 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700" 
                 @click="toggleScanner"
+                :disabled="!hasCamera"
             >
                 <span x-text="isScanning ? 'Stop Scanning' : 'Start QR Scanner'"></span>
             </button>
             
             <span 
-                x-show="!error" 
-                class="text-gray-500 text-sm py-2"
+                x-show="!hasCamera && !error" 
+                class="text-gray-500 text-sm"
             >
                 No camera available
             </span>
