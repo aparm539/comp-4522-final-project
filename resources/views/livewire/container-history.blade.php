@@ -45,7 +45,7 @@
             <div class="mb-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-2">Last Reconciliation</h2>
                 <p class="text-sm text-gray-600">
-                    Status:
+                    Container Status:
                     <x-filament::badge
                         :color="match($lastReconciliationItem->status) {
                         'pending' => 'gray',
