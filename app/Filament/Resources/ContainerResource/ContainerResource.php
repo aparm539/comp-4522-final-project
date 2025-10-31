@@ -28,7 +28,8 @@ class ContainerResource extends Resource
             ->filters(ContainerTable::filters())
             ->actions(ContainerTable::actions())
             ->headerActions(ContainerTable::headerActions())
-            ->bulkActions(ContainerTable::bulkActions());
+            ->bulkActions(ContainerTable::bulkActions())
+            ->groups(ContainerTable::groups());
     }
 
     public static function getPages(): array
