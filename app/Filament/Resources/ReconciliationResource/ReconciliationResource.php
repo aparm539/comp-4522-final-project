@@ -19,7 +19,23 @@ class ReconciliationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema(ReconciliationForm::make());
+            ->schema(function (Form $form) {
+                // Check if we're creating by checking the Livewire component type
+                // The form's schema closure has access to the Livewire component through getLivewire()
+                $isCreate = false;
+                
+                if (method_exists($form, 'getLivewire')) {
+                    try {
+                        $livewire = $form->getLivewire();
+                        $isCreate = $livewire instanceof \App\Filament\Resources\ReconciliationResource\Pages\CreateReconciliation;
+                    } catch (\Exception $e) {
+                        // If getLivewire fails, default to edit form
+                        $isCreate = false;
+                    }
+                }
+                
+                return ReconciliationForm::make($isCreate ? 'create' : 'edit');
+            });
     }
 
     public static function table(Table $table): Table
@@ -37,8 +53,8 @@ class ReconciliationResource extends Resource
         return [
             'index' => Pages\ListReconciliations::route('/'),
             'create' => Pages\CreateReconciliation::route('/create'),
+            'edit' => Pages\EditReconciliation::route('/{record}/edit'),
             'view' => Pages\ViewReconciliation::route('/{record}'),
-
         ];
     }
 
