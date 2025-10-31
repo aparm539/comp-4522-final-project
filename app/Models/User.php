@@ -16,8 +16,7 @@ use Illuminate\Notifications\Notifiable;
  *
  * @property int id
  * @property string name
- * @property string email
- * @property DateTime email_verified_at
+ * @property string username
  * @property string password
  * @property string remember_token
  * @property DateTime created_at
@@ -35,9 +34,19 @@ class User extends Authenticatable implements FilamentUser
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the username for Filament authentication.
+     * Used by the login form.
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     public function canAccessPanel(Panel $panel): bool

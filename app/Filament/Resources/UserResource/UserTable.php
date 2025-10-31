@@ -15,7 +15,7 @@ class UserTable
         return [
             TextColumn::make('name')
                 ->searchable(),
-            TextColumn::make('email')
+            TextColumn::make('username')
                 ->searchable(),
             TextColumn::make('roles.name')
                 ->badge(),
