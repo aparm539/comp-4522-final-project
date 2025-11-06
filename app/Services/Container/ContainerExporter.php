@@ -6,6 +6,7 @@ use App\Models\Container;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
+use Illuminate\Database\Eloquent\Builder;
 
 class ContainerExporter extends Exporter
 {
@@ -28,10 +29,26 @@ class ContainerExporter extends Exporter
                 ->label('Room'),
             ExportColumn::make('storageLocation.name')
                 ->label('Location'),
-            ExportColumn::make('chemical.ishazardous')
-                ->label('Hazardous'),
+            ExportColumn::make('chemical.whmisHazardClasses.class_name')
+                ->label('WHMIS Hazard Classes')
+                ->distinctList()
+                ->default('None'),
+            ExportColumn::make('lastEditAuthor.name')
+                ->label('Last Edited By')
+                ->default('Unknown'),
 
         ];
+    }
+
+    public static function modifyQuery(Builder $query): Builder
+    {
+        return parent::modifyQuery($query)
+            ->with([
+                'chemical.whmisHazardClasses',
+                'storageLocation.lab',
+                'unitOfMeasure',
+                'lastEditAuthor',
+            ]);
     }
 
     public static function getCompletedNotificationBody(Export $export): string
