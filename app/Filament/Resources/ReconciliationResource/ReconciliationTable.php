@@ -9,8 +9,6 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
@@ -66,8 +64,7 @@ class ReconciliationTable
     public static function actions(): array
     {
         return [
-            EditAction::make(),
-            ViewAction::make(),
+            // No actions - clicking row navigates to view page
         ];
     }
 

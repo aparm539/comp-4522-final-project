@@ -62,6 +62,14 @@ class WhmisHazardClassSeeder extends Seeder
             ],
         ];
 
-        DB::table('whmis_hazard_classes')->insert($hazardClasses);
+        // Use updateOrInsert to prevent duplicates and allow updates if classes already exist
+        // In one of the migrations I introduced duplicates, so hopefully this keeps it from breaking in the future 
+        // if the db needs to be reseeded. 
+        foreach ($hazardClasses as $class) {
+            DB::table('whmis_hazard_classes')->updateOrInsert(
+                ['class_name' => $class['class_name']],
+                $class
+            );
+        }
     }
 }

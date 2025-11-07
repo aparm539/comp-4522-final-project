@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\CustomLogin;
 use App\Filament\Resources\ChemicalResource\ChemicalResource;
 use App\Filament\Resources\ContainerResource\ContainerResource;
 use App\Filament\Resources\LabResource\LabResource;
@@ -34,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->id('admin')
             ->path('')
-            ->login()
+            ->login(CustomLogin::class)
             ->topNavigation()
             ->breadcrumbs(false)
             ->colors([

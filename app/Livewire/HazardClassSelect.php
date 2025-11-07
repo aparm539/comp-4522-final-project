@@ -24,20 +24,17 @@ final class HazardClassSelect extends CheckboxList
                     .'</span>';
             }
 
-            return '<span class="inline-flex items-start gap-2">'
+            return '<span class="inline-flex items-center gap-2 w-full">'
                 .view('filament::components.icon', [
                     'icon' => $record->icon,
-                    'class' => 'w-8 h-8 text-primary-600 shrink-0',
+                    'class' => 'w-10 h-10 text-primary-600 shrink-0',
                 ])->render()
-                .'<span>'.e($record->class_name).'</span>'
+                .'<span class="text-xs font-medium leading-tight break-words flex-1 min-w-0">'.e($record->class_name).'</span>'
                 .'</span>';
         });
 
         $this->allowHtml();
 
-        // Display in two columns.
-        $this->columns(2);
-
-        $this->label('WHMIS Hazard Classes');
+        $this->columns(3);
     }
 }

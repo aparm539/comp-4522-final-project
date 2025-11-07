@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -85,6 +86,21 @@ class ContainerTable
                 ->sortable(false)
                 ->width('120px'),
 
+        ];
+    }
+
+    public static function groups(): array
+    {
+        return [
+            Group::make('storageLocation.lab.room_number')
+                ->label('Lab')
+                ->collapsible(),
+            Group::make('storageLocation.name')
+                ->label('Storage Location')
+                ->getTitleFromRecordUsing(fn (Container $record): string => 
+                    $record->storageLocation->lab->room_number . ' - ' . $record->storageLocation->name
+                )
+                ->collapsible(),
         ];
     }
 

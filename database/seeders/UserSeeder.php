@@ -6,7 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-
+use Filament\Forms\Form;
 class UserSeeder extends Seeder
 {
     public function run(): void
@@ -14,13 +14,13 @@ class UserSeeder extends Seeder
         // Create the admin user
         $adminUser = User::create([
             'name' => 'Test Admin',
-            'email' => 'test@test.com',
+            'username' => 'test.admin',
             'password' => Hash::make('test'),
         ]);
 
         $viewUser = User::create([
             'name' => 'Test Viewer',
-            'email' => 'test1@test.com',
+            'username' => 'test.viewer',
             'password' => Hash::make('test'),
         ]);
 
